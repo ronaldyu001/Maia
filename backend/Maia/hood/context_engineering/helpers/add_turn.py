@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from Maia.tools.memory.conversations import load_conversation
-from Maia.tools.generic._time import time_now
+from Maia.helpers._time import time_now
 
 
 def add_turn( session_id: str, role: str, content: str,  ) -> list[dict]:

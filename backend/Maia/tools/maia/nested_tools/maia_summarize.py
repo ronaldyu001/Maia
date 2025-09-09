@@ -23,8 +23,8 @@ def extract_summary(raw_output: str):
 async def async_maia_summarize_conversation( llm: str, ctx_wdw_size: int, session_id: str, task=SUMMARIZE_CONVERSATION, memory_type=["short_term", "long_term"] ) -> str:
     """
     Returns
-    - a dict with the summary if successful: {"response": summary}.
-    - error message if unsuccessful.
+    - a json list with the summary.
+    - false if unsuccessful.
 
     Args
     - llm: the llm name to use.

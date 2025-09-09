@@ -2,9 +2,9 @@ from pathlib import Path
 from typing import List
 from utility_wrappers.LoggingWrapper.LoggingWrapper import Logger
 
-from Maia.hood.context_engineering.config import SHORT_TERM_conversations, LONG_TERM_conversations
+from Maia.hood.context_engineering.settings import SHORT_TERM_conversations, LONG_TERM_conversations
 from Maia.tools.memory.storage import load_json, save_json
-from Maia.tools.generic._time import time_now
+from Maia.helpers._time import time_now
 from Maia.tools.maia.copy_file import copy_file
 
 

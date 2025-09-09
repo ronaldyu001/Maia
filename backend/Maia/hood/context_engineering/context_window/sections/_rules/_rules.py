@@ -1,6 +1,6 @@
 from utility_wrappers.LoggingWrapper.LoggingWrapper import Logger
 
-from Maia.hood.context_engineering.config import RULES
+from Maia.hood.context_engineering.settings import RULES
 from Maia.hood.context_engineering.helpers.token_counter import token_counter
 from Maia.hood.context_engineering.helpers.generic_trimmer import generic_trimmer
 

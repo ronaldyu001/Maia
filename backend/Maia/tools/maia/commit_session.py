@@ -1,5 +1,5 @@
 from Maia.tools.memory.conversations import conversational_to_longterm
-from Maia.hood.context_engineering.config import SHORT_TERM_conversations
+from Maia.hood.context_engineering.settings import SHORT_TERM_conversations
 from pathlib import Path
 
 
