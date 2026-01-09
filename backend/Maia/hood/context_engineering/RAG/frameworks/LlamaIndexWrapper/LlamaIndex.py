@@ -21,8 +21,12 @@ class LlamaIndexWrapper:
     """
     def __init__(self, category: Literal["facts","goals","events"]):
         # --- load storage context and load index ---
-        self.storage_context = StorageContext.from_defaults(persist_dir=STORE_PATHS[category])
-        self.index = load_index_from_storage(storage_context=self.storage_context)
+        Logger.info(f"Loading LlamaIndex Wrapper.")
+        self.storage_context = StorageContext.from_defaults(
+            persist_dir=STORE_PATHS[category],
+            vector_store=FaissMapVectorStore.from_persist_dir(persist_dir=STORE_PATHS[category])
+        )
+        self.index = load_index_from_storage(storage_context=self.storage_context, embed_model=LlamaIndexEmbedAdapter())
     
 
     def save_fact(self, text: str, metadata: Optional[dict] = None, persist: bool = True, TOP_K: int = 5, SIM_THRESHOLD: float = 0.9) -> str | bool:
@@ -37,8 +41,7 @@ class LlamaIndexWrapper:
                 # merge/update policy (simple: append note & update metadata)
                 merged = self._merge_text(h.node.get_content(), text)
                 h.node.text = merged
-                if metadata:
-                    h.node.metadata.update(metadata)
+                if metadata: h.node.metadata.update(metadata)
                 # upsert updated node
                 self.index.delete_nodes([h.node.node_id])
                 self.index.insert_nodes([h.node])
