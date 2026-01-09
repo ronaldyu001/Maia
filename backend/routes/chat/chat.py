@@ -25,7 +25,7 @@ from config import OLLAMA_MODEL_NAME
 
 # ===== router and model =====
 router = APIRouter()
-model = OllamaModel()  # uses your config/model defaults
+model = OllamaModel()  # uses config/model defaults
 # model = HuggingFaceModel()
 
 

@@ -45,7 +45,7 @@ class OllamaModel( BaseModel ):
         ]
         """
 
-        # Convert string prompt to proper message format
+        # Convert string prompt to proper message format if string, else presreve original
         messages = [{"role": "user", "content": prompt}] if isinstance(prompt, str) else prompt
 
         try:
