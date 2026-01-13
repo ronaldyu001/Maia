@@ -1,9 +1,9 @@
 from math import floor, ceil
-from backend.logs.LoggingWrapper import Logger
+from logging.LoggingWrapper import Logger
 
-from backend.Maia.hood.context_engineering.helpers.token_counters import token_counter
-from backend.Maia.hood.context_engineering.helpers.generic_trimmer import generic_trimmer
-from backend.Maia.hood.context_engineering.context_window.sections._task.variables import DEFAULT_CHAT
+from Maia.hood.context_engineering.helpers.token_counters import token_counter
+from Maia.hood.context_engineering.helpers.generic_trimmer import generic_trimmer
+from Maia.hood.context_engineering.context_window.sections._task.variables import DEFAULT_CHAT
 
 
 def generate_task( llm: str, size: int, task=DEFAULT_CHAT ) -> list[dict]:

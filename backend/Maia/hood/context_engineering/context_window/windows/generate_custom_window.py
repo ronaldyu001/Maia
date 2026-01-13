@@ -1,10 +1,10 @@
 from math import ceil, floor
-from backend.logs.LoggingWrapper import Logger
+from logging.LoggingWrapper import Logger
 
-from backend.Maia.hood.context_engineering.context_window.sections._rules._rules import generate_rules
-from backend.Maia.hood.context_engineering.context_window.sections._tool_contract._tool_contract import generate_tool_contract
-from backend.Maia.hood.context_engineering.context_window.sections._conversation_history._conversation import generate_conversational_transcript
-from backend.Maia.hood.context_engineering.context_window.sections._task._task import generate_task
+from Maia.hood.context_engineering.context_window.sections._rules._rules import generate_rules
+from Maia.hood.context_engineering.context_window.sections._tool_contract._tool_contract import generate_tool_contract
+from Maia.hood.context_engineering.context_window.sections._conversation_history._conversation import generate_conversational_transcript
+from Maia.hood.context_engineering.context_window.sections._task._task import generate_task
 
 
 def generate_custom_context_window( 

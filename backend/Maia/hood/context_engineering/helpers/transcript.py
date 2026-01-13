@@ -1,6 +1,6 @@
-from backend.logs.LoggingWrapper import Logger
+from logging.LoggingWrapper import Logger
 
-from backend.Maia.hood.context_engineering.helpers.token_counters import token_counter
+from Maia.hood.context_engineering.helpers.token_counters import token_counter
 from math import ceil, floor
 
 

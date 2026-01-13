@@ -1,6 +1,6 @@
 from llama_cpp import Llama
 from math import ceil
-from backend.Maia.hood.llm_managers.maia_llama3 import Maia_llama3_Manager
+from Maia.hood.llm_managers.maia_llama3 import Maia_llama3_Manager
     
 
 def generic_token_counter( text: str ) -> int:
