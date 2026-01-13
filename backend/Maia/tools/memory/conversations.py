@@ -10,9 +10,7 @@ from backend.Maia.tools.file_interaction.copy_file import copy_file
 
 
 # ===== paths =====
-ROOT = Path("backend/memory")
-SHORT_TERM = ROOT / "short_term"
-CONVERSATIONAL = SHORT_TERM / "conversations"
+CONVERSATIONS = "backend/Maia/memories/conversations"
 
 
 # ===== Function: load conversational memory =====
@@ -27,15 +25,11 @@ def load_conversation( session_id: str ) -> list[dict]:
     """
     Logger.info(f"Loading conversation: list[dict] from {session_id}.json")
     try:
-        # ----- look for conversation in longterm and shortterm memory -----
-        SHORT_TERM = Path( SHORT_TERM_conversations ) / f"{session_id}.json"
-        LONG_TERM = Path( LONG_TERM_conversations ) / f"{session_id}.json"
+        # ----- look for conversation in memory -----
+        conversation_json = Path( CONVERSATIONS ) / f"{session_id}.json"
         
-        if SHORT_TERM.exists():
-            return load_json( path=SHORT_TERM, default=[] )
-        
-        elif LONG_TERM.exists():
-            return load_json( path=LONG_TERM, default=[] )
+        if conversation_json.exists():
+            return load_json( path=conversation_json, default=[] )
 
         else:
             raise Exception( f"Conversation DNE in short term nor long term memory." )
@@ -47,43 +41,76 @@ def load_conversation( session_id: str ) -> list[dict]:
 
 
 # ===== Function: save current conversation =====
-def save_conversation( session_id: str, data: List[dict]) -> None:
+def save_conversation(session_id: str, data: List[dict]) -> None:
     """
-    saves list of jsons containing conversation history and metadata.
+    Appends the latest turn in `data` to the session conversation file.
+
+    - If the session file doesn't exist, it creates a new one.
+    - Expects `data` to be a list of turns; only the last element is appended.
     """
+
+    if not session_id:
+        raise ValueError("session_id is required")
+
+    # If caller passes empty data, there's nothing to append.
+    # (don't treat this as an error.)
+    if not data:
+        return
+
+    # Build path and ensure directory exists
+    convo_dir = Path("backend/Maia/memories/conversations")
+    convo_dir.mkdir(parents=True, exist_ok=True)
+    convo_path = convo_dir / f"{session_id}.json"
+
+    # Load existing conversation safely
+    conversation: List[dict]
     try:
-        if not data:
-            return None
-
-        # Load existing conversation
         conversation = load_conversation(session_id=session_id)
-        
-        # Get last exchange and format it
-        last_exchange = data[-1]
-        new_message = {
-            "role": last_exchange["role"],
-            "content": last_exchange["content"],
-            "timestamp": time_now()
-        }
+        if not isinstance(conversation, list):
+            conversation = []
+    except FileNotFoundError:
+        conversation = []
+    except Exception as err:
+        # If file is corrupt/unreadable, reset to empty rather than crash
+        conversation = []
+        try:
+            Logger.log(f"[save_conversation] load_conversation failed; resetting. err={err}")
+        except Exception:
+            pass
 
-        # Append new message to conversation list
-        if isinstance(conversation, list):
+    # Append last message
+    last_exchange = data[-1] if data else None
+
+    if isinstance(last_exchange, dict):
+        role = last_exchange.get("role")
+        content = last_exchange.get("content")
+
+        # Only append valid turns
+        if isinstance(role, str) and role and isinstance(content, str) and content:
+            new_message = {
+                "role": role,
+                "content": content,
+                "timestamp": time_now(),
+            }
             conversation.append(new_message)
         else:
-            conversation = [new_message]
+            # Invalid / incomplete turn — skip silently
+            Logger.info(
+                f"[save_conversation] Skipping invalid turn: role={role}, content={content}"
+            )
+    else:
+        Logger.info("[save_conversation] No valid last exchange to append")
 
-        # Create conversation file path
-        _CONVERSATION = Path("backend/memory/raw/short_term/conversations") / f"{session_id}.json"
+    # Save updated conversation
+    save_successful, error = save_json(
+        path=convo_path,
+        default=[],
+        data=conversation
+    )
 
-        # Save updated conversation
-        save_successful, error = save_json(
-            path=_CONVERSATION,
-            default=[],  # Specify expected type as list
-            data=conversation
-        )
-    
-    except Exception as err:
-        return None
+    if not save_successful:
+        # Don't silently swallow this — it will make debugging impossible
+        Logger.log(f"Failed to save conversation: {error}")
 
 
 # ===== Function: keep track of last conversation id =====
@@ -146,3 +173,23 @@ def conversational_to_longterm( session_id: str ) -> bool:
 
     except Exception as err:
         return False
+    
+
+def ensure_conversation_initialized(session_id: str) -> list:
+    """
+    Loads conversation if it exists; otherwise creates an empty conversation and returns it.
+    """
+    try:
+        data = load_conversation(session_id=session_id)
+        # normalize: if load returns None, treat as empty
+        if not data:
+            data = []
+    except FileNotFoundError:
+        data = []
+        save_conversation(session_id=session_id, data=data)
+    except Exception:
+        # If the file exists but is corrupted/unreadable, fail soft by resetting
+        data = []
+        save_conversation(session_id=session_id, data=data)
+
+    return data

@@ -12,6 +12,7 @@ def create_transcript(turns: list[dict]) -> list[str]:
     try:
         return [ f"{t['role'].capitalize()}: {t['content']}" for t in turns ]
     except Exception as err:
+        Logger.log(level=20, msg=f'create_transcript: {err}')
         return False
 
 

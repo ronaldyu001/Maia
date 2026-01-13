@@ -3,3 +3,331 @@
 2026-01-12 22:36:57,047 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
 2026-01-12 22:36:57,047 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
 2026-01-12 22:36:57,047 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 22:49:49,731 [INFO] faiss.loader: Loading faiss.
+2026-01-12 22:49:49,820 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 22:49:49,828 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 22:49:49,828 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 22:49:49,828 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 22:51:00,313 [INFO] faiss.loader: Loading faiss.
+2026-01-12 22:51:00,400 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 22:52:45,332 [INFO] faiss.loader: Loading faiss.
+2026-01-12 22:52:45,427 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 22:52:45,432 [INFO] backend.logging.LoggingWrapper: Starting backend.
+2026-01-12 22:52:45,434 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 22:52:45,435 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 22:52:45,435 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 22:56:39,400 [INFO] faiss.loader: Loading faiss.
+2026-01-12 22:56:39,486 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 22:56:39,492 [INFO] backend.logging.LoggingWrapper: Starting backend.
+2026-01-12 22:56:39,494 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 22:56:39,494 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 22:56:39,494 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 23:04:51,483 [INFO] faiss.loader: Loading faiss.
+2026-01-12 23:04:51,580 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 23:04:51,587 [INFO] backend.logging.LoggingWrapper: Starting backend.
+2026-01-12 23:04:51,588 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 23:04:51,589 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 23:04:51,589 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 23:04:58,903 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:04:58,903 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:04:58,903 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:04:58,903 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:04:58,904 [INFO] backend.logging.LoggingWrapper: Generating rules.
+2026-01-12 23:04:58,904 [INFO] backend.logging.LoggingWrapper: Generating tool contract.
+2026-01-12 23:04:58,904 [INFO] backend.logging.LoggingWrapper: Generating conversational transcript.
+2026-01-12 23:04:58,904 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:04:58,904 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:04:58,904 [INFO] backend.logging.LoggingWrapper: Converting transcript from list[dict] to list[str]
+2026-01-12 23:12:25,461 [INFO] faiss.loader: Loading faiss.
+2026-01-12 23:12:25,544 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 23:12:25,550 [INFO] backend.logging.LoggingWrapper: Starting backend.
+2026-01-12 23:12:25,551 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 23:12:25,552 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 23:12:25,552 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 23:12:37,669 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:12:37,670 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:12:37,670 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:12:37,670 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:12:37,670 [INFO] backend.logging.LoggingWrapper: Generating rules.
+2026-01-12 23:12:37,670 [INFO] backend.logging.LoggingWrapper: Generating tool contract.
+2026-01-12 23:12:37,670 [INFO] backend.logging.LoggingWrapper: Generating conversational transcript.
+2026-01-12 23:12:37,670 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:12:37,670 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:12:37,670 [INFO] backend.logging.LoggingWrapper: Converting transcript from list[dict] to list[str]
+2026-01-12 23:16:55,716 [INFO] faiss.loader: Loading faiss.
+2026-01-12 23:16:55,804 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 23:16:55,810 [INFO] backend.logging.LoggingWrapper: Starting backend.
+2026-01-12 23:16:55,812 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 23:16:55,812 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 23:16:55,812 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 23:17:18,589 [INFO] faiss.loader: Loading faiss.
+2026-01-12 23:17:18,677 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 23:17:18,683 [INFO] backend.logging.LoggingWrapper: Starting backend.
+2026-01-12 23:17:18,684 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 23:17:18,684 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 23:17:18,684 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 23:18:31,520 [INFO] faiss.loader: Loading faiss.
+2026-01-12 23:18:31,614 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 23:18:31,619 [INFO] backend.logging.LoggingWrapper: Starting backend.
+2026-01-12 23:18:31,621 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 23:18:31,621 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 23:18:31,621 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 23:18:59,089 [INFO] faiss.loader: Loading faiss.
+2026-01-12 23:18:59,175 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 23:18:59,181 [INFO] backend.logging.LoggingWrapper: Starting backend.
+2026-01-12 23:18:59,182 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 23:18:59,182 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 23:18:59,182 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 23:19:03,373 [INFO] faiss.loader: Loading faiss.
+2026-01-12 23:19:03,472 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 23:19:03,477 [INFO] backend.logging.LoggingWrapper: Starting backend.
+2026-01-12 23:19:03,479 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 23:19:03,479 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 23:19:03,479 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 23:19:09,245 [INFO] faiss.loader: Loading faiss.
+2026-01-12 23:19:09,326 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 23:19:09,330 [INFO] backend.logging.LoggingWrapper: Starting backend.
+2026-01-12 23:19:09,331 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 23:19:09,332 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 23:19:09,332 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 23:19:12,162 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:19:12,162 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:19:12,162 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:19:12,162 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:19:12,162 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:19:12,162 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:19:12,162 [INFO] backend.logging.LoggingWrapper: Generating rules.
+2026-01-12 23:19:12,162 [INFO] backend.logging.LoggingWrapper: Generating tool contract.
+2026-01-12 23:19:12,163 [INFO] backend.logging.LoggingWrapper: Generating conversational transcript.
+2026-01-12 23:19:12,163 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:19:12,163 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:19:12,163 [INFO] backend.logging.LoggingWrapper: Converting transcript from list[dict] to list[str]
+2026-01-12 23:20:37,337 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:20:37,337 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:20:37,338 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:20:37,338 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:20:37,338 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:20:37,338 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:20:37,338 [INFO] backend.logging.LoggingWrapper: Generating rules.
+2026-01-12 23:20:37,338 [INFO] backend.logging.LoggingWrapper: Generating tool contract.
+2026-01-12 23:20:37,338 [INFO] backend.logging.LoggingWrapper: Generating conversational transcript.
+2026-01-12 23:20:37,338 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:20:37,338 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:20:37,338 [INFO] backend.logging.LoggingWrapper: Converting transcript from list[dict] to list[str]
+2026-01-12 23:22:27,048 [INFO] faiss.loader: Loading faiss.
+2026-01-12 23:22:27,142 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 23:22:27,148 [INFO] backend.logging.LoggingWrapper: Starting backend.
+2026-01-12 23:22:27,149 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 23:22:27,149 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 23:22:27,149 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 23:22:37,838 [INFO] faiss.loader: Loading faiss.
+2026-01-12 23:22:37,936 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 23:22:37,942 [INFO] backend.logging.LoggingWrapper: Starting backend.
+2026-01-12 23:22:37,944 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 23:22:37,944 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 23:22:37,944 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 23:22:48,050 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:22:48,051 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:22:48,051 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:22:48,051 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:22:48,051 [INFO] backend.logging.LoggingWrapper: Generating rules.
+2026-01-12 23:22:48,051 [INFO] backend.logging.LoggingWrapper: Generating tool contract.
+2026-01-12 23:22:48,051 [INFO] backend.logging.LoggingWrapper: Generating conversational transcript.
+2026-01-12 23:22:48,051 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:22:48,051 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:22:48,051 [INFO] backend.logging.LoggingWrapper: Converting transcript from list[dict] to list[str]
+2026-01-12 23:27:54,349 [INFO] faiss.loader: Loading faiss.
+2026-01-12 23:27:54,437 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 23:27:54,443 [INFO] backend.logging.LoggingWrapper: Starting backend.
+2026-01-12 23:27:54,445 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 23:27:54,445 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 23:27:54,445 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 23:28:20,546 [INFO] faiss.loader: Loading faiss.
+2026-01-12 23:28:20,630 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 23:28:20,635 [INFO] backend.logging.LoggingWrapper: Starting backend.
+2026-01-12 23:28:20,637 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 23:28:20,637 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 23:28:20,637 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 23:28:55,887 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:28:55,887 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:28:55,888 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:28:55,888 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:28:55,888 [INFO] backend.logging.LoggingWrapper: Generating rules.
+2026-01-12 23:28:55,889 [INFO] backend.logging.LoggingWrapper: Generating tool contract.
+2026-01-12 23:28:55,889 [INFO] backend.logging.LoggingWrapper: Generating conversational transcript.
+2026-01-12 23:28:55,889 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:28:55,889 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:28:55,889 [INFO] backend.logging.LoggingWrapper: Converting transcript from list[dict] to list[str]
+2026-01-12 23:29:10,903 [INFO] faiss.loader: Loading faiss.
+2026-01-12 23:29:10,979 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 23:29:10,984 [INFO] backend.logging.LoggingWrapper: Starting backend.
+2026-01-12 23:29:10,985 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 23:29:10,985 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 23:29:10,986 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 23:29:11,610 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:29:11,610 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:29:11,610 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:29:11,610 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:29:11,610 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:29:11,611 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:29:11,611 [INFO] backend.logging.LoggingWrapper: Generating rules.
+2026-01-12 23:29:11,611 [INFO] backend.logging.LoggingWrapper: Generating tool contract.
+2026-01-12 23:29:11,611 [INFO] backend.logging.LoggingWrapper: Generating conversational transcript.
+2026-01-12 23:29:11,611 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:29:11,611 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:29:11,611 [INFO] backend.logging.LoggingWrapper: Converting transcript from list[dict] to list[str]
+2026-01-12 23:30:09,809 [INFO] faiss.loader: Loading faiss.
+2026-01-12 23:30:09,900 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 23:30:09,906 [INFO] backend.logging.LoggingWrapper: Starting backend.
+2026-01-12 23:30:09,907 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 23:30:09,907 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 23:30:09,907 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 23:30:11,322 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:30:11,322 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:30:11,322 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:30:11,322 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:30:11,322 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:30:11,322 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:30:11,323 [INFO] backend.logging.LoggingWrapper: Generating rules.
+2026-01-12 23:30:11,323 [INFO] backend.logging.LoggingWrapper: Generating tool contract.
+2026-01-12 23:30:11,323 [INFO] backend.logging.LoggingWrapper: Generating conversational transcript.
+2026-01-12 23:30:11,323 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:30:11,323 [ERROR] backend.logging.LoggingWrapper: Exception('Conversation DNE in short term nor long term memory.')
+2026-01-12 23:30:11,323 [INFO] backend.logging.LoggingWrapper: Converting transcript from list[dict] to list[str]
+2026-01-12 23:32:42,550 [INFO] faiss.loader: Loading faiss.
+2026-01-12 23:32:42,677 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 23:32:42,683 [INFO] backend.logging.LoggingWrapper: Starting backend.
+2026-01-12 23:32:42,685 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 23:32:42,685 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 23:32:42,685 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 23:32:44,586 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:32:44,586 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:32:44,587 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:32:44,587 [INFO] backend.logging.LoggingWrapper: Generating rules.
+2026-01-12 23:32:44,587 [INFO] backend.logging.LoggingWrapper: Generating tool contract.
+2026-01-12 23:32:44,587 [INFO] backend.logging.LoggingWrapper: Generating conversational transcript.
+2026-01-12 23:32:44,587 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:32:44,587 [INFO] backend.logging.LoggingWrapper: Converting transcript from list[dict] to list[str]
+2026-01-12 23:33:46,466 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:33:46,466 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:33:46,466 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:33:46,466 [INFO] backend.logging.LoggingWrapper: Generating rules.
+2026-01-12 23:33:46,466 [INFO] backend.logging.LoggingWrapper: Generating tool contract.
+2026-01-12 23:33:46,467 [INFO] backend.logging.LoggingWrapper: Generating conversational transcript.
+2026-01-12 23:33:46,467 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:33:46,467 [INFO] backend.logging.LoggingWrapper: Converting transcript from list[dict] to list[str]
+2026-01-12 23:41:53,093 [INFO] faiss.loader: Loading faiss.
+2026-01-12 23:41:53,195 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 23:41:53,206 [INFO] backend.logging.LoggingWrapper: Starting backend.
+2026-01-12 23:41:53,208 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 23:41:53,208 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 23:41:53,208 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 23:41:55,823 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:41:55,823 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:41:55,824 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:41:55,824 [INFO] backend.logging.LoggingWrapper: Generating rules.
+2026-01-12 23:41:55,824 [INFO] backend.logging.LoggingWrapper: Generating tool contract.
+2026-01-12 23:41:55,824 [INFO] backend.logging.LoggingWrapper: Generating conversational transcript.
+2026-01-12 23:41:55,824 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:41:55,825 [INFO] backend.logging.LoggingWrapper: Converting transcript from list[dict] to list[str]
+2026-01-12 23:42:10,649 [INFO] faiss.loader: Loading faiss.
+2026-01-12 23:42:10,728 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 23:42:10,734 [INFO] backend.logging.LoggingWrapper: Starting backend.
+2026-01-12 23:42:10,736 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 23:42:10,736 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 23:42:10,736 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 23:42:15,714 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:42:15,715 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:42:15,715 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:42:15,715 [INFO] backend.logging.LoggingWrapper: Generating rules.
+2026-01-12 23:42:15,715 [INFO] backend.logging.LoggingWrapper: Generating tool contract.
+2026-01-12 23:42:15,715 [INFO] backend.logging.LoggingWrapper: Generating conversational transcript.
+2026-01-12 23:42:15,716 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:42:15,716 [INFO] backend.logging.LoggingWrapper: Converting transcript from list[dict] to list[str]
+2026-01-12 23:42:15,716 [INFO] backend.logging.LoggingWrapper: False
+2026-01-12 23:44:49,047 [INFO] faiss.loader: Loading faiss.
+2026-01-12 23:44:49,131 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 23:44:49,137 [INFO] backend.logging.LoggingWrapper: Starting backend.
+2026-01-12 23:44:49,138 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 23:44:49,138 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 23:44:49,138 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 23:44:51,064 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:44:51,065 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:44:51,065 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:44:51,065 [INFO] backend.logging.LoggingWrapper: Generating rules.
+2026-01-12 23:44:51,065 [INFO] backend.logging.LoggingWrapper: Generating tool contract.
+2026-01-12 23:44:51,065 [INFO] backend.logging.LoggingWrapper: Generating conversational transcript.
+2026-01-12 23:44:51,065 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:44:51,066 [INFO] backend.logging.LoggingWrapper: Converting transcript from list[dict] to list[str]
+2026-01-12 23:44:51,066 [INFO] backend.logging.LoggingWrapper: create_transcript: 'NoneType' object has no attribute 'capitalize'
+2026-01-12 23:44:51,066 [INFO] backend.logging.LoggingWrapper: False
+2026-01-12 23:48:24,723 [INFO] faiss.loader: Loading faiss.
+2026-01-12 23:48:24,803 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 23:48:24,809 [INFO] backend.logging.LoggingWrapper: Starting backend.
+2026-01-12 23:48:24,811 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 23:48:24,811 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 23:48:24,811 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 23:50:34,310 [INFO] faiss.loader: Loading faiss.
+2026-01-12 23:50:34,420 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 23:50:34,428 [INFO] backend.logging.LoggingWrapper: Starting backend.
+2026-01-12 23:50:34,430 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 23:50:34,430 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 23:50:34,430 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 23:50:37,360 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:50:37,360 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:50:37,361 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:50:37,361 [INFO] backend.logging.LoggingWrapper: Generating rules.
+2026-01-12 23:50:37,361 [INFO] backend.logging.LoggingWrapper: Generating tool contract.
+2026-01-12 23:50:37,361 [INFO] backend.logging.LoggingWrapper: Generating conversational transcript.
+2026-01-12 23:50:37,361 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:51:24,875 [INFO] faiss.loader: Loading faiss.
+2026-01-12 23:51:24,959 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 23:51:24,965 [INFO] backend.logging.LoggingWrapper: Starting backend.
+2026-01-12 23:51:24,967 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 23:51:24,967 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 23:51:24,967 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 23:51:30,871 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:51:30,872 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:51:30,872 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:51:30,873 [INFO] backend.logging.LoggingWrapper: Generating rules.
+2026-01-12 23:51:30,874 [INFO] backend.logging.LoggingWrapper: Generating tool contract.
+2026-01-12 23:51:30,874 [INFO] backend.logging.LoggingWrapper: Generating conversational transcript.
+2026-01-12 23:51:30,874 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:51:30,874 [INFO] backend.logging.LoggingWrapper: [{'role': None, 'content': None, 'timestamp': '2026-01-13T05:30:11+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:32:44+00:00'}, {'role': 'user', 'content': 'hello', 'timestamp': '2026-01-13T05:33:46+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:41:55+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:42:15+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:44:51+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:50:37+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:51:30+00:00'}]
+2026-01-12 23:51:30,874 [INFO] backend.logging.LoggingWrapper: Converting transcript from list[dict] to list[str]
+2026-01-12 23:51:30,874 [INFO] backend.logging.LoggingWrapper: create_transcript: 'NoneType' object has no attribute 'capitalize'
+2026-01-12 23:51:30,874 [INFO] backend.logging.LoggingWrapper: False
+2026-01-12 23:52:27,686 [INFO] faiss.loader: Loading faiss.
+2026-01-12 23:52:27,769 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 23:52:27,774 [INFO] backend.logging.LoggingWrapper: Starting backend.
+2026-01-12 23:52:27,776 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 23:52:27,776 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 23:52:27,776 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 23:52:27,782 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:52:27,783 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:52:27,783 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:52:27,783 [INFO] backend.logging.LoggingWrapper: Generating rules.
+2026-01-12 23:52:27,783 [INFO] backend.logging.LoggingWrapper: Generating tool contract.
+2026-01-12 23:52:27,783 [INFO] backend.logging.LoggingWrapper: Generating conversational transcript.
+2026-01-12 23:52:27,784 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:52:27,784 [INFO] backend.logging.LoggingWrapper: [{'role': None, 'content': None, 'timestamp': '2026-01-13T05:30:11+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:32:44+00:00'}, {'role': 'user', 'content': 'hello', 'timestamp': '2026-01-13T05:33:46+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:41:55+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:42:15+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:44:51+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:50:37+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:51:30+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:52:27+00:00'}]
+2026-01-12 23:52:27,785 [INFO] backend.logging.LoggingWrapper: Converting transcript from list[dict] to list[str]
+2026-01-12 23:52:27,785 [INFO] backend.logging.LoggingWrapper: [{'role': None, 'content': None, 'timestamp': '2026-01-13T05:30:11+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:32:44+00:00'}, {'role': 'user', 'content': 'hello', 'timestamp': '2026-01-13T05:33:46+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:41:55+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:42:15+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:44:51+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:50:37+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:51:30+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:52:27+00:00'}]
+2026-01-12 23:52:27,785 [INFO] backend.logging.LoggingWrapper: create_transcript: 'NoneType' object has no attribute 'capitalize'
+2026-01-12 23:52:27,785 [INFO] backend.logging.LoggingWrapper: False
+2026-01-12 23:52:59,039 [INFO] faiss.loader: Loading faiss.
+2026-01-12 23:52:59,125 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 23:52:59,131 [INFO] backend.logging.LoggingWrapper: Starting backend.
+2026-01-12 23:52:59,133 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 23:52:59,133 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 23:52:59,133 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.
+2026-01-12 23:53:09,243 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:53:09,244 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:53:09,244 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:53:09,245 [INFO] backend.logging.LoggingWrapper: Generating rules.
+2026-01-12 23:53:09,245 [INFO] backend.logging.LoggingWrapper: Generating tool contract.
+2026-01-12 23:53:09,245 [INFO] backend.logging.LoggingWrapper: Generating conversational transcript.
+2026-01-12 23:53:09,245 [INFO] backend.logging.LoggingWrapper: Loading conversation: list[dict] from 71bb608b-1ffa-4a42-8dc0-b9454d12adc7.json
+2026-01-12 23:53:09,245 [INFO] backend.logging.LoggingWrapper: Converting transcript from list[dict] to list[str]
+2026-01-12 23:53:09,245 [INFO] backend.logging.LoggingWrapper: [{'role': None, 'content': None, 'timestamp': '2026-01-13T05:30:11+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:32:44+00:00'}, {'role': 'user', 'content': 'hello', 'timestamp': '2026-01-13T05:33:46+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:41:55+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:42:15+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:44:51+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:50:37+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:51:30+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:52:27+00:00'}, {'role': 'user', 'content': 'hi', 'timestamp': '2026-01-13T05:53:09+00:00'}]
+2026-01-12 23:53:09,245 [INFO] backend.logging.LoggingWrapper: create_transcript: 'NoneType' object has no attribute 'capitalize'
