@@ -1,11 +1,11 @@
 from pathlib import Path
 from typing import List
-from logging.LoggingWrapper import Logger
+from backend.logging.LoggingWrapper import Logger
 
-from Maia.hood.context_engineering.settings import SHORT_TERM_conversations, LONG_TERM_conversations
-from Maia.tools.memory.storage import load_json, save_json
-from Maia.tools.utility._time import time_now
-from Maia.tools.file_interaction.copy_file import copy_file
+from backend.Maia.hood.context_engineering.settings import SHORT_TERM_conversations, LONG_TERM_conversations
+from backend.Maia.tools.memory.storage import load_json, save_json
+from backend.Maia.tools.utility._time import time_now
+from backend.Maia.tools.file_interaction.copy_file import copy_file
 
 
 

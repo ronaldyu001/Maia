@@ -4,16 +4,16 @@ from llama_index.core.storage.docstore import SimpleDocumentStore
 from llama_index.core.storage.index_store import SimpleIndexStore
 from llama_index.core.graph_stores.simple import SimpleGraphStore
 
-from Maia.hood.llm_managers.maia_llama3 import Maia_llama3_Manager
-from Maia.hood.context_engineering.RAG.embedders.Nomic.NomicWrapper import NomicEmbedder
-from Maia.hood.context_engineering.RAG.frameworks.LlamaIndexWrapper.LlamaIndex import LlamaIndexEmbedAdapter
+from backend.Maia.hood.llm_managers.maia_llama3 import Maia_llama3_Manager
+from backend.Maia.hood.context_engineering.RAG.embedders.Nomic.NomicWrapper import NomicEmbedder
+from backend.Maia.hood.context_engineering.RAG.frameworks.LlamaIndexWrapper.LlamaIndex import LlamaIndexEmbedAdapter
 
 import faiss
 from pathlib import Path
 
-from logging.LoggingWrapper import Logger
-from Maia.tools.memory.storage import load_json
-from Maia.SETTINGS import SEED_PATHS, STORE_PATHS
+from backend.logging.LoggingWrapper import Logger
+from backend.Maia.tools.memory.storage import load_json
+from backend.Maia.SETTINGS import SEED_PATHS, STORE_PATHS
 """
 startup events.
 """

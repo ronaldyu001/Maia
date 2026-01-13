@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import Optional, List, Literal
 
-from Maia.tools.utility._time import time_now
+from backend.Maia.tools.utility._time import time_now
 
 
 class FactsMeta(BaseModel):

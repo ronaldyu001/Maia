@@ -1,0 +1,5 @@
+2026-01-12 22:36:56,957 [INFO] faiss.loader: Loading faiss.
+2026-01-12 22:36:57,038 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-12 22:36:57,047 [INFO] backend.logging.LoggingWrapper: Checking events RAG stores.
+2026-01-12 22:36:57,047 [INFO] backend.logging.LoggingWrapper: Checking facts RAG stores.
+2026-01-12 22:36:57,047 [INFO] backend.logging.LoggingWrapper: Checking goals RAG stores.

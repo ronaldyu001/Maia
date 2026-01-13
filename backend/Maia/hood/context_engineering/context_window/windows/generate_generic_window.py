@@ -1,11 +1,11 @@
 from math import ceil
-from logging.LoggingWrapper import Logger
+from backend.logging.LoggingWrapper import Logger
 
-from Maia.hood.context_engineering.helpers.token_counters import token_counter
-from Maia.hood.context_engineering.context_window.sections._rules._rules import generate_rules
-from Maia.hood.context_engineering.context_window.sections._tool_contract._tool_contract import generate_tool_contract
-from Maia.hood.context_engineering.context_window.sections._conversation_history._conversation import generate_conversational_transcript
-from Maia.hood.context_engineering.context_window.sections._task._task import generate_task
+from backend.Maia.hood.context_engineering.helpers.token_counters import token_counter
+from backend.Maia.hood.context_engineering.context_window.sections._rules._rules import generate_rules
+from backend.Maia.hood.context_engineering.context_window.sections._tool_contract._tool_contract import generate_tool_contract
+from backend.Maia.hood.context_engineering.context_window.sections._conversation_history._conversation import generate_conversational_transcript
+from backend.Maia.hood.context_engineering.context_window.sections._task._task import generate_task
 
 def generate_context_window( llm: str, size: int, session_id: str ) -> list[dict]:
     """

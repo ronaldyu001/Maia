@@ -1,26 +1,26 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from logging.LoggingWrapper import Logger
+from backend.logging.LoggingWrapper import Logger
 
-from Maia.hood.engine_wrappers.ollama.wrapper_ollama import OllamaModel
-from Maia.hood.engine_wrappers.huggingface.wrapper_huggingface import HuggingFaceModel
+from backend.Maia.hood.engine_wrappers.ollama.wrapper_ollama import OllamaModel
+from backend.Maia.hood.engine_wrappers.huggingface.wrapper_huggingface import HuggingFaceModel
 
-from Maia.tools.memory.conversations import (
+from backend.Maia.tools.memory.conversations import (
     save_conversation,
     load_conversation,
     set_last_conversation_id,
     get_last_conversation_id
 )
-from Maia.tools.tool_handling import (
+from backend.Maia.tools.tool_handling import (
     receive_tool_request,
 )
-from Maia.hood.context_engineering.context_window.windows.generate_generic_window import generate_context_window
-from Maia.hood.context_engineering.helpers.token_counters import token_counter
-from Maia.hood.context_engineering.helpers.add_turn import add_turn
-from Maia.tools.utility._time import time_now
-from Maia.tools.utility._json import try_parse_json
-from routes.chat.helpers.error_handlers import _post
-from Maia.config import OLLAMA_MODEL_NAME
+from backend.Maia.hood.context_engineering.context_window.windows.generate_generic_window import generate_context_window
+from backend.Maia.hood.context_engineering.helpers.token_counters import token_counter
+from backend.Maia.hood.context_engineering.helpers.add_turn import add_turn
+from backend.Maia.tools.utility._time import time_now
+from backend.Maia.tools.utility._json import try_parse_json
+from backend.routes.chat.helpers.error_handlers import _post
+from backend.Maia.config import OLLAMA_MODEL_NAME
 
 
 # ===== router and model =====
