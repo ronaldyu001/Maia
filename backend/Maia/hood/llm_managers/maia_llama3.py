@@ -1,6 +1,6 @@
 from llama_cpp import Llama
 from typing import Optional
-from config import MAIA_LLAMA3_V1
+from backend.config import MAIA_LLAMA3_V1
 
 class Maia_llama3_Manager:
     _instance: Optional[Llama] = None  # Class variable to store single instance

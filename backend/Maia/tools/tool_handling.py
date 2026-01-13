@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import List, Dict, Any
 from pydantic import BaseModel
 
-from Maia.tools.maia.commit_session import commit_session
+from backend.Maia.tools.maia.commit_session import commit_session
 
 
 # ===== Available Tools for Maia =====
@@ -34,7 +34,7 @@ def single_request( request: dict, tools=TOOLS ) -> bool:
             
         # ----- raise error if request not valid -----
         else:
-            raise Exception( f"{request["tool"]} not a valid tool." )
+            raise Exception( f"{request['tool']} not a valid tool." )
         
     except Exception as err:
         return False
@@ -56,7 +56,7 @@ def summarize_single_request( request: dict ) -> str:
 
 def receive_tool_request( request: Dict|List ) -> str:
     """
-    Handles single/batch tool requests from Maia.\n
+    Handles single/batch tool requests from backend.Maia.\n
     Returns
     - Request summary if success.
     - Error if fail.

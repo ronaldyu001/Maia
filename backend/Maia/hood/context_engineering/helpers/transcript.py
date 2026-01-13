@@ -1,6 +1,6 @@
-from utility_wrappers.LoggingWrapper.LoggingWrapper import Logger
+from backend.utility_wrappers.LoggingWrapper.LoggingWrapper import Logger
 
-from Maia.hood.context_engineering.helpers.token_counter import token_counter
+from backend.Maia.hood.context_engineering.helpers.token_counter import token_counter
 from math import ceil, floor
 
 
@@ -10,7 +10,7 @@ def create_transcript(turns: list[dict]) -> list[str]:
     """
     Logger.info("Converting transcript from list[dict] to list[str]")
     try:
-        return [ f"{t["role"].capitalize()}: {t['content']}" for t in turns ]
+        return [ f"{t['role'].capitalize()}: {t['content']}" for t in turns ]
     except Exception as err:
         return False
 

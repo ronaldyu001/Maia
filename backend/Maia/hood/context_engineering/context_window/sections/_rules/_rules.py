@@ -1,8 +1,8 @@
-from utility_wrappers.LoggingWrapper.LoggingWrapper import Logger
+from backend.utility_wrappers.LoggingWrapper.LoggingWrapper import Logger
 
-from Maia.hood.context_engineering.settings import RULES
-from Maia.hood.context_engineering.helpers.token_counter import token_counter
-from Maia.hood.context_engineering.helpers.generic_trimmer import generic_trimmer
+from backend.Maia.hood.context_engineering.settings import RULES
+from backend.Maia.hood.context_engineering.helpers.token_counter import token_counter
+from backend.Maia.hood.context_engineering.helpers.generic_trimmer import generic_trimmer
 
 
 def generate_rules( llm: str, size: int, session_id: str, rules=RULES ) -> list[dict] | None:

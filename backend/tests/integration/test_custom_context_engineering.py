@@ -1,8 +1,8 @@
 import pytest
 
-from Maia.hood.context_engineering.context_window.generate_custom_window import generate_custom_context_window
+from backend.Maia.hood.context_engineering.context_window.generate_custom_window import generate_custom_context_window
 from backend.Maia.hood.context_engineering.settings import RULES, TOOL_CONTRACT
-from Maia.hood.context_engineering.context_window.sections._conversation_history._conversation import generate_conversational_transcript
+from backend.Maia.hood.context_engineering.context_window.sections._conversation_history._conversation import generate_conversational_transcript
 
 
 def test_custom_window():

@@ -2,7 +2,7 @@ import pytest
 import asyncio
 from config import OLLAMA_MODEL_NAME
 
-from Maia.tools.maia.nested_tools.maia_summarize import async_maia_summarize_conversation
+from backend.Maia.tools.maia.nested_tools.maia_summarize import async_maia_summarize_conversation
 
 
 @pytest.mark.asyncio

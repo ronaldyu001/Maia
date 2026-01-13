@@ -1,8 +1,8 @@
-from utility_wrappers.LoggingWrapper.LoggingWrapper import Logger
+from backend.utility_wrappers.LoggingWrapper.LoggingWrapper import Logger
 
-from Maia.hood.context_engineering.settings import TOOL_CONTRACT
-from Maia.hood.context_engineering.helpers.token_counter import token_counter
-from Maia.hood.context_engineering.helpers.generic_trimmer import generic_trimmer
+from backend.Maia.hood.context_engineering.settings import TOOL_CONTRACT
+from backend.Maia.hood.context_engineering.helpers.token_counter import token_counter
+from backend.Maia.hood.context_engineering.helpers.generic_trimmer import generic_trimmer
 
 
 def generate_tool_contract( llm: str, size: int, contract=TOOL_CONTRACT ) -> list[dict] | None:

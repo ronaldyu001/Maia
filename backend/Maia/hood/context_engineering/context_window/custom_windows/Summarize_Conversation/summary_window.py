@@ -1,9 +1,9 @@
 from math import ceil, floor
 from utility_wrappers.LoggingWrapper.LoggingWrapper import Logger
 
-from Maia.hood.context_engineering.context_window.generate_custom_window import generate_custom_context_window
-from Maia.hood.context_engineering.context_window.sections._task._task import generate_task
-from Maia.hood.context_engineering.context_window.sections._task.variables import SUMMARIZE_CONVERSATION
+from backend.Maia.hood.context_engineering.context_window.generate_custom_window import generate_custom_context_window
+from backend.Maia.hood.context_engineering.context_window.sections._task._task import generate_task
+from backend.Maia.hood.context_engineering.context_window.sections._task.variables import SUMMARIZE_CONVERSATION
 
 
 def generate_summarize_context_window( 

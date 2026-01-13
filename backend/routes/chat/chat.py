@@ -1,26 +1,26 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from utility_wrappers.LoggingWrapper.LoggingWrapper import Logger
+from backend.utility_wrappers.LoggingWrapper.LoggingWrapper import Logger
 
-from Maia.hood.engine_wrappers.ollama.wrapper_ollama import OllamaModel
-from Maia.hood.engine_wrappers.huggingface.wrapper_huggingface import HuggingFaceModel
+from backend.Maia.hood.engine_wrappers.ollama.wrapper_ollama import OllamaModel
+from backend.Maia.hood.engine_wrappers.huggingface.wrapper_huggingface import HuggingFaceModel
 
-from Maia.tools.memory.conversations import (
+from backend.Maia.tools.memory.conversations import (
     save_conversation, 
     load_conversation, 
     set_last_conversation_id, 
     get_last_conversation_id
 )
-from Maia.tools.tool_handling import (
+from backend.Maia.tools.tool_handling import (
     receive_tool_request,
 )
-from Maia.hood.context_engineering.context_window.generate_generic_window import generate_context_window
-from Maia.hood.context_engineering.helpers.token_counter import token_counter
-from Maia.hood.context_engineering.helpers.add_turn import add_turn
+from backend.Maia.hood.context_engineering.context_window.generate_generic_window import generate_context_window
+from backend.Maia.hood.context_engineering.helpers.token_counter import token_counter
+from backend.Maia.hood.context_engineering.helpers.add_turn import add_turn
 from backend.Maia.helpers._time import time_now
 from backend.Maia.helpers._json import try_parse_json
-from routes.chat.helpers.error_handlers import _post
-from config import OLLAMA_MODEL_NAME
+from backend.routes.chat.helpers.error_handlers import _post
+from backend.config import OLLAMA_MODEL_NAME
 
 
 # ===== router and model =====
@@ -65,8 +65,8 @@ async def chat(self, req: ChatRequest):
     print( f"Context Window size: {token_counter( llm=llm, text=prompt )} tokens" )
 
     # ----- get response -----
-    print(prompt)
-    print("Getting response...")
+    Logger.log(prompt)
+    Logger.log("Getting response...")
     response = { "response": model.chat(prompt=prompt) }
 
     # ----- check if Maia sent a message or tool request -----

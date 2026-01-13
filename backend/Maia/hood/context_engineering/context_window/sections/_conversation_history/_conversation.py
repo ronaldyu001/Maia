@@ -1,8 +1,8 @@
-from utility_wrappers.LoggingWrapper.LoggingWrapper import Logger
+from backend.utility_wrappers.LoggingWrapper.LoggingWrapper import Logger
 
-from Maia.tools.memory.conversations import load_conversation
-from Maia.hood.context_engineering.helpers.transcript import create_transcript, trim_transcript, autosize_transcript
-from Maia.hood.context_engineering.helpers.token_counter import token_counter
+from backend.Maia.tools.memory.conversations import load_conversation
+from backend.Maia.hood.context_engineering.helpers.transcript import create_transcript, trim_transcript, autosize_transcript
+from backend.Maia.hood.context_engineering.helpers.token_counter import token_counter
 
 
 def generate_conversational_transcript( llm: str, session_id: str, size: int ) -> list[dict] | bool:

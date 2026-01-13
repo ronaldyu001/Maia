@@ -1,10 +1,10 @@
 from fastapi import FastAPI
-from Maia.hood.engine_wrappers.ollama.wrapper_ollama import OllamaModel
-from routes import chat
+from backend.Maia.hood.engine_wrappers.ollama.wrapper_ollama import OllamaModel
+from backend.routes.chat import chat
 from fastapi.middleware.cors import CORSMiddleware
-from config import OLLAMA_MODEL_NAME
+from backend.config import OLLAMA_MODEL_NAME
 
-from startup import load_llama3, load_RAG
+from backend.startup import load_llama3, load_RAG
 
 
 # ----- create FastAPI app -----
@@ -12,7 +12,7 @@ app = FastAPI()
 # model = OllamaModel( model_name=OLLAMA_MODEL_NAME )
 
 
-# ----- Allow your frontend origin(s) -----
+# ----- Allow frontend origin(s) -----
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],

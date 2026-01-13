@@ -2,7 +2,7 @@
 import numpy as np
 import pytest
 
-from Maia.hood.context_engineering.RAG.embedders.Nomic.NomicWrapper import NomicEmbedder
+from backend.Maia.hood.context_engineering.RAG.embedders.Nomic.NomicWrapper import NomicEmbedder
 
 
 @pytest.fixture(scope="module")

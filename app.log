@@ -1,0 +1,28 @@
+2026-01-08 22:31:52,564 [INFO] faiss.loader: Loading faiss.
+2026-01-08 22:31:52,597 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-08 22:35:37,439 [INFO] faiss.loader: Loading faiss.
+2026-01-08 22:35:37,460 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-08 23:00:04,932 [INFO] faiss.loader: Loading faiss.
+2026-01-08 23:00:05,018 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-08 23:00:42,266 [INFO] faiss.loader: Loading faiss.
+2026-01-08 23:00:42,349 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-08 23:01:09,446 [INFO] faiss.loader: Loading faiss.
+2026-01-08 23:01:09,533 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-08 23:01:09,539 [INFO] backend.utility_wrappers.LoggingWrapper.LoggingWrapper: Checking events RAG stores.
+2026-01-08 23:01:09,539 [INFO] backend.utility_wrappers.LoggingWrapper.LoggingWrapper: Checking facts RAG stores.
+2026-01-08 23:01:09,539 [INFO] backend.utility_wrappers.LoggingWrapper.LoggingWrapper: Checking goals RAG stores.
+2026-01-08 23:07:45,471 [INFO] faiss.loader: Loading faiss.
+2026-01-08 23:07:45,542 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-08 23:07:45,548 [INFO] backend.utility_wrappers.LoggingWrapper.LoggingWrapper: Checking events RAG stores.
+2026-01-08 23:07:45,548 [INFO] backend.utility_wrappers.LoggingWrapper.LoggingWrapper: Checking facts RAG stores.
+2026-01-08 23:07:45,548 [INFO] backend.utility_wrappers.LoggingWrapper.LoggingWrapper: Checking goals RAG stores.
+2026-01-08 23:08:38,081 [INFO] faiss.loader: Loading faiss.
+2026-01-08 23:08:38,152 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-08 23:08:38,157 [INFO] backend.utility_wrappers.LoggingWrapper.LoggingWrapper: Checking events RAG stores.
+2026-01-08 23:08:38,157 [INFO] backend.utility_wrappers.LoggingWrapper.LoggingWrapper: Checking facts RAG stores.
+2026-01-08 23:08:38,157 [INFO] backend.utility_wrappers.LoggingWrapper.LoggingWrapper: Checking goals RAG stores.
+2026-01-08 23:24:01,971 [INFO] faiss.loader: Loading faiss.
+2026-01-08 23:24:02,043 [INFO] faiss.loader: Successfully loaded faiss.
+2026-01-08 23:24:02,049 [INFO] backend.utility_wrappers.LoggingWrapper.LoggingWrapper: Checking events RAG stores.
+2026-01-08 23:24:02,049 [INFO] backend.utility_wrappers.LoggingWrapper.LoggingWrapper: Checking facts RAG stores.
+2026-01-08 23:24:02,049 [INFO] backend.utility_wrappers.LoggingWrapper.LoggingWrapper: Checking goals RAG stores.

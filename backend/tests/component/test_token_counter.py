@@ -1,7 +1,7 @@
 import pytest
 from llama_cpp import Llama
 from typing import Tuple
-from Maia.hood.context_engineering.helpers.token_counter import (
+from backend.Maia.hood.context_engineering.helpers.token_counter import (
     maia_llama3_token_counter, 
     token_counter
     )

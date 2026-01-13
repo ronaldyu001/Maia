@@ -1,4 +1,4 @@
-from Maia.hood.context_engineering.RAG.frameworks.LlamaIndexWrapper.LlamaIndex import LlamaIndexWrapper
+from backend.Maia.hood.context_engineering.RAG.frameworks.LlamaIndexWrapper.LlamaIndex import LlamaIndexWrapper
 
 
 import json, faiss
