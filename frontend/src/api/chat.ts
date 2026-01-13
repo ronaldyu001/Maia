@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 // --- backend chat endpoint ---
-const API_URL = 'http://localhost:8000/chat';
+const API_URL = 'http://127.0.0.1:8000/chat';
 
 
 // --- API Call: Send Message ---

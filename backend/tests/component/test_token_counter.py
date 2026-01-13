@@ -1,10 +1,10 @@
 import pytest
 from llama_cpp import Llama
 from typing import Tuple
-from backend.context_engineering.helpers.token_counter import (
-    maia_llama3_token_counter, 
+from backend.Maia.hood.context_engineering.helpers.token_counters import (
+    maia_llama3_token_counter,
     token_counter
-    )
+)
 
 
 def test_token_counter():

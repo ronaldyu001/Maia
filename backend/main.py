@@ -1,17 +1,18 @@
 from fastapi import FastAPI
-from backend.engine_wrappers.ollama.wrapper_ollama import OllamaModel
-from backend.routes import chat
+from backend.Maia.hood.engine_wrappers.ollama.wrapper_ollama import OllamaModel
+from backend.routes.chat import chat
 from fastapi.middleware.cors import CORSMiddleware
-
-from backend.startup import load_llama3
-
+from backend.Maia.config import OLLAMA_MODEL_NAME
+from backend.logging.LoggingWrapper import Logger
+from backend.startup import load_llama3, load_RAG
 
 # ----- create FastAPI app -----
+Logger.log(level=20, msg='Starting backend.')
 app = FastAPI()
-model = OllamaModel( model_name="llama3" )
+# model = OllamaModel( model_name=OLLAMA_MODEL_NAME )
 
 
-# ----- Allow your frontend origin(s) -----
+# ----- Allow frontend origin(s) -----
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
@@ -30,4 +31,5 @@ app.include_router( chat.router )
 async def startup_events():
     """ startup events. """
     print( f"Performing startup events..." )
-    await load_llama3()
+    # await load_llama3()
+    load_RAG()
