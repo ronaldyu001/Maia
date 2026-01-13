@@ -8,7 +8,7 @@ from pydantic import PrivateAttr
 import faiss
 from typing import Literal, Optional, List
 import datetime
-from backend.utility_wrappers.LoggingWrapper.LoggingWrapper import Logger
+from backend.logs.LoggingWrapper import Logger
 
 from backend.Maia.SETTINGS import STORE_PATHS
 from backend.Maia.hood.context_engineering.RAG.embedders.Nomic.NomicWrapper import NomicEmbedder

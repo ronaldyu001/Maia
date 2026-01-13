@@ -3,7 +3,7 @@ from math import ceil
 
 def generic_trimmer( text: str, llm: str, desired_tokens: int ) -> tuple[ str, str|None ]:
     """
-    Generically trims text to desired number of tokens.
+    Trims text to desired number of tokens. Anything past the desired tokens will be trimmed.
     """
     try:
         # ----- generic trim -----

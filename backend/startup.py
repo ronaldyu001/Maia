@@ -11,7 +11,7 @@ from backend.Maia.hood.context_engineering.RAG.frameworks.LlamaIndexWrapper.Llam
 import faiss
 from pathlib import Path
 
-from backend.utility_wrappers.LoggingWrapper.LoggingWrapper import Logger
+from backend.logs.LoggingWrapper import Logger
 from backend.Maia.tools.memory.storage import load_json
 from backend.Maia.SETTINGS import SEED_PATHS, STORE_PATHS
 """

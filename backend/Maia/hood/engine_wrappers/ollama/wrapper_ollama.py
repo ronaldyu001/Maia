@@ -3,7 +3,7 @@ from typing import List
 import requests
 import asyncio
 
-from backend.config import (
+from backend.Maia.config import (
     OLLAMA_HOST,
     OLLAMA_MODEL_NAME
 )

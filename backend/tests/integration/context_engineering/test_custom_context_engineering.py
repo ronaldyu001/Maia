@@ -1,6 +1,6 @@
 import pytest
 
-from backend.Maia.hood.context_engineering.context_window.generate_custom_window import generate_custom_context_window
+from backend.Maia.hood.context_engineering.context_window.windows.generate_custom_window import generate_custom_context_window
 from backend.Maia.hood.context_engineering.settings import RULES, TOOL_CONTRACT
 from backend.Maia.hood.context_engineering.context_window.sections._conversation_history._conversation import generate_conversational_transcript
 

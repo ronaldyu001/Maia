@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import List, Dict, Any
 from pydantic import BaseModel
 
-from backend.Maia.tools.maia.commit_session import commit_session
+from backend.Maia.tools.memory.commit_session import commit_session
 
 
 # ===== Available Tools for Maia =====

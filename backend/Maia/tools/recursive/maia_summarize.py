@@ -1,5 +1,5 @@
 from pathlib import Path
-from utility_wrappers.LoggingWrapper.LoggingWrapper import Logger
+from backend.logs.LoggingWrapper import Logger
 from math import floor
 import re, json
 

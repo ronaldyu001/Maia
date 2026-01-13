@@ -1,7 +1,7 @@
 from math import ceil
-from backend.utility_wrappers.LoggingWrapper.LoggingWrapper import Logger
+from backend.logs.LoggingWrapper import Logger
 
-from backend.Maia.hood.context_engineering.helpers.token_counter import token_counter
+from backend.Maia.hood.context_engineering.helpers.token_counters import token_counter
 from backend.Maia.hood.context_engineering.context_window.sections._rules._rules import generate_rules
 from backend.Maia.hood.context_engineering.context_window.sections._tool_contract._tool_contract import generate_tool_contract
 from backend.Maia.hood.context_engineering.context_window.sections._conversation_history._conversation import generate_conversational_transcript

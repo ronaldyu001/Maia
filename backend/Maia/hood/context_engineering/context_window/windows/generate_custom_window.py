@@ -1,5 +1,5 @@
 from math import ceil, floor
-from utility_wrappers.LoggingWrapper.LoggingWrapper import Logger
+from backend.logs.LoggingWrapper import Logger
 
 from backend.Maia.hood.context_engineering.context_window.sections._rules._rules import generate_rules
 from backend.Maia.hood.context_engineering.context_window.sections._tool_contract._tool_contract import generate_tool_contract

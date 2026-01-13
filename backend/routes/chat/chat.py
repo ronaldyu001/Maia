@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from backend.utility_wrappers.LoggingWrapper.LoggingWrapper import Logger
+from backend.logs.LoggingWrapper import Logger
 
 from backend.Maia.hood.engine_wrappers.ollama.wrapper_ollama import OllamaModel
 from backend.Maia.hood.engine_wrappers.huggingface.wrapper_huggingface import HuggingFaceModel
@@ -14,13 +14,13 @@ from backend.Maia.tools.memory.conversations import (
 from backend.Maia.tools.tool_handling import (
     receive_tool_request,
 )
-from backend.Maia.hood.context_engineering.context_window.generate_generic_window import generate_context_window
-from backend.Maia.hood.context_engineering.helpers.token_counter import token_counter
+from backend.Maia.hood.context_engineering.context_window.windows.generate_generic_window import generate_context_window
+from backend.Maia.hood.context_engineering.helpers.token_counters import token_counter
 from backend.Maia.hood.context_engineering.helpers.add_turn import add_turn
 from backend.Maia.helpers._time import time_now
-from backend.Maia.helpers._json import try_parse_json
+from backend.Maia.tools.utility._json import try_parse_json
 from backend.routes.chat.helpers.error_handlers import _post
-from backend.config import OLLAMA_MODEL_NAME
+from backend.Maia.config import OLLAMA_MODEL_NAME
 
 
 # ===== router and model =====

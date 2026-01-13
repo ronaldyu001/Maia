@@ -1,7 +1,7 @@
 from math import floor, ceil
-from backend.utility_wrappers.LoggingWrapper.LoggingWrapper import Logger
+from backend.logs.LoggingWrapper import Logger
 
-from backend.Maia.hood.context_engineering.helpers.token_counter import token_counter
+from backend.Maia.hood.context_engineering.helpers.token_counters import token_counter
 from backend.Maia.hood.context_engineering.helpers.generic_trimmer import generic_trimmer
 from backend.Maia.hood.context_engineering.context_window.sections._task.variables import DEFAULT_CHAT
 
