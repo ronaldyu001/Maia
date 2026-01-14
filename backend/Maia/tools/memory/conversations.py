@@ -119,7 +119,7 @@ def set_last_conversation_id( session_id: str ) -> None:
     - Sets last_conversation.text with current conversation's session id.
     """
     # ----- get paths -----
-    CONVERSATIONAL = Path( "backend/memory/raw/short_term/conversations" )
+    CONVERSATIONAL = Path( "backend/Maia/memories/conversations" )
     LAST_CONVERSATION_TEXT = CONVERSATIONAL / "last_conversation.text"
 
     # ----- create current conversation json path -----
@@ -134,7 +134,7 @@ def get_last_conversation_id() -> str:
     - Returns string of last conversation's session id.
     """
     # ---- path for last_conversation.text -----
-    LAST_CONVERSATION = Path( "backend/memory/raw/short_term/conversations/last_conversation.text" )
+    LAST_CONVERSATION = Path( "backend/Maia/memories/conversations/last_conversation.text" )
 
     # ----- load path of last conversation json from last_conversation.text -----
     session_id = load_json( path=LAST_CONVERSATION, default="" )
