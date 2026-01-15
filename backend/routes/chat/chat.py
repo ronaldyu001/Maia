@@ -51,13 +51,17 @@ async def chat(req: ChatRequest):
 
     # ----- add and save new turn to conversational memory (used in context window) -----
     # create conversation json in memory if DNE
+    Logger.info(f"Initializing conversation with id: {current_session_id}")
     ensure_conversation_initialized(session_id=current_session_id)
 
+    Logger.info("Adding turn to conversation.")
     turns = add_turn( session_id=current_session_id, role="user", content=message )
     # update the json
+    Logger.info(f"Saving conversation id: {current_session_id}")
     save_conversation( session_id=current_session_id, data=turns )
 
     # ----- generate context window -----
+    Logger.info("Generating context window.")
     prompt = generate_context_window( llm=llm, size=8192, session_id=current_session_id )
     print( f"Context Window size: {token_counter( llm=llm, text=prompt )} tokens" )
 
@@ -66,11 +70,12 @@ async def chat(req: ChatRequest):
     response = { "response": model.chat(prompt=prompt) }
 
     # ----- check if Maia sent a message or tool request -----
+    Logger.info("Checking Maia's reponse.")
     data, success = try_parse_json( response["response"] )
 
     # ----- if Maia sends a message -----
     if not success:
-        print("Sending Maia's reply...")
+        Logger.info("Sending Maia's reply...")
         # update full conversation with response
         turns = add_turn( session_id=current_session_id, role="assistant", content=response["response"] )
         # save full conversation to conversational memory
@@ -80,7 +85,7 @@ async def chat(req: ChatRequest):
 
     # ----- if Maia sends a tool request -----
     if isinstance( data, (dict, list) ):
-        print("Processing tool request...")
+        Logger.info("Processing tool request...")
         # add work summary to conversational history
         record = receive_tool_request( request=data )
         turns = add_turn( session_id=current_session_id, role="assistant", content=record )

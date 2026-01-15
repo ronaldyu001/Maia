@@ -39,12 +39,12 @@ def generate_context_window( llm: str, size: int, session_id: str ) -> list[dict
     for section in CONTENT:
         if isinstance( section, list ): CONTEXT_WINDOW += section
 
-    print( CONTEXT_WINDOW )
+    Logger.info( f"Maia's Context Window: \n{CONTEXT_WINDOW}" )
 
     # ----- Summary -----
-    print( f"Sizes:\n" )
-    print( f"Rules: ~{ceil(len(str(RULES))/4)} tokens\n" )
-    print( f"Tool Contract: ~{ceil(len(str(TOOL_CONTRACT))/4)} tokens\n" )
-    print( f"Conversational Transcript: ~{ceil(len(str(CONVERSATIONAL_HISTORY))/4)} tokens\n" )
+    Logger.info("Context Window sizes:\n")
+    Logger.info( f"Rules: ~{ceil(len(str(RULES))/4)} tokens\n" )
+    Logger.info( f"Tool Contract: ~{ceil(len(str(TOOL_CONTRACT))/4)} tokens\n" )
+    Logger.info( f"Conversational Transcript: ~{ceil(len(str(CONVERSATIONAL_HISTORY))/4)} tokens\n" )
 
     return CONTEXT_WINDOW
