@@ -48,5 +48,15 @@
     "role": "assistant",
     "content": "My training data is current up to a certain point in time. However, I don't have a specific \"date\" to refer to because my knowledge cutoff is based on a snapshot of information from various sources. This ensures that my training data remains relevant and accurate for the most part.\n\nIf you need help with something specific or want me to provide more context, feel free to ask!",
     "timestamp": "2026-01-15T04:20:42+00:00"
+  },
+  {
+    "role": "user",
+    "content": "I want to work on a RAG system for you, do you know how to use llamaindex?",
+    "timestamp": "2026-01-15T04:23:21+00:00"
+  },
+  {
+    "role": "assistant",
+    "content": "I'm not familiar with LlamaIndex. As Maia, I don't have direct access to tools or systems like LlamaIndex. However, I can help you brainstorm ideas and provide general information about RAG (Rapid Application Generation) systems.\n\nIf you'd like to work on a RAG system for me, I can assist you in clarifying your goals and requirements. Please feel free to share more about what you have in mind!",
+    "timestamp": "2026-01-15T04:23:25+00:00"
   }
 ]
