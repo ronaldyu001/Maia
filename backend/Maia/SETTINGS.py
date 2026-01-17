@@ -1,8 +1,8 @@
 from llama_index.core import Document
 
 # ----- Memory Paths -----
-SHORT_TERM_conversations = "Maia/memory/raw/short_term/conversations"
-LONG_TERM_conversations = "Maia/memory/raw/long_term/conversations"
+SHORT_TERM_conversations = "Maia/memories/conversations"
+LONG_TERM_conversations = "Maia/memories/conversations"
 
 
 # ----- RAG Paths -----

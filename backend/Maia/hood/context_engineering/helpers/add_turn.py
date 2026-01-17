@@ -12,7 +12,7 @@ def add_turn( session_id: str, role: str, content: str,  ) -> list[dict]:
     """
     try:
         # ----- create conversation file if DNE -----
-        CONVERSATION = Path( f"backend/memory/raw/short_term/conversations" ) / f"{session_id}.json"
+        CONVERSATION = Path( f"backend/Maia/memories/conversations" ) / f"{session_id}.json"
         CONVERSATION.touch( exist_ok=True )
 
         # ----- load conversation -----

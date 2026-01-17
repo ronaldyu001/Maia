@@ -1,7 +1,6 @@
 from pathlib import Path
 from typing import List
 from backend.logging.LoggingWrapper import Logger
-
 from backend.Maia.hood.context_engineering.settings import SHORT_TERM_conversations, LONG_TERM_conversations
 from backend.Maia.tools.memory.storage import load_json, save_json
 from backend.Maia.tools.utility._time import time_now
@@ -53,7 +52,6 @@ def save_conversation(session_id: str, data: List[dict]) -> None:
         raise ValueError("session_id is required")
 
     # If caller passes empty data, there's nothing to append.
-    # (don't treat this as an error.)
     if not data:
         return
 
@@ -68,8 +66,10 @@ def save_conversation(session_id: str, data: List[dict]) -> None:
         conversation = load_conversation(session_id=session_id)
         if not isinstance(conversation, list):
             conversation = []
+
     except FileNotFoundError:
         conversation = []
+
     except Exception as err:
         # If file is corrupt/unreadable, reset to empty rather than crash
         conversation = []
@@ -109,37 +109,7 @@ def save_conversation(session_id: str, data: List[dict]) -> None:
     )
 
     if not save_successful:
-        # Don't silently swallow this — it will make debugging impossible
-        Logger.log(f"Failed to save conversation: {error}")
-
-
-# ===== Function: keep track of last conversation id =====
-def set_last_conversation_id( session_id: str ) -> None:
-    """
-    - Sets last_conversation.text with current conversation's session id.
-    """
-    # ----- get paths -----
-    CONVERSATIONAL = Path( "backend/memory/raw/short_term/conversations" )
-    LAST_CONVERSATION_TEXT = CONVERSATIONAL / "last_conversation.text"
-
-    # ----- create current conversation json path -----
-    CURRENT_CONVERSATION = f"{session_id}"
-    
-    save_json( path=LAST_CONVERSATION_TEXT, default="", data=CURRENT_CONVERSATION )
-
-
-# ===== Function: save current conversation =====
-def get_last_conversation_id() -> str:
-    """
-    - Returns string of last conversation's session id.
-    """
-    # ---- path for last_conversation.text -----
-    LAST_CONVERSATION = Path( "backend/memory/raw/short_term/conversations/last_conversation.text" )
-
-    # ----- load path of last conversation json from last_conversation.text -----
-    session_id = load_json( path=LAST_CONVERSATION, default="" )
-
-    return session_id
+        Logger.log(f"Failed to save conversation {session_id}: {error}")
 
 
 def format_conversation( conversation: list[dict] ) -> list[dict]:
