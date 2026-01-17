@@ -7,9 +7,6 @@ from backend.Maia.hood.engine_wrappers.huggingface.wrapper_huggingface import Hu
 
 from backend.Maia.tools.memory.conversations import (
     save_conversation,
-    load_conversation,
-    set_last_conversation_id,
-    get_last_conversation_id,
     ensure_conversation_initialized
 )
 from backend.Maia.tools.tool_handling import (
@@ -41,13 +38,9 @@ class ChatResponse(BaseModel):
 async def chat(req: ChatRequest):
 
     # ----- get session id info and message -----
-    last_session_id = get_last_conversation_id()
     current_session_id = req.session_id
     message = req.message
     llm = OLLAMA_MODEL_NAME
-
-    # ----- update last_conversation.text with this session id -----
-    if current_session_id is not last_session_id: set_last_conversation_id( current_session_id )
 
     # ----- add and save new turn to conversational memory (used in context window) -----
     # create conversation json in memory if DNE

@@ -82,7 +82,7 @@ def save_json( path: Path, default: Any, data: Any ) -> Tuple[ bool, str|None ]:
 
         # --- write to json ---
         temp.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
-        temp.replace(path)  # overwrite actual path with temp data, atomic-ish on most OSes
+        temp.replace(path)  # overwrite actual path with temp data
 
         return True, None
     
