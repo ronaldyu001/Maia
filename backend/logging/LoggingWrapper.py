@@ -12,7 +12,7 @@ log_path = log_dir / log_filename
 # Basic configuration
 logging.basicConfig(
     level=logging.INFO,  # Default log level
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    format="%(asctime)s [%(levelname)s]: %(message)s",
     handlers=[
         logging.StreamHandler(),              # Print to console
         logging.FileHandler(log_path)          # Write to dated log file
