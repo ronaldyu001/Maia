@@ -145,21 +145,19 @@ def conversational_to_longterm( session_id: str ) -> bool:
         return False
     
 
-def ensure_conversation_initialized(session_id: str) -> list:
+def ensure_conversation_initialized(session_id: str) -> bool:
     """
-    Loads conversation if it exists; otherwise creates an empty conversation and returns it.
+    Loads conversation if it exists; otherwise creates an empty conversation.\n
+    Returns True if conversation exists, else False.
     """
+    conversation_exists = True
+
     try:
         data = load_conversation(session_id=session_id)
-        # normalize: if load returns None, treat as empty
-        if not data:
-            data = []
-    except FileNotFoundError:
-        data = []
-        save_conversation(session_id=session_id, data=data)
-    except Exception:
-        # If the file exists but is corrupted/unreadable, fail soft by resetting
+
+    except:
+        conversation_exists = False
         data = []
         save_conversation(session_id=session_id, data=data)
 
-    return data
+    return conversation_exists

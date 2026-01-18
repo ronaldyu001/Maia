@@ -20,10 +20,12 @@ from backend.Maia.tools.utility._json import try_parse_json
 from backend.routes.chat.helpers.error_handlers import _post
 from backend.Maia.config import OLLAMA_MODEL_NAME
 
+
 # ===== router and model =====
 router = APIRouter()
 model = OllamaModel()  # uses config/model defaults
 # model = HuggingFaceModel()
+
 
 # ===== Schemas =====
 class ChatRequest(BaseModel):
@@ -32,6 +34,7 @@ class ChatRequest(BaseModel):
 
 class ChatResponse(BaseModel):
     response: str
+
 
 # ===== Route =====
 @router.post("/chat", response_model=ChatResponse)
