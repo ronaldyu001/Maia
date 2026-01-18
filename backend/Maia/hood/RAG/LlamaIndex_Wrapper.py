@@ -1,4 +1,10 @@
-from llama_index.core import VectorStoreIndex, Document
+from llama_index.core import VectorStoreIndex, Document, Settings, StorageContext
+from llama_index.embeddings.ollama import OllamaEmbedding
+from llama_index.core.vector_stores.simple import SimpleVectorStore
+from backend.logging.LoggingWrapper import Logger
+from backend.Maia.hood.RAG.getters_vector_store_indexes.get_memories_index import get_memories_index
+
+
 
 class LlamaIndex:
     """
@@ -7,10 +13,29 @@ class LlamaIndex:
     PURPOSE:
     This class initialize a vectore store object from Maia's vector store, and abstracts necessary functions
     to dynamically maintain it.
+
+    VECTOR STORE INDEXES:
+    memory: This is where high level memories belong, such as summarized events, conversations, topics, projects, etc.
+            This should be the first index hit for RAG. 
     """
     def __init__(self):
-        #
-        self.index = VectorStoreIndex()
+        #index paths
+        self.memories_index_path = "backend/Maia/memories/vector_stores/memories"
+
+        #initialize LlamaIndex settings object
+        self.settings = Settings
+
+        #set embedder in settings
+        Logger.info("Setting embed model for LlamaIndex in settings.")
+        self.settings.embed_model = OllamaEmbedding(
+            model_name="nomic-embed-text",
+            base_url="http://localhost:11434"
+        )
+
+        #intialize/load vector stores
+        Logger.info("Initializing/Loading 'memories' index.")
+        self.memories_index = get_memories_index()
+
 
 
     def embed(self, text: str, metadata: dict):
@@ -18,6 +43,11 @@ class LlamaIndex:
         document = Document(text=text, extra_info=metadata)
 
         #insert document into vector store
-        self.index.insert(document=document)
+        self.memories_index.insert(document)
+
+        #persist
+        self.memories_index.storage_context.persist(
+            persist_dir=self.memories_index_path
+        )
 
 
