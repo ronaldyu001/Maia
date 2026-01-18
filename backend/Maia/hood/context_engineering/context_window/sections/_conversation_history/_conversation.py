@@ -1,6 +1,6 @@
 from backend.logging.LoggingWrapper import Logger
 
-from backend.Maia.tools.memory.conversations import load_conversation
+from backend.Maia.hood.context_engineering.helpers.conversations import load_conversation
 from backend.Maia.hood.context_engineering.helpers.transcript import create_transcript, trim_transcript, autosize_transcript
 from backend.Maia.hood.context_engineering.helpers.token_counters import token_counter
 

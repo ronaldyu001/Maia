@@ -5,7 +5,7 @@ from backend.logging.LoggingWrapper import Logger
 from backend.Maia.hood.engine_wrappers.ollama.wrapper_ollama import OllamaModel
 from backend.Maia.hood.engine_wrappers.huggingface.wrapper_huggingface import HuggingFaceModel
 
-from backend.Maia.tools.memory.conversations import (
+from backend.Maia.hood.context_engineering.helpers.conversations import (
     save_conversation,
     ensure_conversation_initialized
 )

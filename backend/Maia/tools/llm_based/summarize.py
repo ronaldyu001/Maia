@@ -8,7 +8,7 @@ from backend.Maia.hood.context_engineering.context_window.sections._task.variabl
 from backend.Maia.hood.context_engineering.context_window.windows.summary_window import generate_summarize_context_window
 from backend.Maia.hood.engine_wrappers.ollama.wrapper_ollama import OllamaModel
 from backend.Maia.hood.context_engineering.helpers.transcript import create_transcript, autosize_transcript, trim_transcript
-from backend.Maia.tools.memory.conversations import load_conversation
+from backend.Maia.hood.context_engineering.helpers.conversations import load_conversation
 
 
 # helpers
