@@ -2,8 +2,8 @@ from llama_index.core import VectorStoreIndex, Document, Settings, StorageContex
 from llama_index.embeddings.ollama import OllamaEmbedding
 from llama_index.core.vector_stores.simple import SimpleVectorStore
 from backend.logging.LoggingWrapper import Logger
-from backend.Maia.hood.RAG.getters_vector_store_indexes.get_memories_index import get_memories_index
-
+from backend.Maia.hood.RAG.get_vector_store_indices.get_memories_index import get_memories_index
+from backend.Maia.hood.RAG.get_vector_store_indices.get_raw_conversations_index import get_raw_conversations_index
 
 
 class LlamaIndex:
@@ -18,6 +18,8 @@ class LlamaIndex:
     memory: This is where high level memories belong, such as summarized events, conversations, topics, projects, etc.
             This should be the first index hit for RAG. 
     """
+
+
     def __init__(self):
         #index paths
         self.memories_index_path = "backend/Maia/memories/vector_stores/memories"
@@ -33,10 +35,13 @@ class LlamaIndex:
         )
 
         #intialize/load vector stores
+        Logger.info("initializing/Loading 'raw_converations' index.")
+        self.raw_conversations_index = get_raw_conversations_index()
+
         Logger.info("Initializing/Loading 'memories' index.")
         self.memories_index = get_memories_index()
-
-
+        
+        
 
     def embed(self, text: str, metadata: dict):
         #create document from text and metadata
