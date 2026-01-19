@@ -3,7 +3,6 @@ from backend.logging.LoggingWrapper import Logger
 from math import floor
 import re, json
 
-
 from backend.Maia.hood.context_engineering.context_window.sections._task.variables import SUMMARIZE_CONVERSATION
 from backend.Maia.hood.context_engineering.context_window.windows.summary_window import generate_summarize_context_window
 from backend.Maia.hood.engine_wrappers.ollama.wrapper_ollama import OllamaModel
@@ -11,7 +10,6 @@ from backend.Maia.hood.context_engineering.helpers.transcript import create_tran
 from backend.Maia.hood.context_engineering.helpers.conversations import load_conversation
 
 
-# helpers
 def extract_summary(raw_output: str):
     try:
         match = re.search(r"<JSON>(.*?)</JSON>", raw_output, re.S)
@@ -20,7 +18,7 @@ def extract_summary(raw_output: str):
     except: return False
 
 
-async def async_maia_summarize_conversation( llm: str, ctx_wdw_size: int, session_id: str, task=SUMMARIZE_CONVERSATION, memory_type=["short_term", "long_term"] ) -> str:
+def summarize_conversation( llm: str, ctx_wdw_size: int, session_id: str, task=SUMMARIZE_CONVERSATION, memory_type=["short_term", "long_term"] ) -> str:
     """
     Returns
     - a json list with the summary.
