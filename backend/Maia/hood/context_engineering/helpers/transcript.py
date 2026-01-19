@@ -7,16 +7,30 @@ from math import ceil, floor
 def create_transcript(turns: list[dict]) -> list[str]:
     """
     Converts transcript from a list of dicts into a list of strings.
+    Only includes 'role' and 'content' in transcript.
     """
     Logger.info("Converting transcript from list[dict] to list[str]")
     try:
         return [ f"{t['role'].capitalize()}: {t['content']}" for t in turns ]
     except Exception as err:
-        Logger.log(level=20, msg=f'create_transcript: {err}')
+        Logger.error(f'create_transcript: {err}')
+        return False
+    
+
+def create_transcript_with_timestamps(turns: list[dict]) -> list[str]:
+    """
+    Converts transcript from a list of dicts into a list of strings.
+    Includes 'role', 'timestamp', 'content' in transcript.
+    """
+    Logger.info("Converting transcript from list[dict] to list[str] with timestamps")
+    try:
+        return [ f"[{t['timestamp']}] {t['role'].capitalize()}: {t['content']}" for t in turns ]
+    except Exception as err:
+        Logger.error(f'create_transcript_with_timestamps: {err}')
         return False
 
 
-def trim_transcript( transcript: list[str], num_turns: int, stringify: bool = True ) -> str:
+def trim_transcript( transcript: list[str], num_turns: int, stringify_entire_transcript: bool = True ) -> str:
     """
     Shortens transcript (list of strings) to desired num_turns and returns as string.\n
     Prioritizes recency.
@@ -25,7 +39,7 @@ def trim_transcript( transcript: list[str], num_turns: int, stringify: bool = Tr
     - stringify: bool # stringifies list if True
     """
     Logger.info("Trimming transcript.")
-    if stringify: num_turns = len(transcript)
+    if stringify_entire_transcript: num_turns = len(transcript)
     start_index = len(transcript) - num_turns
     return "\n".join( transcript[ start_index: ] )
 
