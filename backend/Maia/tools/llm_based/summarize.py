@@ -59,7 +59,7 @@ def summarize_conversation( session_id: str, llm=llms[1], ctx_wdw_size=4086, tas
         # ----- get summary from Maia -----
         summary = extract_summary(raw_output=Maia.chat( prompt=window ))
         if not summary: raise Exception("Summary unable to be processed.")
-        print(summary)
+        Logger.info(f"Conversation {session_id} summarized, returning summary.")
         return summary
 
     except Exception as err:
