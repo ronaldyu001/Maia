@@ -8,6 +8,7 @@ from backend.Maia.hood.context_engineering.context_window.windows.summary_window
 from backend.Maia.hood.engine_wrappers.ollama.wrapper_ollama import OllamaModel
 from backend.Maia.hood.context_engineering.helpers.transcript import create_transcript, autosize_transcript, trim_transcript
 from backend.Maia.hood.context_engineering.helpers.conversations import load_conversation
+from backend.Maia.config import llms
 
 
 def extract_summary(raw_output: str):
@@ -18,7 +19,7 @@ def extract_summary(raw_output: str):
     except: return False
 
 
-def summarize_conversation( llm: str, ctx_wdw_size: int, session_id: str, task=SUMMARIZE_CONVERSATION, memory_type=["short_term", "long_term"] ) -> str:
+def summarize_conversation( session_id: str, llm=llms[1], ctx_wdw_size=4086, task=SUMMARIZE_CONVERSATION ) -> str:
     """
     Returns
     - a json list with the summary.
@@ -36,11 +37,6 @@ def summarize_conversation( llm: str, ctx_wdw_size: int, session_id: str, task=S
 
 
     try:
-        # ----- determine memory type and set target path -----
-        if memory_type == "short_term": TARGET = Path( f"backend/memory/raw/short_term/conversations" ) / f"{session_id}.json"
-        elif memory_type == "long_term": TARGET = Path( f"backend/memory/raw/long_term/conversations" ) / f"{session_id}.json"
-        else: raise Exception( f"Invalid memory type given." )
-
         # ----- create transcript: str of conversation to summarize -----
         conversation_size = floor(ctx_wdw_size * 0.5)
         conversation = load_conversation(session_id=session_id)
