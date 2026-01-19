@@ -1,6 +1,5 @@
-from llama_index.core import VectorStoreIndex, Document, Settings, StorageContext
+from llama_index.core import VectorStoreIndex, Document, Settings
 from llama_index.embeddings.ollama import OllamaEmbedding
-from llama_index.core.vector_stores.simple import SimpleVectorStore
 from backend.logging.LoggingWrapper import Logger
 from backend.Maia.hood.RAG.get_vector_store_indices.get_memories_index import get_memories_index
 from backend.Maia.hood.RAG.get_vector_store_indices.get_raw_conversations_index import get_raw_conversations_index
@@ -24,6 +23,7 @@ class LlamaIndex:
     def __init__(self):
         #index paths
         self.memories_index_path = "backend/Maia/memories/vector_stores/memories"
+        self.raw_conversations_index_path = "backend/Maia/memories/vector_stores/raw_conversations"
 
         #initialize LlamaIndex settings object
         self.settings = Settings
@@ -44,18 +44,45 @@ class LlamaIndex:
         
 
 
-    def embed(self, text: str, metadata: dict):
+    def embed(self, text: str, metadata: dict, index: VectorStoreIndex, persist_dir: str):
+        """
+        Low level embedding function. Don't use directly unless necessary.
+        
+        :param text: Data being stored.
+        :type text: str
+        :param metadata: Metadata for the data being stored.
+        :type metadata: dict
+        :param index: Use this class object's own index. e.g.(Maia.memories_index)
+        :type index: VectorStoreIndex
+        :param persist_dir: The path to persist the index.
+        :type persist_dir: str
+        """
         #create document from text and metadata
         document = Document(text=text, extra_info=metadata)
 
         #insert document into vector store
-        self.memories_index.insert(document)
+        try: 
+            Logger.info("Inserting document to index.")
+            self.memories_index.insert(document)
+        except Exception as err:
+            Logger.error(repr(err))
 
         #persist
+        Logger.info("Persisting index.")
         self.memories_index.storage_context.persist(
             persist_dir=self.memories_index_path
         )
 
 
     def embed_raw_conversation(self, session_id: str):
-        store_raw_conversation(session_id=session_id)
+        """
+        One of Maia's embedding functions. Saves a raw conversation to its corresponding vector store.
+        
+        :param session_id: The session id of the conversation to save.
+        :type session_id: str
+        """
+        store_raw_conversation(
+            session_id=session_id, 
+            index=self.raw_conversations_index, 
+            persist_dir=self.raw_conversations_index_path
+        )
