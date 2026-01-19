@@ -19,7 +19,7 @@ def extract_summary(raw_output: str):
     except: return False
 
 
-def summarize_conversation( session_id: str, llm=llms[1], ctx_wdw_size=4086, task=SUMMARIZE_CONVERSATION ) -> str:
+def summarize_conversation( session_id: str, llm=llms[2], ctx_wdw_size=4086, task=SUMMARIZE_CONVERSATION ) -> str:
     """
     Returns
     - a json list with the summary.
@@ -58,7 +58,10 @@ def summarize_conversation( session_id: str, llm=llms[1], ctx_wdw_size=4086, tas
 
         # ----- get summary from Maia -----
         summary = extract_summary(raw_output=Maia.chat( prompt=window ))
-        if not summary: raise Exception("Summary unable to be processed.")
+
+        if not summary: 
+            raise Exception("Summary unable to be processed.")
+        
         Logger.info(f"Conversation {session_id} summarized, returning summary.")
         return summary
 
