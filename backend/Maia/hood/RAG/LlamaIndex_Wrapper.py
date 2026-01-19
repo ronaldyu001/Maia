@@ -4,6 +4,7 @@ from llama_index.core.vector_stores.simple import SimpleVectorStore
 from backend.logging.LoggingWrapper import Logger
 from backend.Maia.hood.RAG.get_vector_store_indices.get_memories_index import get_memories_index
 from backend.Maia.hood.RAG.get_vector_store_indices.get_raw_conversations_index import get_raw_conversations_index
+from backend.Maia.hood.RAG.store_to_vector_store_indices.store_raw_conversation import store_raw_conversation
 
 
 class LlamaIndex:
@@ -41,7 +42,7 @@ class LlamaIndex:
         Logger.info("Initializing/Loading 'memories' index.")
         self.memories_index = get_memories_index()
         
-        
+
 
     def embed(self, text: str, metadata: dict):
         #create document from text and metadata
@@ -56,3 +57,5 @@ class LlamaIndex:
         )
 
 
+    def embed_raw_conversation(self, session_id: str):
+        store_raw_conversation(session_id=session_id)
