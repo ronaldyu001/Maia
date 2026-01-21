@@ -1,4 +1,5 @@
 from backend.logging.LoggingWrapper import Logger
+from typing import Optional
 
 from backend.Maia.hood.context_engineering.helpers.token_counters import token_counter
 from math import ceil, floor
@@ -30,7 +31,7 @@ def create_transcript_with_timestamps(turns: list[dict]) -> list[str]:
         return False
 
 
-def trim_transcript( transcript: list[str], num_turns: int, stringify_entire_transcript: bool = True ) -> str:
+def trim_transcript( transcript: list[str], num_turns: Optional[int] = None, stringify_entire_transcript: bool = True ) -> str:
     """
     Shortens transcript (list of strings) to desired num_turns and returns as string.\n
     Prioritizes recency.

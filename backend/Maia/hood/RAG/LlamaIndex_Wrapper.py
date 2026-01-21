@@ -3,7 +3,8 @@ from llama_index.embeddings.ollama import OllamaEmbedding
 from backend.logging.LoggingWrapper import Logger
 from backend.Maia.hood.RAG.get_vector_store_indices.get_memories_index import get_memories_index
 from backend.Maia.hood.RAG.get_vector_store_indices.get_raw_conversations_index import get_raw_conversations_index
-from backend.Maia.hood.RAG.store_to_vector_store_indices.store_raw_conversation import store_raw_conversation
+from backend.Maia.hood.context_engineering.helpers.conversations import load_conversation
+from backend.Maia.hood.context_engineering.helpers.transcript import create_transcript_with_timestamps, trim_transcript
 
 
 class LlamaIndex:
@@ -63,14 +64,14 @@ class LlamaIndex:
         #insert document into vector store
         try: 
             Logger.info("Inserting document to index.")
-            self.memories_index.insert(document)
+            index.insert(document)
         except Exception as err:
             Logger.error(repr(err))
 
         #persist
         Logger.info("Persisting index.")
-        self.memories_index.storage_context.persist(
-            persist_dir=self.memories_index_path
+        index.storage_context.persist(
+            persist_dir=persist_dir
         )
 
 
@@ -81,8 +82,41 @@ class LlamaIndex:
         :param session_id: The session id of the conversation to save.
         :type session_id: str
         """
-        store_raw_conversation(
-            session_id=session_id, 
-            index=self.raw_conversations_index, 
-            persist_dir=self.raw_conversations_index_path
-        )
+
+        #load conversation based on session id
+        try:
+            Logger.info(f"Loading conversation: {session_id}")
+            turns = load_conversation(session_id=session_id)
+            transcript = create_transcript_with_timestamps(turns=turns)
+            stringified_transcript = trim_transcript(transcript=transcript, stringify_entire_transcript=True)
+
+        except Exception as err:
+            Logger.error(repr(err))
+            raise repr(err)
+        
+
+        #create metadata
+        try:
+            Logger.info("Creating conversation metadata.")
+            metadata = {
+                "session_id": session_id,
+                "project": "conversation"
+            }
+
+        except Exception as err:
+            Logger.error(repr(err))
+
+
+        #embed conversation to raw_conversations vector store
+        try:
+            Logger.info("Embedding conversation.")
+            self.embed(
+                text=stringified_transcript,
+                metadata=metadata,
+                index=self.raw_conversations_index,
+                persist_dir=self.raw_conversations_index_path
+            )
+            Logger.info("Conversation embedded.")
+
+        except Exception as err:
+            Logger.error(repr(err))
