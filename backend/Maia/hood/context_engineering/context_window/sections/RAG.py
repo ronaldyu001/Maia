@@ -4,7 +4,13 @@ from backend.logging.LoggingWrapper import Logger
 
 
 RAG_INTRO = """
+The following section contains retrieved reference material that may be relevant to the current task.
 
+- The content was retrieved automatically based on semantic similarity.
+- It may include partial, outdated, or tangential information.
+- Use it only if it is helpful for answering the user’s current request.
+- Do not assume the retrieved content is correct or complete.
+- Do not mention retrieval, embeddings, or vector stores in the final answer.
 """
 
 
@@ -45,10 +51,12 @@ def get_RAG(session_id: str) -> str:
     retriever = vector_store.raw_conversations_index.as_retriever(similarity_top_k=5)
     results = retriever.retrieve(last_user_message)
 
-    print(f'RAG results: {results}')
-
     if not results:
         return ""
 
     chunks = [f"[{i+1}] {r.node.text}" for i, r in enumerate(results)]
-    return "\n\n---\n\n".join(chunks)
+
+    BODY = "\n\n---\n\n".join(chunks)
+    RAG_TEXT = RAG_INTRO + BODY
+
+    return RAG_TEXT

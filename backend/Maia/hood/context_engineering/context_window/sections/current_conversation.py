@@ -5,6 +5,7 @@ from backend.Maia.hood.context_engineering.helpers.transcript import create_tran
 from backend.Maia.hood.context_engineering.helpers.token_counters import token_counter
 
 
+
 def get_current_conversation( session_id: str, size: int ) -> list[dict] | bool:
     """
     Generates the conversational transcript for the context window.
@@ -30,13 +31,18 @@ def get_current_conversation( session_id: str, size: int ) -> list[dict] | bool:
         #if transcript too large, autosize
         ready_transcript_str = trim_transcript(
             transcript=history_str_list, 
-            num_turns=len(history_str_list)
+            stringify_entire_transcript=True
         )
         
         if token_counter( llm="maia-llama3", text=ready_transcript_str ) > size:
             ready_transcript = autosize_transcript_generic(transcript=history_json_list, size=size)
+        
+        ready_transcript_str = trim_transcript(
+            transcript=create_transcript(ready_transcript),
+            stringify_entire_transcript=True
+        )
 
-        return ready_transcript
+        return ready_transcript_str
 
     except Exception as err: 
         raise Exception(repr(err))

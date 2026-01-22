@@ -1,0 +1,22 @@
+[
+  {
+    "role": "user",
+    "content": "Hey Maia, how's it going?",
+    "timestamp": "2026-01-22T03:16:40+00:00"
+  },
+  {
+    "role": "assistant",
+    "content": "Hey there! It's great to chat with you. I'm doing well, thanks for asking. How about you? What's on your mind today?",
+    "timestamp": "2026-01-22T03:16:43+00:00"
+  },
+  {
+    "role": "user",
+    "content": "Not much, just wanted to chat for a bit!",
+    "timestamp": "2026-01-22T03:16:56+00:00"
+  },
+  {
+    "role": "assistant",
+    "content": "Hey there! Nice to hear from you too. It's always good to have a casual conversation and catch up. Is there anything in particular you'd like to talk about or ask me, or are we just going to enjoy the chat?",
+    "timestamp": "2026-01-22T03:16:58+00:00"
+  }
+]

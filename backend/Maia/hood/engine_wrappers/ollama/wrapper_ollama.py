@@ -12,12 +12,22 @@ from backend.Maia.config import (
 class OllamaModel( BaseModel ):
     """
     Purpose:
-    - Wraps Ollama Engine to access its endpoints.
-    
+    - Wraps Ollama Engine to access its endpoints (Singleton).
+
     Arguments:
     - model_name = OLLAMA_MODEL_NAME from config.py
     - host = Ollama's default port
     """
+
+    #singleton instance
+    _instance = None
+
+    def __new__(cls, model_name=OLLAMA_MODEL_NAME, host=OLLAMA_HOST):
+        #create instance if it doesn't exist, otherwise return existing instance
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance._initialized = False
+        return cls._instance
 
     def __init__( self, model_name=OLLAMA_MODEL_NAME, host=OLLAMA_HOST ):
         """
@@ -25,6 +35,11 @@ class OllamaModel( BaseModel ):
         - Sets model_name.
         - Sets api_url based on host. Default host is "http://localhost:11434".
         """
+
+        #skip initialization if already initialized
+        if self._initialized:
+            return
+        self._initialized = True
 
         self.model_name = model_name
         self.api_url = f"{host}/api/chat"
