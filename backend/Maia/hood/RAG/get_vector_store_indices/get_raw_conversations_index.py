@@ -1,6 +1,6 @@
 from pathlib import Path
 from backend.logging.LoggingWrapper import Logger
-from llama_index.core import StorageContext, VectorStoreIndex
+from llama_index.core import StorageContext, VectorStoreIndex, load_index_from_storage, load_indices_from_storage
 from llama_index.core.vector_stores.simple import SimpleVectorStore
 
 
@@ -25,8 +25,7 @@ def get_raw_conversations_index():
         )
 
         #load vector store index
-        raw_conversations_index = VectorStoreIndex(
-            nodes=[],
+        raw_conversations_index = load_index_from_storage(
             storage_context=storage_context
         )
 

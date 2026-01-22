@@ -1,7 +1,7 @@
 from backend.logging.LoggingWrapper import Logger
 from typing import Optional
 
-from backend.Maia.hood.context_engineering.helpers.token_counters import token_counter
+from backend.Maia.hood.context_engineering.helpers.token_counters import token_counter, generic_token_counter
 from math import ceil, floor
 
 
@@ -67,7 +67,7 @@ def autosize_transcript( transcript: list[dict], size: int, llm: str ) -> list[d
     if token_count <= size:
         return ready_transcript
 
-    # ----- if transcript is larger than window, binary search -----
+    # ----- if transcript is larger than window, decrease -----
     start_index = 0
     while token_count > size:
         start_index += 1
@@ -75,5 +75,41 @@ def autosize_transcript( transcript: list[dict], size: int, llm: str ) -> list[d
         temp_transcript = create_transcript( ready_transcript )
         ready_transcript_str = trim_transcript( transcript=temp_transcript, num_turns=len(ready_transcript) )
         token_count = token_counter( llm=llm, text=ready_transcript_str )
+
+    return ready_transcript
+
+
+def autosize_transcript_generic(transcript: list[dict], size: int):
+    """
+    Automatically resizes a transcript to the desired token count for a desired llm.
+    """
+
+    Logger.info("Autosizing transcript.")
+
+    #stringify transcript
+    ready_transcript = transcript
+    temp_transcript = create_transcript( turns=transcript )
+    ready_transcript_str = trim_transcript( transcript=temp_transcript, num_turns=len(transcript) )
+    
+    #current token count
+    token_count = generic_token_counter( text=ready_transcript_str  )
+
+    #if transcript is smaller than window, return
+    if token_count <= size:
+        return ready_transcript
+
+    #if transcript is larger than window, decrease until smaller
+    start_index = 0
+    while token_count > size:
+        start_index += 1
+        ready_transcript = transcript[start_index:]
+        temp_transcript = create_transcript(ready_transcript)
+        ready_transcript_str = trim_transcript(
+            transcript=temp_transcript, 
+            num_turns=len(ready_transcript)
+        )
+        token_count = generic_token_counter(
+            text=ready_transcript_str
+        )
 
     return ready_transcript

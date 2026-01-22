@@ -1,5 +1,5 @@
 from pathlib import Path
-from llama_index.core import StorageContext, VectorStoreIndex
+from llama_index.core import StorageContext, VectorStoreIndex, load_index_from_storage
 from llama_index.core.vector_stores.simple import SimpleVectorStore
 from backend.logging.LoggingWrapper import Logger
 
@@ -25,8 +25,7 @@ def get_memories_index() -> VectorStoreIndex:
         )
 
         #load vector store index
-        memories_index = VectorStoreIndex(
-            nodes=[],
+        memories_index = load_index_from_storage(
             storage_context=storage_context
         )
 

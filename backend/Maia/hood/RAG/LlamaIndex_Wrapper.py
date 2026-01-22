@@ -9,7 +9,7 @@ from backend.Maia.hood.context_engineering.helpers.transcript import create_tran
 
 class LlamaIndex:
     """
-    A wrapper class for LlamaIndex.
+    A wrapper class for LlamaIndex (Singleton).
 
     PURPOSE:
     This class initialize a vectore store object from Maia's vector store, and abstracts necessary functions
@@ -17,11 +17,25 @@ class LlamaIndex:
 
     VECTOR STORE INDEXES:
     memory: This is where high level memories belong, such as summarized events, conversations, topics, projects, etc.
-            This should be the first index hit for RAG. 
+            This should be the first index hit for RAG.
     """
 
+    #singleton instance
+    _instance = None
+
+    def __new__(cls):
+        #create instance if it doesn't exist, otherwise return existing instance
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance._initialized = False
+        return cls._instance
 
     def __init__(self):
+        #skip initialization if already initialized
+        if self._initialized:
+            return
+        self._initialized = True
+
         #index paths
         self.memories_index_path = "backend/Maia/memories/vector_stores/memories"
         self.raw_conversations_index_path = "backend/Maia/memories/vector_stores/raw_conversations"

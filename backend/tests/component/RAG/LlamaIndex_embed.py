@@ -12,12 +12,13 @@ def test_LlamaIndex_embed():
     ]
 
     for text, metadata in facts:
-        vector_store.embed(text=text, metadata=metadata)
+        vector_store.embed(text=text, metadata=metadata, index=vector_store.memories_index, persist_dir=vector_store.memories_index_path)
         print(f"Embedded: {text[:50]}...")
 
     print("\nFinished embedding all 5 facts")
 
-    retriever = vector_store.memories_index.as_retriever(similarity_top_k=5)
+    new_vector_store = LlamaIndex()
+    retriever = new_vector_store.memories_index.as_retriever(similarity_top_k=5)
 
     queries = [
         ("ancient walls", "The Great Wall of China"),
