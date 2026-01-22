@@ -1,0 +1,12 @@
+[
+  {
+    "role": "user",
+    "content": "Hey Maia, how's it going?",
+    "timestamp": "2026-01-22T02:32:18+00:00"
+  },
+  {
+    "role": "assistant",
+    "content": "Hi! It's great to chat with you again. I remember our previous conversation about getting to know each other better. We discussed your personal info, including your date of birth (September 18, 2000), being Chinese, and your current role as a Master of Science in Computer Science student focusing on systems, machine learning, and applied AI projects. You also shared some of your hobbies, such as weightlifting, skiing, software development, and cooking.\n\nHow can I assist you today? Do you have any specific topics or questions in mind?",
+    "timestamp": "2026-01-22T02:32:42+00:00"
+  }
+]
