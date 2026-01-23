@@ -4,11 +4,67 @@ import { sendMessage } from "../api/chat";
 
 type Turn = { role: "user" | "maia"; text: string };
 
+// Design tokens for consistent styling (cozy coffee shop theme)
+const tokens = {
+  colors: {
+    background: "#1c1816",
+    surface: "#2a2320",
+    surfaceSecondary: "#3a322d",
+    border: "#4a3f38",
+    borderLight: "#5a4d44",
+    text: "#f5ebe0",
+    textSecondary: "#c4b5a8",
+    textMuted: "#8a7b6d",
+    accent: "#d4a574",
+    accentHover: "#c4956a",
+    userBubble: "#3a322d",
+    assistantBubble: "#2a2320",
+  },
+  fonts: {
+    sans: '"Kalam", "Patrick Hand", cursive',
+  },
+  spacing: {
+    xs: 4,
+    sm: 8,
+    md: 16,
+    lg: 24,
+    xl: 32,
+  },
+  radius: {
+    sm: 8,
+    md: 12,
+    lg: 16,
+    xl: 24,
+    full: 9999,
+  },
+};
+
+// Send icon component
+function SendIcon({ active }: { active: boolean }) {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={active ? "#ffffff" : tokens.colors.textMuted}
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M22 2L11 13" />
+      <path d="M22 2L15 22L11 13L2 9L22 2Z" />
+    </svg>
+  );
+}
+
 export default function ChatWindow() {
   const [turns, setTurns] = useState<Turn[]>([]);
   const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const sessionIdRef = useRef<string>("");
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
     sessionIdRef.current = crypto.randomUUID();
@@ -18,169 +74,329 @@ export default function ChatWindow() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [turns]);
 
+  // Auto-resize textarea
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = Math.min(textareaRef.current.scrollHeight, 200) + "px";
+    }
+  }, [input]);
+
   async function handleSend() {
     const msg = input.trim();
-    if (!msg) { setInput(""); return; }
+    if (!msg || isLoading) { setInput(""); return; }
     const next = [...turns, { role: "user" as const, text: msg }];
     setTurns(next);
     setInput("");
+    setIsLoading(true);
     try {
       const reply = await sendMessage(msg, String(sessionIdRef.current));
       setTurns([...next, { role: "maia" as const, text: reply }]);
     } catch (e) {
-      setTurns([...next, { role: "maia" as const, text: "⚠️ Error talking to backend." }]);
+      setTurns([...next, { role: "maia" as const, text: "I apologize, but I encountered an error. Please try again." }]);
       console.error(e);
+    } finally {
+      setIsLoading(false);
     }
   }
 
-  function handleKey(e: React.KeyboardEvent<HTMLInputElement>) {
+  function handleKey(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSend();
     }
   }
 
+  const canSend = input.trim() && !isLoading;
+
   return (
-    <div style={{
-      position: "fixed",
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      background: "linear-gradient(135deg, #232526 0%, #414345 100%)",
-      display: "flex",
-      alignItems: "stretch",
-      justifyContent: "center",
-      padding: 0,
-      margin: 0,
-      overflow: "hidden",
-    }}>
-      <div style={{
-        width: "100%",
-        maxWidth: "100%",
-        height: "100vh",
-        background: "#181c23",
-        borderRadius: 20,
-        boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.25)",
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: tokens.colors.background,
+        fontFamily: tokens.fonts.sans,
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
-        border: "1px solid #23272f",
-      }}>
-        {/* Header */}
-        <div style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 12,
-          padding: "20px 28px 16px 28px",
-          background: "rgba(24,28,35,0.98)",
-          borderBottom: "1px solid #23272f",
-        }}>
-          <div style={{
-            width: 36,
-            height: 36,
-            borderRadius: "50%",
-            background: "linear-gradient(135deg, #238636 0%, #1f6feb 100%)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontWeight: 700,
-            fontSize: 20,
-            color: "#fff",
-            boxShadow: "0 2px 8px rgba(35,134,54,0.15)",
-            userSelect: "none",
-          }}>
-            M
-          </div>
-          <span style={{
-            fontWeight: 700,
-            fontSize: 20,
-            letterSpacing: 0.5,
-            color: "#fff",
-          }}>
-            Maia
-          </span>
-        </div>
-
-        {/* Message history */}
+      }}
+    >
+      {/* Messages area */}
+      <main
+        ref={scrollRef}
+        style={{
+          flex: 1,
+          overflowY: "auto",
+          overflowX: "hidden",
+        }}
+      >
         <div
-          ref={scrollRef}
           style={{
-            flex: 1,
-            overflowY: "auto",
-            background: "#181c23",
-            padding: "24px 18px 18px 18px",
-            display: "flex",
-            flexDirection: "column",
-            gap: 0,
+            maxWidth: 768,
+            margin: "0 auto",
+            padding: `${tokens.spacing.lg}px ${tokens.spacing.md}px`,
           }}
         >
           {turns.length === 0 && (
-            <div style={{
-              color: "#7a8599",
-              textAlign: "center",
-              marginTop: 40,
-              fontSize: 16,
-              letterSpacing: 0.1,
-            }}>
-              Start a conversation with Maia!
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                minHeight: "60vh",
+                color: tokens.colors.textMuted,
+                textAlign: "center",
+              }}
+            >
+              <div
+                style={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: tokens.radius.md,
+                  background: tokens.colors.surfaceSecondary,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 28,
+                  marginBottom: tokens.spacing.md,
+                }}
+              >
+                🤖
+              </div>
+              <h2
+                style={{
+                  fontSize: 26,
+                  fontWeight: 400,
+                  color: tokens.colors.text,
+                  margin: 0,
+                  marginBottom: tokens.spacing.sm,
+                }}
+              >
+                Hello there...
+              </h2>
+              <p
+                style={{
+                  fontSize: 18,
+                  color: tokens.colors.textSecondary,
+                  margin: 0,
+                }}
+              >
+                What's on your mind?
+              </p>
             </div>
           )}
-          {turns.map((t, i) => (
-            <Message key={i} role={t.role} text={t.text} />
-          ))}
-        </div>
 
-        {/* Input bar */}
-        <div style={{
-          padding: "18px 20px 18px 20px",
-          background: "rgba(24,28,35,0.98)",
-          borderTop: "1px solid #23272f",
-        }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: tokens.spacing.sm }}>
+            {turns.map((t, i) => (
+              <Message key={i} role={t.role} text={t.text} />
+            ))}
+
+            {/* Loading indicator */}
+            {isLoading && (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: tokens.spacing.sm,
+                  padding: `${tokens.spacing.md}px 0`,
+                }}
+              >
+                <div
+                  style={{
+                    width: 28,
+                    height: 28,
+                    borderRadius: tokens.radius.sm,
+                    background: tokens.colors.surfaceSecondary,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: 16,
+                    flexShrink: 0,
+                  }}
+                >
+                  🤖
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 4,
+                    padding: `${tokens.spacing.sm}px 0`,
+                  }}
+                >
+                  <span
+                    style={{
+                      width: 6,
+                      height: 6,
+                      borderRadius: "50%",
+                      backgroundColor: tokens.colors.textMuted,
+                      animation: "pulse 1.4s ease-in-out infinite",
+                    }}
+                  />
+                  <span
+                    style={{
+                      width: 6,
+                      height: 6,
+                      borderRadius: "50%",
+                      backgroundColor: tokens.colors.textMuted,
+                      animation: "pulse 1.4s ease-in-out 0.2s infinite",
+                    }}
+                  />
+                  <span
+                    style={{
+                      width: 6,
+                      height: 6,
+                      borderRadius: "50%",
+                      backgroundColor: tokens.colors.textMuted,
+                      animation: "pulse 1.4s ease-in-out 0.4s infinite",
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </main>
+
+      {/* Input area */}
+      <footer
+        style={{
+          flexShrink: 0,
+          backgroundColor: tokens.colors.background,
+          padding: `${tokens.spacing.md}px ${tokens.spacing.md}px ${tokens.spacing.lg}px`,
+        }}
+      >
+        <div
+          style={{
+            maxWidth: 768,
+            margin: "0 auto",
+          }}
+        >
           <form
-            style={{ display: "flex", gap: 10 }}
-            onSubmit={e => { e.preventDefault(); handleSend(); }}
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSend();
+            }}
             autoComplete="off"
+            style={{
+              display: "flex",
+              alignItems: "flex-end",
+              gap: tokens.spacing.sm,
+              padding: `${tokens.spacing.sm}px ${tokens.spacing.sm}px ${tokens.spacing.sm}px ${tokens.spacing.md}px`,
+              backgroundColor: tokens.colors.surfaceSecondary,
+              borderRadius: tokens.radius.lg,
+              border: `1px solid ${tokens.colors.borderLight}`,
+              transition: "border-color 0.15s ease, box-shadow 0.15s ease",
+            }}
           >
-            <input
+            <textarea
+              ref={textareaRef}
               value={input}
-              onChange={e => setInput(e.target.value)}
+              onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKey}
-              placeholder="Message Maia…"
+              placeholder="Write something..."
+              rows={1}
               style={{
                 flex: 1,
-                padding: "14px 16px",
-                borderRadius: 12,
-                border: "1.5px solid #23272f",
-                background: "#23272f",
-                color: "#e6edf3",
-                fontSize: 16,
+                resize: "none",
+                border: "none",
                 outline: "none",
-                transition: "border 0.2s",
-                boxShadow: "0 1px 4px rgba(0,0,0,0.07)",
+                backgroundColor: "transparent",
+                color: tokens.colors.text,
+                fontSize: 18,
+                lineHeight: 1.5,
+                padding: `${tokens.spacing.sm}px 0`,
+                fontFamily: tokens.fonts.sans,
+                maxHeight: 200,
               }}
             />
             <button
               type="submit"
+              disabled={!canSend}
               style={{
-                padding: "0 22px",
-                borderRadius: 10,
+                flexShrink: 0,
+                width: 36,
+                height: 36,
+                borderRadius: tokens.radius.sm,
                 border: "none",
-                background: input.trim() ? "linear-gradient(135deg, #238636 0%, #1f6feb 100%)" : "#23272f",
-                color: input.trim() ? "#fff" : "#7a8599",
-                fontWeight: 700,
-                fontSize: 16,
-                cursor: input.trim() ? "pointer" : "not-allowed",
-                boxShadow: input.trim() ? "0 2px 8px rgba(35,134,54,0.10)" : "none",
-                transition: "background 0.2s, color 0.2s",
+                backgroundColor: canSend ? tokens.colors.accent : tokens.colors.borderLight,
+                cursor: canSend ? "pointer" : "not-allowed",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                transition: "background-color 0.15s ease",
               }}
-              disabled={!input.trim()}
+              onMouseEnter={(e) => {
+                if (canSend) {
+                  e.currentTarget.style.backgroundColor = tokens.colors.accentHover;
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = canSend
+                  ? tokens.colors.accent
+                  : tokens.colors.borderLight;
+              }}
             >
-              Send
+              <SendIcon active={canSend} />
             </button>
           </form>
+          <p
+            style={{
+              fontSize: 13,
+              color: tokens.colors.textMuted,
+              textAlign: "center",
+              margin: `${tokens.spacing.sm}px 0 0 0`,
+              fontFamily: '"Cormorant Garamond", Georgia, serif',
+              fontStyle: "italic",
+              fontWeight: 300,
+              letterSpacing: "0.02em",
+            }}
+          >
+            Maia can make mistakes. Consider checking important information.
+          </p>
         </div>
-      </div>
+      </footer>
+
+      {/* CSS for loading animation and fonts */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap');
+
+        @keyframes pulse {
+          0%, 80%, 100% {
+            opacity: 0.3;
+            transform: scale(0.8);
+          }
+          40% {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        ::placeholder {
+          color: #8a7b6d;
+        }
+
+        ::-webkit-scrollbar {
+          width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+          background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+          background: #4a3f38;
+          border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+          background: #5a4d44;
+        }
+      `}</style>
     </div>
   );
 }
