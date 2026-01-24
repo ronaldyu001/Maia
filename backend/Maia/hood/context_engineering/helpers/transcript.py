@@ -1,7 +1,7 @@
 from backend.logging.LoggingWrapper import Logger
 from typing import Optional
 
-from backend.Maia.hood.context_engineering.helpers.token_counters import token_counter, generic_token_counter
+from backend.Maia.hood.context_engineering.helpers.token_counters import generic_token_counter
 from math import ceil, floor
 
 
@@ -61,7 +61,7 @@ def autosize_transcript( transcript: list[dict], size: int, llm: str ) -> list[d
     ready_transcript_str = trim_transcript( transcript=temp_transcript, num_turns=num_turns )
     
     # ----- current token count -----
-    token_count = token_counter( llm=llm, text=ready_transcript_str  )
+    token_count = generic_token_counter( llm=llm, text=ready_transcript_str  )
 
     # ----- if transcript is smaller than window, return -----
     if token_count <= size:
@@ -74,14 +74,15 @@ def autosize_transcript( transcript: list[dict], size: int, llm: str ) -> list[d
         ready_transcript = transcript[ start_index: ]
         temp_transcript = create_transcript( ready_transcript )
         ready_transcript_str = trim_transcript( transcript=temp_transcript, num_turns=len(ready_transcript) )
-        token_count = token_counter( llm=llm, text=ready_transcript_str )
+        token_count = generic_token_counter( llm=llm, text=ready_transcript_str )
 
     return ready_transcript
 
 
 def autosize_transcript_generic(transcript: list[dict], size: int):
     """
-    Automatically resizes a transcript to the desired token count for a desired llm.
+    Automatically resizes a transcript to the desired size. 
+    Keeps most recent messages.
     """
 
     Logger.info("Autosizing transcript.")
@@ -111,5 +112,43 @@ def autosize_transcript_generic(transcript: list[dict], size: int):
         token_count = generic_token_counter(
             text=ready_transcript_str
         )
+
+    return ready_transcript
+
+
+def autosize_transcript_generic_keep_oldest(transcript: list[dict], size: int):
+    """
+    Automatically resizes a transcript to the desired size.
+    Keeps the oldest messages (drops newest ones).
+    """
+
+    Logger.info("Autosizing transcript (keep oldest).")
+
+    # stringify transcript
+    ready_transcript = transcript
+    temp_transcript = create_transcript(turns=ready_transcript)
+    ready_transcript_str = trim_transcript(
+        transcript=temp_transcript,
+        num_turns=len(ready_transcript)
+    )
+
+    # current token count
+    token_count = generic_token_counter(text=ready_transcript_str)
+
+    # if transcript is smaller than window, return
+    if token_count <= size:
+        return ready_transcript
+
+    # if transcript is larger than window, decrease from the end
+    end_index = len(transcript)
+    while token_count > size and end_index > 0:
+        end_index -= 1
+        ready_transcript = transcript[:end_index]
+        temp_transcript = create_transcript(turns=ready_transcript)
+        ready_transcript_str = trim_transcript(
+            transcript=temp_transcript,
+            num_turns=len(ready_transcript)
+        )
+        token_count = generic_token_counter(text=ready_transcript_str)
 
     return ready_transcript

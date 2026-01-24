@@ -17,9 +17,8 @@ from backend.Maia.tools.tool_handling import (
 from backend.Maia.hood.context_engineering.context_window.windows.generate_conversation_window import generate_conversation_window
 from backend.Maia.hood.context_engineering.helpers.token_counters import generic_token_counter
 from backend.Maia.hood.context_engineering.helpers.add_turn import add_turn
-from backend.Maia.tools.utility._time import time_now
 from backend.Maia.tools.utility._json import try_parse_json
-from backend.Maia.hood.context_engineering.helpers.transcript import create_transcript, trim_transcript
+from backend.Maia.hood.context_engineering.context_window.sections.current_conversation import get_current_conversation
 
 
 # ===== router and model =====
@@ -72,10 +71,12 @@ async def chat(req: ChatRequest):
     #if Maia sends a message
     if not success:
         Logger.info("Sending Maia's reply...")
-        # update full conversation with response
+        #update full conversation with response
         turns = add_turn( session_id=current_session_id, role="assistant", content=response["response"] )
-        # save full conversation to conversational memory
+        #save full conversation to conversational memory
         save_conversation( session_id=current_session_id, data=turns )
+        #embed buffer if Maia's reply causes window to exceed token limit
+        generate_conversation_window(session_id=current_session_id, window_size_tkns=8192, current_conversation=turns)
 
         # return message
         return response
