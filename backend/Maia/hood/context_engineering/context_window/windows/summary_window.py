@@ -55,17 +55,24 @@ def generate_summarize_context_window(
     - "maia-llama3"
     """
 
-    Logger.info("Generating summarize context window.")
+    Logger.info(f"[generate_summarize_context_window] Creating summarization window for session {session_id} (size: {size} tokens, llm: {llm})")
     args = locals()
     RATIOS = [ RULES_ratio, TOOL_CONTRACT_ratio, TASK_FRAMING_ratio, PINNED_FACTS_ratio, GOALS_ratio, LONGTERM_RECALL_ratio, CONVERSATIONAL_TRANSCRIPT_ratio ]
-    
+
     try:
         # ----- Check ratio sum > 1. Get dict of args. Create window. -----
-        if sum( RATIOS ) > 1: raise Exception( f"Sum of given ratios can't exceed 1." )
-        CONTEXT_WINDOW = generate_custom_context_window(**args)
+        ratio_sum = sum(RATIOS)
+        if ratio_sum > 1:
+            raise Exception(f"Sum of given ratios ({ratio_sum:.2f}) exceeds 1.0")
 
-    except Exception as err: 
-        Logger.error(repr(err))
+        active_sections = sum(1 for r in RATIOS if r > 0)
+        Logger.info(f"[generate_summarize_context_window] {active_sections} active sections, ratio sum: {ratio_sum:.2f}")
+
+        CONTEXT_WINDOW = generate_custom_context_window(**args)
+        Logger.info(f"[generate_summarize_context_window] Successfully generated context window")
+
+    except Exception as err:
+        Logger.error(f"[generate_summarize_context_window] Failed to generate context window: {repr(err)}")
         return False
 
     return CONTEXT_WINDOW

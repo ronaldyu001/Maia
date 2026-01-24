@@ -42,7 +42,7 @@ def add_list_of_dicts(a: list[dict], b: list[dict]) -> list[dict]:
 
 
 def get_current_conversation(current_conversation: list[dict], session_id: str, size: int) -> str | bool:
-    Logger.info("Generating conversational transcript.")
+    Logger.info(f"[get_current_conversation] Processing conversation for session {session_id} (token budget: {size})")
 
     vector_store = LlamaIndex()
     embedding_history_path = Path("backend/Maia/memories/conversations/last_embedded.json")
@@ -54,10 +54,14 @@ def get_current_conversation(current_conversation: list[dict], session_id: str, 
         stringify_entire_transcript=True,
     )
     conversation_token_count = generic_token_counter(text=current_transcript_str)
+    Logger.info(f"[get_current_conversation] Current conversation: {len(current_conversation)} turns, ~{conversation_token_count} tokens")
 
     # return conversation if <= token limit
     if conversation_token_count <= size:
+        Logger.info(f"[get_current_conversation] Conversation fits within budget, returning full transcript")
         return current_transcript_str
+
+    Logger.info(f"[get_current_conversation] Conversation exceeds budget ({conversation_token_count} > {size}), preparing to embed older turns")
 
     # ensure and load embedding history
     try:
@@ -69,16 +73,18 @@ def get_current_conversation(current_conversation: list[dict], session_id: str, 
         embedding_history: list[dict] = load_json(path=embedding_history_path, default=[])
         if not isinstance(embedding_history, list):
             embedding_history = []
+        Logger.info(f"[get_current_conversation] Loaded embedding history: {len(embedding_history)} previously embedded turns")
     except Exception as err:
         embedding_history = []
-        Logger.error(repr(err))
+        Logger.error(f"[get_current_conversation] Failed to load embedding history: {repr(err)}")
 
     # conversation portion not embedded yet
     try:
         conversation_not_embedded = subtract_list_of_dicts(current_conversation, embedding_history)
+        Logger.info(f"[get_current_conversation] {len(conversation_not_embedded)} turns not yet embedded")
     except Exception as err:
         conversation_not_embedded = current_conversation
-        Logger.error(repr(err))
+        Logger.error(f"[get_current_conversation] Failed to calculate unembedded turns: {repr(err)}")
 
     # pick chunk to embed (oldest part of not-embedded)
     chunk_ratio = 0.3
@@ -91,6 +97,7 @@ def get_current_conversation(current_conversation: list[dict], session_id: str, 
 
     # If there's nothing new to embed, just return the full current transcript
     if not chunk_list_dict:
+        Logger.info(f"[get_current_conversation] No new turns to embed, returning full transcript")
         return current_transcript_str
 
     chunk_obj = create_transcript(turns=chunk_list_dict)
@@ -101,6 +108,7 @@ def get_current_conversation(current_conversation: list[dict], session_id: str, 
         "session_id": session_id,
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
+    Logger.info(f"[get_current_conversation] Embedding {len(chunk_list_dict)} turns to vector store")
     vector_store.embed(
         text=chunk_str,
         metadata=metadata,
@@ -112,12 +120,14 @@ def get_current_conversation(current_conversation: list[dict], session_id: str, 
     try:
         embedding_history = add_list_of_dicts(embedding_history, chunk_list_dict)
         save_json(path=embedding_history_path, default=[], data=embedding_history)
+        Logger.info(f"[get_current_conversation] Updated embedding history: now {len(embedding_history)} total embedded turns")
     except Exception as err:
-        Logger.error(repr(err))
+        Logger.error(f"[get_current_conversation] Failed to save embedding history: {repr(err)}")
 
     # return remaining conversation (not embedded yet) for context window
     remaining = subtract_list_of_dicts(current_conversation, chunk_list_dict)
     remaining_obj = create_transcript(turns=remaining)
     remaining_str = trim_transcript(transcript=remaining_obj, stringify_entire_transcript=True)
 
+    Logger.info(f"[get_current_conversation] Returning {len(remaining)} remaining turns for context window")
     return remaining_str

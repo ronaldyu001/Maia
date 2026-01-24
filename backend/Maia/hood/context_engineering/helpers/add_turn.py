@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from backend.logging.LoggingWrapper import Logger
 from backend.Maia.hood.context_engineering.helpers.conversations import load_conversation
 from backend.Maia.tools.utility._time import time_now
 
@@ -24,7 +25,11 @@ def add_turn( session_id: str, role: str, content: str,  ) -> list[dict]:
             "time stamp": time_now(),
             "content": content
         }]
+
+        content_preview = content[:50].replace('\n', ' ')
+        Logger.info(f"[add_turn] Added {role} turn to session {session_id} ({len(turns)} total turns): \"{content_preview}{'...' if len(content) > 50 else ''}\"")
         return turns
 
     except Exception as err:
+        Logger.error(f"[add_turn] Failed to add turn to session {session_id}: {repr(err)}")
         return [{}]
