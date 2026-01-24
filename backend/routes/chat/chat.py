@@ -14,14 +14,12 @@ from backend.Maia.tools.tool_handling import (
     receive_tool_request,
 )
 
-from backend.Maia.hood.context_engineering.context_window.windows.generate_generic_window import generate_context_window
 from backend.Maia.hood.context_engineering.context_window.windows.generate_conversation_window import generate_conversation_window
 from backend.Maia.hood.context_engineering.helpers.token_counters import generic_token_counter
 from backend.Maia.hood.context_engineering.helpers.add_turn import add_turn
 from backend.Maia.tools.utility._time import time_now
 from backend.Maia.tools.utility._json import try_parse_json
-from backend.routes.chat.helpers.error_handlers import _post
-from backend.Maia.config import OLLAMA_MODEL_NAME
+from backend.Maia.hood.context_engineering.helpers.transcript import create_transcript, trim_transcript
 
 
 # ===== router and model =====
@@ -60,8 +58,7 @@ async def chat(req: ChatRequest):
 
     #generate context window
     Logger.info("Generating context window.")
-    # prompt = generate_context_window( llm=llm, size=8192, session_id=current_session_id )
-    prompt = generate_conversation_window(session_id=current_session_id, window_size_tkns=8192)
+    prompt = generate_conversation_window(session_id=current_session_id, window_size_tkns=8192, current_conversation=turns)
     print( f"Context Window size: {generic_token_counter( text=prompt )} tokens" )
 
     #get response

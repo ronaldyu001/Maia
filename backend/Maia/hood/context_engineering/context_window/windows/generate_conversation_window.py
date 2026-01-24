@@ -8,7 +8,7 @@ from backend.Maia.hood.context_engineering.context_window.sections.tool_contract
 from backend.Maia.hood.context_engineering.context_window.sections.RAG import get_RAG
 
 from math import floor
-
+from typing import List
 
 
 section_ratios = {
@@ -30,7 +30,7 @@ The section below the bullet points contains the current conversation.
 """
 
 
-def generate_conversation_window(session_id: str, window_size_tkns: int):
+def generate_conversation_window(session_id: str, window_size_tkns: int, current_conversation: List[dict] ):
 
     #generate sections for context window
     SYSTEM_PROMPT = get_system_prompt()
@@ -40,10 +40,7 @@ def generate_conversation_window(session_id: str, window_size_tkns: int):
     RAG = get_RAG(
         session_id=session_id
     )
-    CURRENT_CONVERSATION = get_current_conversation(
-        session_id=session_id, 
-        size=floor(window_size_tkns * section_ratios["CURRENT_CONVERSATION"])
-    )
+    CURRENT_CONVERSATION = current_conversation
     CURRENT_CONVERSATION_FULL = CURRENT_CONVERSATION_INTRO + CURRENT_CONVERSATION
 
     #create sections dict

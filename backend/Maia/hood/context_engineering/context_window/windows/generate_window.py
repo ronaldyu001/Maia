@@ -18,6 +18,7 @@ def truncate_to_tokens(text: str, max_tokens: int) -> str:
     if estimate_tokens(text) <= max_tokens:
         return text
 
+    Logger.warning(msg=f'')
     # Approximate character cutoff
     max_chars = max_tokens * 4
     truncated = text[:max_chars]
@@ -72,7 +73,7 @@ def build_context_window(
 
         if section_budget <= 0:
             continue
-
+        
         truncated_text = truncate_to_tokens(text.strip(), section_budget)
         used_tokens = estimate_tokens(truncated_text)
         remaining_tokens -= used_tokens
