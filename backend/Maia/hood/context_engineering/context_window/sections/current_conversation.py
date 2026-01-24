@@ -104,8 +104,8 @@ def get_current_conversation(current_conversation: list[dict], session_id: str, 
     vector_store.embed(
         text=chunk_str,
         metadata=metadata,
-        index=vector_store.memories_index,
-        persist_dir=vector_store.memories_index_path,
+        index=vector_store.raw_conversations_index,
+        persist_dir=vector_store.raw_conversations_index_path,
     )
 
     # update embedding history (no +=)

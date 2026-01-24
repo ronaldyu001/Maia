@@ -11,6 +11,7 @@ The following section contains retrieved reference material that may be relevant
 - Use it only if it is helpful for answering the user’s current request.
 - Do not assume the retrieved content is correct or complete.
 - Do not mention retrieval, embeddings, or vector stores in the final answer.
+- Do not include raw RAG text in final answer unless asked.
 """
 
 
