@@ -40,18 +40,16 @@ def generate_conversation_window(session_id: str, window_size_tkns: int):
     RAG = get_RAG(
         session_id=session_id
     )
-    # RAG = ""
     CURRENT_CONVERSATION = get_current_conversation(
         session_id=session_id, 
         size=floor(window_size_tkns * section_ratios["CURRENT_CONVERSATION"])
     )
     CURRENT_CONVERSATION_FULL = CURRENT_CONVERSATION_INTRO + CURRENT_CONVERSATION
+
     #create sections dict
     section_names = list(section_ratios.keys())
     section_content = [SYSTEM_PROMPT, TASK, RULES, TOOL_CONTRACT, RAG, CURRENT_CONVERSATION_FULL]
     sections = [(str(k), str(v)) for k, v in zip(section_names, section_content)]
-
-    print(f'RAG content: {RAG}')
 
     #build context window
     context_window = build_context_window(

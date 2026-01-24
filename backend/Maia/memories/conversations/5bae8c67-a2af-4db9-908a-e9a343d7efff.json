@@ -1,0 +1,22 @@
+[
+  {
+    "role": "user",
+    "content": "Hey Maia!",
+    "timestamp": "2026-01-23T17:37:34+00:00"
+  },
+  {
+    "role": "assistant",
+    "content": "Hey! How can I assist you today?",
+    "timestamp": "2026-01-23T17:37:41+00:00"
+  },
+  {
+    "role": "user",
+    "content": "Just wanted to chat for a bit! My parents are coming to Denver, we’re going to get some sushi for lunch!",
+    "timestamp": "2026-01-23T17:44:45+00:00"
+  },
+  {
+    "role": "assistant",
+    "content": "That sounds like a nice plan. Enjoy your lunch with your parents and the sushi. Do you have any other questions or topics you'd like to discuss?",
+    "timestamp": "2026-01-23T17:44:52+00:00"
+  }
+]

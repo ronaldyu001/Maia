@@ -46,7 +46,6 @@ async def chat(req: ChatRequest):
     #get session id info and message
     current_session_id = req.session_id
     message = req.message
-    llm = OLLAMA_MODEL_NAME
 
     #add and save new turn to conversational memory (used in context window)
     #create conversation json in memory if DNE
