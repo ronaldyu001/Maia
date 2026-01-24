@@ -1,3 +1,6 @@
+from pathlib import Path
+import json
+
 from llama_index.core import VectorStoreIndex, Document, Settings
 from llama_index.embeddings.ollama import OllamaEmbedding
 from backend.logging.LoggingWrapper import Logger
@@ -5,6 +8,7 @@ from backend.Maia.hood.RAG.get_vector_store_indices.get_memories_index import ge
 from backend.Maia.hood.RAG.get_vector_store_indices.get_raw_conversations_index import get_raw_conversations_index
 from backend.Maia.hood.context_engineering.helpers.conversations import load_conversation
 from backend.Maia.hood.context_engineering.helpers.transcript import create_transcript_with_timestamps, trim_transcript
+from backend.Maia.tools.memory.storage import load_json
 
 
 class LlamaIndex:
@@ -89,7 +93,87 @@ class LlamaIndex:
         )
 
 
-    def embed_raw_conversation(self, session_id: str):
+    def embed_remaining_conversation(self, session_id: str):
+        """
+        Embeds the unembedded portion of a conversation.
+        Only works if the target conversation has just been rendered old due to a new conversation.
+        Pulls the embedding history to embed the remaining conversation.
+
+        :param session_id: the session id to embed
+        :type session_id: str
+        """
+        embedding_history_path = Path("backend/Maia/memories/conversations/last_embedded.json")
+
+        # load conversation based on session id
+        try:
+            Logger.info(f"Loading conversation for remaining embed: {session_id}")
+            conversation = load_conversation(session_id=session_id)
+            if not conversation:
+                Logger.warning(f"No conversation found for session id: {session_id}")
+                return
+        except Exception as err:
+            Logger.error(f"Failed to load conversation: {repr(err)}")
+            return
+
+        # load embedding history
+        try:
+            Logger.info("Loading embedding history.")
+            embedding_history: list[dict] = load_json(path=embedding_history_path, default=[])
+            if not isinstance(embedding_history, list):
+                embedding_history = []
+        except Exception as err:
+            Logger.error(f"Failed to load embedding history: {repr(err)}")
+            embedding_history = []
+
+        # find portion of conversation not yet embedded
+        try:
+            Logger.info("Calculating remaining conversation to embed.")
+            embedding_history_keys = {
+                json.dumps(d, sort_keys=True, ensure_ascii=False) for d in embedding_history
+            }
+            remaining_conversation = [
+                turn for turn in conversation
+                if json.dumps(turn, sort_keys=True, ensure_ascii=False) not in embedding_history_keys
+            ]
+        except Exception as err:
+            Logger.error(f"Failed to calculate remaining conversation: {repr(err)}")
+            remaining_conversation = conversation
+
+        # if nothing remaining to embed, exit
+        if not remaining_conversation:
+            Logger.info("No remaining conversation to embed.")
+            return
+
+        # create transcript from remaining conversation
+        try:
+            Logger.info(f"Embedding {len(remaining_conversation)} remaining turns.")
+            transcript = create_transcript_with_timestamps(turns=remaining_conversation)
+            stringified_transcript = trim_transcript(transcript=transcript, stringify_entire_transcript=True)
+        except Exception as err:
+            Logger.error(f"Failed to create transcript: {repr(err)}")
+            return
+
+        # create metadata
+        metadata = {
+            "session_id": session_id,
+            "project": "conversation"
+        }
+
+        # embed remaining conversation to raw_conversations vector store
+        try:
+            Logger.info("Embedding remaining conversation.")
+            self.embed(
+                text=stringified_transcript,
+                metadata=metadata,
+                index=self.raw_conversations_index,
+                persist_dir=self.raw_conversations_index_path
+            )
+            Logger.info("Remaining conversation embedded successfully.")
+        except Exception as err:
+            Logger.error(f"Failed to embed remaining conversation: {repr(err)}")
+
+
+    def embed_entire_conversation(self, session_id: str):
         """
         One of Maia's embedding functions. Saves a raw conversation to its corresponding vector store.
         
