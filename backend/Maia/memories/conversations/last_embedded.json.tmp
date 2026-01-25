@@ -1,27 +1,32 @@
 [
   {
     "role": "user",
-    "content": "Hey Maia!",
-    "timestamp": "2026-01-25T02:03:55+00:00"
+    "content": "Hey, how’s it going?",
+    "timestamp": "2026-01-25T02:47:27+00:00"
   },
   {
     "role": "assistant",
-    "content": "Hey! How can I assist you today?",
-    "timestamp": "2026-01-25T02:04:01+00:00"
+    "content": "Hey! I'm doing well. How about you? How's your day so far?",
+    "timestamp": "2026-01-25T02:47:34+00:00"
   },
   {
     "role": "user",
-    "content": "Just wanted to chat, let’s try and get to know eachother",
-    "timestamp": "2026-01-25T02:07:06+00:00"
+    "content": "My day’s good! I’ve been taking it chill, just been hiding inside all day from the cold haha",
+    "timestamp": "2026-01-25T02:47:57+00:00"
   },
   {
     "role": "assistant",
-    "content": "Sure thing! It's great to meet someone new. What kind of topics are you interested in discussing first? Whether it's hobbies, books you've read recently, or even just small talk about everyday life would be fun to explore.",
-    "timestamp": "2026-01-25T02:07:08+00:00"
+    "content": "That sounds like a nice way to spend a chilly day indoors. It can be cozy and productive as well. What kind of activities have you been doing while staying inside?",
+    "timestamp": "2026-01-25T02:48:01+00:00"
   },
   {
     "role": "user",
-    "content": "Hm, I’ll start with hobbies! I like to lift weights, game, watch tv, play guitar, and code",
-    "timestamp": "2026-01-25T02:08:21+00:00"
+    "content": "I’ve been coding like all day haha, working on your frontend and backend :)",
+    "timestamp": "2026-01-25T02:48:32+00:00"
+  },
+  {
+    "role": "assistant",
+    "content": "That’s great! Working on both the frontend and backend is quite comprehensive for developing a full application. How do you find balancing these two aspects? Coding in one area can sometimes help with understanding requirements better when working on another part of the project, right? Have you noticed any specific challenges or interesting moments from your coding today?",
+    "timestamp": "2026-01-25T02:48:36+00:00"
   }
 ]

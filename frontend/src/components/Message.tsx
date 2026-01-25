@@ -104,11 +104,29 @@ function parseText(text: string): React.ReactNode[] {
     if (!match || match.index == null) return null;
     return match.index + (match[1] ? match[1].length : 0);
   };
+  const firstMarkdownStopMatch = (segment: string) => {
+    const match = segment.match(/(^|\n)\s*\n\s*\n/);
+    if (!match || match.index == null) return null;
+    return { index: match.index, length: match[0].length };
+  };
 
   const pushTextSegment = (segment: string) => {
     if (!segment.trim()) return;
     if (sawMarkdown) {
-      out.push(<MarkdownBlock key={getKey()} text={segment} />);
+      const stop = firstMarkdownStopMatch(segment);
+      if (!stop) {
+        out.push(<MarkdownBlock key={getKey()} text={segment} />);
+        return;
+      }
+      const before = segment.slice(0, stop.index);
+      const after = segment.slice(stop.index + stop.length);
+      if (before.trim()) {
+        out.push(<MarkdownBlock key={getKey()} text={before} />);
+      }
+      sawMarkdown = false;
+      if (after.trim()) {
+        out.push(...parseInlineMarkdown(after, getKey));
+      }
       return;
     }
 

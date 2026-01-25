@@ -87,6 +87,16 @@ fn main() {
 
   app.run(|app_handle, event| {
     match event {
+      // Fired when a window is closed (including clicking the close button).
+      tauri::RunEvent::WindowEvent { event, .. } => match event {
+        tauri::WindowEvent::CloseRequested { .. } => {
+          stop_backend(app_handle);
+        }
+        tauri::WindowEvent::Destroyed => {
+          stop_backend(app_handle);
+        }
+        _ => {}
+      },
       // Fired when the app is about to exit (Cmd+Q, closing last window, etc.)
       tauri::RunEvent::ExitRequested { .. } => {
         stop_backend(app_handle);
