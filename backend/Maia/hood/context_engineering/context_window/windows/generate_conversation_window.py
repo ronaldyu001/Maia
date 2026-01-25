@@ -15,7 +15,7 @@ section_ratios = {
     "TASK": 0.10,
     "TOOL_CONTRACT": 0.15,
     "CURRENT_CONVERSATION": 0.25,
-    "RAG": 0.35,
+    "RAG": 0.0,
 }
 
 

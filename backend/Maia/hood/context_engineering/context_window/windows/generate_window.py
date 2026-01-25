@@ -75,7 +75,8 @@ def build_context_window(
             Logger.warning(f"[build_context_window] No budget remaining for section '{name}'")
             continue
 
-        truncated_text = truncate_to_tokens(text.strip(), section_budget)
+        # truncated_text = truncate_to_tokens(text.strip(), section_budget)
+        truncated_text = text
         used_tokens = estimate_tokens(truncated_text)
         remaining_tokens -= used_tokens
 
