@@ -39,6 +39,9 @@ class ChatResponse(BaseModel):
     response: str
 
 
+context_window_size = 4096
+
+
 #Chat Route
 @router.post("/chat", response_model=ChatResponse)
 async def chat(req: ChatRequest):
@@ -60,11 +63,12 @@ async def chat(req: ChatRequest):
     turns = add_turn( session_id=current_session_id, role="user", content=message )
     Logger.info(f"Saving conversation id: {current_session_id}")
     save_conversation( session_id=current_session_id, data=turns )
-
+ 
     #generate context window
     Logger.info("Generating context window.")
-    prompt = generate_conversation_window(session_id=current_session_id, window_size_tkns=8192, current_conversation=turns)
+    prompt = generate_conversation_window(session_id=current_session_id, window_size_tkns=context_window_size, current_conversation=turns)
     print( f"Context Window size: {generic_token_counter( text=prompt )} tokens" )
+    Logger.info(prompt)
 
     #get response
     Logger.info("Getting response...")
@@ -82,7 +86,7 @@ async def chat(req: ChatRequest):
         #save full conversation to conversational memory
         save_conversation( session_id=current_session_id, data=turns )
         #embed buffer if Maia's reply causes window to exceed token limit
-        generate_conversation_window(session_id=current_session_id, window_size_tkns=8192, current_conversation=turns)
+        generate_conversation_window(session_id=current_session_id, window_size_tkns=context_window_size, current_conversation=turns)
         #update previous session id
         set_prev_session_id(current_session_id=current_session_id)
 

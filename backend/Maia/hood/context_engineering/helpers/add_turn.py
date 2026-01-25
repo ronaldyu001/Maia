@@ -12,17 +12,27 @@ def add_turn( session_id: str, role: str, content: str,  ) -> list[dict]:
     - Does not update the json.
     """
     try:
-        # ----- create conversation file if DNE -----
-        CONVERSATION = Path( f"backend/Maia/memories/conversations" ) / f"{session_id}.json"
-        CONVERSATION.touch( exist_ok=True )
+        # ----- ensure directory and file exist -----
+        conversations_dir = Path("backend/Maia/memories/conversations")
+        conversations_dir.mkdir(parents=True, exist_ok=True)
 
-        # ----- load conversation -----
-        conversational_memory = load_conversation( session_id=session_id )
+        conversation_file = conversations_dir / f"{session_id}.json"
+
+        # ----- initialize with empty array if file DNE or is empty -----
+        if not conversation_file.exists() or conversation_file.stat().st_size == 0:
+            conversation_file.write_text("[]", encoding="utf-8")
+            Logger.info(f"[add_turn] Created new conversation file for session {session_id}")
+            conversational_memory = []
+        else:
+            # ----- load existing conversation -----
+            conversational_memory = load_conversation(session_id=session_id)
+            if not isinstance(conversational_memory, list):
+                conversational_memory = []
 
         # ----- returns conversation as json list -----
-        turns = [ *conversational_memory, {
+        turns = [*conversational_memory, {
             "role": role,
-            "time stamp": time_now(),
+            "timestamp": time_now(),
             "content": content
         }]
 

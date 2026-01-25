@@ -1,0 +1,27 @@
+[
+  {
+    "role": "user",
+    "content": "Hey Maia!",
+    "timestamp": "2026-01-25T02:03:55+00:00"
+  },
+  {
+    "role": "assistant",
+    "content": "Hey! How can I assist you today?",
+    "timestamp": "2026-01-25T02:04:01+00:00"
+  },
+  {
+    "role": "user",
+    "content": "Just wanted to chat, let’s try and get to know eachother",
+    "timestamp": "2026-01-25T02:07:06+00:00"
+  },
+  {
+    "role": "assistant",
+    "content": "Sure thing! It's great to meet someone new. What kind of topics are you interested in discussing first? Whether it's hobbies, books you've read recently, or even just small talk about everyday life would be fun to explore.",
+    "timestamp": "2026-01-25T02:07:08+00:00"
+  },
+  {
+    "role": "user",
+    "content": "Hm, I’ll start with hobbies! I like to lift weights, game, watch tv, play guitar, and code",
+    "timestamp": "2026-01-25T02:08:21+00:00"
+  }
+]
