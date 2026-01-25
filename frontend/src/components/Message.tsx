@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import MaiaAvatar from "../assets/Maia_Avatars/1.0-1.x/1.0/Maia_Avatar.gif";
 
 type Props = { role: "user" | "maia"; text: string };
 
@@ -196,21 +197,34 @@ export default function Message({ role, text }: Props) {
       }}
     >
       {/* Avatar */}
-      <div
-        style={{
-          width: 28,
-          height: 28,
-          borderRadius: tokens.radius.sm,
-          backgroundColor: tokens.colors.surfaceSecondary,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexShrink: 0,
-          fontSize: isUser ? 12 : 16,
-        }}
-      >
-        {isUser ? <UserIcon /> : "🤖"}
-      </div>
+      {isUser ? (
+        <div
+          style={{
+            width: 28,
+            height: 28,
+            borderRadius: tokens.radius.sm,
+            backgroundColor: tokens.colors.surfaceSecondary,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
+          }}
+        >
+          <UserIcon />
+        </div>
+      ) : (
+        <img
+          src={MaiaAvatar}
+          alt="Maia"
+          style={{
+            width: 28,
+            height: 28,
+            borderRadius: tokens.radius.sm,
+            objectFit: "cover",
+            flexShrink: 0,
+          }}
+        />
+      )}
 
       {/* Message content */}
       <div

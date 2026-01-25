@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import Message from "./Message";
 import { sendMessage } from "../api/chat";
+import MaiaAvatar from "../assets/Maia_Avatars/1.0-1.x/1.0/Maia_Avatar.gif";
+import MaiaAnimaBot from "../assets/Maia_Avatars/1.0-1.x/1.0/Anima Bot.gif";
 
 type Turn = { role: "user" | "maia"; text: string };
 
@@ -101,6 +103,35 @@ function ChatIcon() {
       strokeLinejoin="round"
     >
       <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+    </svg>
+  );
+}
+
+function RobotIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={tokens.colors.accent}
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {/* Head */}
+      <rect x="5" y="8" width="14" height="10" rx="2" />
+      {/* Antenna */}
+      <line x1="12" y1="8" x2="12" y2="4" />
+      <circle cx="12" cy="3" r="1" fill={tokens.colors.accent} />
+      {/* Eyes */}
+      <circle cx="9" cy="12" r="1.5" fill={tokens.colors.accent} />
+      <circle cx="15" cy="12" r="1.5" fill={tokens.colors.accent} />
+      {/* Smile */}
+      <path d="M9 15.5c0 0 1.5 1 3 1s3-1 3-1" />
+      {/* Ears */}
+      <rect x="2" y="11" width="2" height="4" rx="0.5" />
+      <rect x="20" y="11" width="2" height="4" rx="0.5" />
     </svg>
   );
 }
@@ -251,10 +282,9 @@ function Sidebar({ onNewConversation }: { onNewConversation: () => void }) {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: 18,
             }}
           >
-            🤖
+            <RobotIcon />
           </div>
           <span
             style={{
@@ -378,42 +408,43 @@ export default function ChatWindow() {
                   minHeight: "60vh",
                   color: tokens.colors.textMuted,
                   textAlign: "center",
+                  padding: tokens.spacing.lg,
                 }}
               >
-                <div
+                <img
+                  src={MaiaAnimaBot}
+                  alt="Maia"
                   style={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: tokens.radius.md,
-                    background: tokens.colors.surfaceSecondary,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: 28,
-                    marginBottom: tokens.spacing.md,
+                    width: 120,
+                    height: 120,
+                    borderRadius: tokens.radius.xl,
+                    objectFit: "cover",
+                    marginBottom: tokens.spacing.lg,
                   }}
-                >
-                  🤖
-                </div>
+                />
                 <h2
                   style={{
-                    fontSize: 26,
+                    fontSize: 34,
                     fontWeight: 400,
                     color: tokens.colors.text,
                     margin: 0,
-                    marginBottom: tokens.spacing.sm,
+                    marginBottom: tokens.spacing.md,
+                    lineHeight: 1.3,
                   }}
                 >
-                  Hello there...
+                  Hey, Ronald!
                 </h2>
                 <p
                   style={{
-                    fontSize: 18,
+                    fontSize: 22,
                     color: tokens.colors.textSecondary,
                     margin: 0,
+                    fontFamily: tokens.fonts.elegant,
+                    fontStyle: "italic",
+                    fontWeight: 300,
                   }}
                 >
-                  What's on your mind?
+                  What shall we explore together today?
                 </p>
               </div>
             )}
@@ -433,21 +464,17 @@ export default function ChatWindow() {
                     padding: `${tokens.spacing.md}px 0`,
                   }}
                 >
-                  <div
+                  <img
+                    src={MaiaAvatar}
+                    alt="Maia"
                     style={{
                       width: 28,
                       height: 28,
                       borderRadius: tokens.radius.sm,
-                      background: tokens.colors.surfaceSecondary,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: 16,
+                      objectFit: "cover",
                       flexShrink: 0,
                     }}
-                  >
-                    🤖
-                  </div>
+                  />
                   <div
                     style={{
                       display: "flex",
