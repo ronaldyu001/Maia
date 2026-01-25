@@ -106,17 +106,30 @@ class Summarizer:
 
         return "\n".join(lines)
 
-    def summarize(self, session_id: str, window_size_tkns: int, given_text: str, custom_prompt: Optional[str] = None) -> str:
-        prompt_text = given_text
+    def summarize(self, 
+        window_size_tkns: int, 
+        given_text: str, 
+        custom_prompt: Optional[str] = None, 
+        custom_ratios: Optional[dict] = None, 
+        session_id: Optional[str] = None
+    ) -> str:
         if custom_prompt:
-            prompt_text = f"{custom_prompt}\n\n{given_text}"
+            Logger.info(f'[Summarize] Using custom prompt: {custom_prompt}')
+            prompt = generate_summarize_context_window(
+                window_size_tkns=window_size_tkns,
+                given_text=given_text,
+                custom_prompt=custom_prompt,
+                custom_ratios=custom_ratios
+            )
 
-        prompt = generate_summarize_context_window(
-            window_size_tkns=window_size_tkns,
-            given_text=prompt_text,
-        )
+        else:
+            prompt = generate_summarize_context_window(
+                window_size_tkns=window_size_tkns,
+                given_text=given_text
+            )
 
         last_response = ""
+
         #retry until valid response or max retries hit
         for _ in range(MAX_SUMMARY_RETRIES):
             last_response = self._request_summary(prompt)
@@ -125,10 +138,21 @@ class Summarizer:
             if self._is_json_wrapped(last_response):
                 break
 
+            if custom_prompt:
+                Logger.info(f'Summarize response is valid string: {isinstance(last_response, str)}')
+                if isinstance(last_response, str):
+                    return last_response
+
+        Logger.info(f'Summary response: {last_response}')
+
         #parse the response into a dict
         summary_dict = self._parse_summary_dict(last_response)
         if summary_dict is None:
             return last_response
+        
+        #if custom promp injected, skip anchors
+        if custom_prompt:
+            return self._stringify_summary(summary_dict)
 
         #extract anchors from the text and add it to the dict
         anchors = extract_anchors(given_text)
@@ -136,10 +160,40 @@ class Summarizer:
         return self._stringify_summary(summary_dict)
 
     def summarize_response(self, response: str) -> str:
-        from backend.routes.chat.helpers.summarize_response import summarize_response
 
-        summary_text = summarize_response(response)
-        summary_dict = self._parse_summary_dict(summary_text)
-        if summary_dict is None:
-            return summary_text
-        return self._stringify_summary(summary_dict)
+        CUSTOM_PROMPT = """
+        Compress the following ASSISTANT response for storage in a conversation transcript.
+
+Write 1–2 plain sentences reporting what Maia talked about.
+This is a neutral recap, not advice.
+
+Rules:
+- No lists, headings, or labels.
+- No pronouns like he/she/them. Use names always.
+- No imperative or advisory verbs (do, configure, implement, ensure, suggest, recommend).
+- Use past-tense phrasing like "Maia explained..." or "Maia discussed...".
+- Include only technical terms that appear in the original text.
+- Omit examples and elaboration.
+- Max 400 characters.
+
+Return only the recap text.
+"""
+
+        custom_ratios = {
+            "TASK": 0.1,
+            "CONVERSATIONAL_TRANSCRIPT": 0.9,
+        }
+
+        try:
+            Logger.info("Summarizing response.")
+            summary = self.summarize(
+                window_size_tkns=1500,
+                given_text=response,
+                custom_prompt=CUSTOM_PROMPT,
+                custom_ratios=custom_ratios
+            )
+
+        except Exception as err:
+            Logger.error(repr(err))
+
+        return summary

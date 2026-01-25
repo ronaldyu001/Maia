@@ -62,7 +62,8 @@ Use it as the sole source of truth for your summary.
 def generate_summarize_context_window(
     window_size_tkns: int,
     given_text: str,
-    custom_prompt: Optional[str] = None
+    custom_prompt: Optional[str] = None,
+    custom_ratios: Optional[dict] = None
 ) -> str:
     # generate sections for context window
     TASK_SECTION = TASK
@@ -71,6 +72,7 @@ def generate_summarize_context_window(
     # if custom prompt provided, override
     if custom_prompt: 
         TASK_SECTION = custom_prompt
+        section_ratios = custom_ratios
 
     # create sections dict
     section_names = list(section_ratios.keys())

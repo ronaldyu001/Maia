@@ -1,9 +1,11 @@
+import re
+
 from fastapi import APIRouter
 from pydantic import BaseModel
 from backend.logging.LoggingWrapper import Logger
 
-from backend.Maia.hood.engine_wrappers.ollama.wrapper_ollama import OllamaModel
-from backend.Maia.hood.engine_wrappers.huggingface.wrapper_huggingface import HuggingFaceModel
+from backend.Maia.hood.models.ollama.wrapper_ollama import OllamaModel
+from backend.Maia.hood.models.huggingface.wrapper_huggingface import HuggingFaceModel
 
 from backend.Maia.hood.context_engineering.helpers.conversations import (
     save_conversation,
@@ -82,6 +84,7 @@ async def chat(req: ChatRequest):
     #if Maia sends a message
     if not success:
         Logger.info("Sending Maia's reply...")
+
         #if response token count > threshold, summarize
         token_threshold = 300
         response_token_count = generic_token_counter(text=response["response"])
@@ -90,8 +93,15 @@ async def chat(req: ChatRequest):
             Logger.info(f"Summarizing response (~{response_token_count} tokens > {token_threshold})")
             summary_response = summarize_response(response["response"])
         
+        #if response contains any lists, summarize
+        list_pattern = re.compile(r"(^|\n)\s*(?:[-*+•]\s+|\d+[.)]\s+)")
+        if list_pattern.search(response["response"]):
+            Logger.info("Summarizing response (list detected)")
+            summary_response = summarize_response(response["response"])
+
         #update full conversation with response
         turns = add_turn( session_id=current_session_id, role="assistant", content=summary_response )
+        Logger.info(f"Length of conversation: {turns}")
         #save full conversation to conversational memory
         save_conversation( session_id=current_session_id, data=turns )
         #embed buffer if Maia's reply causes window to exceed token limit

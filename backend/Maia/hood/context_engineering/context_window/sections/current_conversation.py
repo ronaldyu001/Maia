@@ -9,6 +9,7 @@ from backend.Maia.hood.RAG.LlamaIndex_Wrapper import LlamaIndex
 from backend.Maia.hood.context_engineering.helpers.transcript import (
     create_transcript,
     trim_transcript,
+    create_transcript_with_timestamps
 )
 from backend.Maia.hood.context_engineering.helpers.token_counters import generic_token_counter
 from backend.Maia.tools.memory.storage import load_json, save_json
@@ -48,7 +49,7 @@ def get_current_conversation(current_conversation: list[dict], session_id: str, 
     embedding_history_path = Path("backend/Maia/memories/conversations/last_embedded.json")
 
     # token count of FULL current conversation (string form)
-    current_transcript_obj = create_transcript(turns=current_conversation)
+    current_transcript_obj = create_transcript_with_timestamps(turns=current_conversation)
     current_transcript_str = trim_transcript(
         transcript=current_transcript_obj,
         stringify_entire_transcript=True,
@@ -87,7 +88,7 @@ def get_current_conversation(current_conversation: list[dict], session_id: str, 
         Logger.error(f"[get_current_conversation] Failed to calculate unembedded turns: {repr(err)}")
 
     # pick chunk to embed (oldest part of not-embedded)
-    chunk_ratio = 0.3
+    chunk_ratio = 0.5
     chunk_size = int(size * chunk_ratio)
 
     chunk_list_dict = autosize_transcript_generic_keep_oldest(
@@ -100,7 +101,7 @@ def get_current_conversation(current_conversation: list[dict], session_id: str, 
         Logger.info(f"[get_current_conversation] No new turns to embed, returning full transcript")
         return current_transcript_str
 
-    chunk_obj = create_transcript(turns=chunk_list_dict)
+    chunk_obj = create_transcript_with_timestamps(turns=chunk_list_dict)
     chunk_str = trim_transcript(transcript=chunk_obj, stringify_entire_transcript=True)
 
     # embed chunk
@@ -115,6 +116,7 @@ def get_current_conversation(current_conversation: list[dict], session_id: str, 
         index=vector_store.raw_conversations_index,
         persist_dir=vector_store.raw_conversations_index_path,
     )
+    Logger.info(f"Chunk embedded: {chunk_str}")
 
     # update embedding history (no +=)
     try:
@@ -126,7 +128,7 @@ def get_current_conversation(current_conversation: list[dict], session_id: str, 
 
     # return remaining conversation (not embedded yet) for context window
     remaining = subtract_list_of_dicts(current_conversation, chunk_list_dict)
-    remaining_obj = create_transcript(turns=remaining)
+    remaining_obj = create_transcript_with_timestamps(turns=remaining)
     remaining_str = trim_transcript(transcript=remaining_obj, stringify_entire_transcript=True)
 
     Logger.info(f"[get_current_conversation] Returning {len(remaining)} remaining turns for context window")

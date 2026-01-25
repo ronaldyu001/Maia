@@ -1,8 +1,8 @@
-from datetime import datetime, timezone
+from datetime import datetime
 
 
 def time_now():
     """
-    returns current time in utc timezone and ISO format
+    returns current time in local timezone and ISO format
     """
-    return datetime.now(timezone.utc).isoformat(timespec="seconds")
+    return datetime.now().astimezone().isoformat(timespec="seconds")

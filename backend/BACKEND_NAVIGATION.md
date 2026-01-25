@@ -14,9 +14,9 @@ Quick map of the backend layout and the common flow from request -> response.
 Top-level package: `backend/Maia/`
 
 ### Engine Wrappers
-- `backend/Maia/hood/engine_wrappers/ollama/wrapper_ollama.py`: main Ollama wrapper.
-- `backend/Maia/hood/engine_wrappers/ollama/summarizer.py`: summarizer singleton + retry logic.
-- `backend/Maia/hood/engine_wrappers/huggingface/`: HuggingFace wrapper (if used).
+- `backend/Maia/hood/models/ollama/wrapper_ollama.py`: main Ollama wrapper.
+- `backend/Maia/hood/models/ollama/summarizer.py`: summarizer singleton + retry logic.
+- `backend/Maia/hood/models/huggingface/`: HuggingFace wrapper (if used).
 
 ### Context Engineering
 - `backend/Maia/hood/context_engineering/context_window/windows/`:

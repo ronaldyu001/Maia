@@ -1,27 +1,27 @@
 [
   {
     "role": "user",
-    "content": "hey Maia!",
-    "timestamp": "2026-01-25T03:53:58+00:00"
+    "content": "Hey!",
+    "timestamp": "2026-01-25T14:21:37-07:00"
   },
   {
     "role": "assistant",
-    "content": "Hey! It's nice to meet you again. How about we start with a bit more about your hobbies? I'm curious to know what else you enjoy doing in addition to the ones you mentioned.",
-    "timestamp": "2026-01-25T03:54:02+00:00"
+    "content": "Hey! How’s the game looking now? Still enjoying the Broncos’ strong start, or is there a moment you’re particularly excited about? 😊",
+    "timestamp": "2026-01-25T14:21:51-07:00"
   },
   {
     "role": "user",
-    "content": "which ones did I mention again?",
-    "timestamp": "2026-01-25T03:54:12+00:00"
+    "content": "Um the patriots scored because our kicker fumbled lol, so it looks like we’ve got ourselves a game! Waht time is it btw?",
+    "timestamp": "2026-01-25T14:22:38-07:00"
   },
   {
     "role": "assistant",
-    "content": "Which hobby or activities did you previously discuss that you remembered mentioning? That way, I can help you recall them.",
-    "timestamp": "2026-01-25T03:54:14+00:00"
+    "content": "Ah, got it! Since you’ve updated the timestamps to reflect your actual time, it’s now **14:22** (based on the latest message timestamp). The Patriots just tied the game—what a twist! Want to talk strategy, or should we keep an eye on the next play? 🏈",
+    "timestamp": "2026-01-25T14:22:48-07:00"
   },
   {
     "role": "user",
-    "content": "I think weightlifting? i forgot the others",
-    "timestamp": "2026-01-25T03:54:31+00:00"
+    "content": "awesome it works now! do you know timezone conversions? My parents live in Texas and I live in CO. What time is it for them?",
+    "timestamp": "2026-01-25T14:24:39-07:00"
   }
 ]

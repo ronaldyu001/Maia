@@ -1,7 +1,7 @@
 import json
 import re
 
-from backend.Maia.hood.engine_wrappers.ollama.summarizer import Summarizer
+from backend.Maia.hood.models.ollama.summarizer import Summarizer
 
 
 TEXT = """

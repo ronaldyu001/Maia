@@ -2,7 +2,7 @@ from backend.logging.LoggingWrapper import Logger
 from math import floor
 import re, json
 
-from backend.Maia.hood.engine_wrappers.ollama.summarizer import Summarizer
+from backend.Maia.hood.models.ollama.summarizer import Summarizer
 from backend.Maia.hood.context_engineering.helpers.transcript import create_transcript, autosize_transcript, trim_transcript
 from backend.Maia.hood.context_engineering.helpers.conversations import load_conversation
 from backend.Maia.config import llms
