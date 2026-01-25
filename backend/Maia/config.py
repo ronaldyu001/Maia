@@ -11,4 +11,9 @@ llms = {
 
 # ----- Ollama Wrapper Variables -----
 OLLAMA_HOST = "http://localhost:11434"
-OLLAMA_MODEL_NAME = llms[3]
+OLLAMA_MODEL_NAME = llms[1]
+
+
+# ----- Summarizer Model Variables -----
+# SUMMARIZER_HOST = "http://localhost:11435"
+SUMMARIZER_MODEL_NAME = llms[3]

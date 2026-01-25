@@ -1,11 +1,8 @@
-from pathlib import Path
 from backend.logging.LoggingWrapper import Logger
 from math import floor
 import re, json
 
-from backend.Maia.hood.context_engineering.context_window.sections._task.variables import SUMMARIZE_CONVERSATION
-from backend.Maia.hood.context_engineering.context_window.windows.summary_window import generate_summarize_context_window
-from backend.Maia.hood.engine_wrappers.ollama.wrapper_ollama import OllamaModel
+from backend.Maia.hood.engine_wrappers.ollama.summarizer import Summarizer
 from backend.Maia.hood.context_engineering.helpers.transcript import create_transcript, autosize_transcript, trim_transcript
 from backend.Maia.hood.context_engineering.helpers.conversations import load_conversation
 from backend.Maia.config import llms
@@ -19,7 +16,7 @@ def extract_summary(raw_output: str):
     except: return False
 
 
-def summarize_conversation( session_id: str, llm=llms[2], ctx_wdw_size=4086, task=SUMMARIZE_CONVERSATION ) -> str:
+def summarize_conversation(session_id: str, llm=llms[2], ctx_wdw_size=4086) -> str:
     """
     Returns
     - a json list with the summary.
@@ -29,11 +26,10 @@ def summarize_conversation( session_id: str, llm=llms[2], ctx_wdw_size=4086, tas
     - llm: the llm name to use.
     - ctx_wdw_size: number of tokens in context window.
     - session_id: session id of conversation to summarize.
-    - task: rules for how to summarize conversation. defaults to generic summary.
     - memory_type: specifies whether saving a short term or long term conversation.
     """
 
-    Maia = OllamaModel()
+    summarizer = Summarizer()
 
 
     try:
@@ -44,20 +40,14 @@ def summarize_conversation( session_id: str, llm=llms[2], ctx_wdw_size=4086, tas
         conversation_list_str = create_transcript(turns=conversation)        
         CONVERSATIONAL_TRANSCRIPT = trim_transcript(transcript=conversation_list_str, num_turns=len(conversation_list_str))
         
-        # ----- create context window -----
-        window = generate_summarize_context_window(
-            llm=llm,
-            size=ctx_wdw_size,
-            session_id=session_id,
-            TASK_FRAMING=SUMMARIZE_CONVERSATION,
-            CONVERSATIONAL_TRANSCRIPT=CONVERSATIONAL_TRANSCRIPT,
-            RULES_ratio=0.1,
-            TASK_FRAMING_ratio=0.1,
-            CONVERSATIONAL_TRANSCRIPT_ratio=0.5
-        )
-
         # ----- get summary from Maia -----
-        summary = extract_summary(raw_output=Maia.chat( prompt=window ))
+        summary = extract_summary(
+            raw_output=summarizer.summarize(
+                session_id=session_id,
+                window_size_tkns=ctx_wdw_size,
+                given_text=CONVERSATIONAL_TRANSCRIPT,
+            )
+        )
 
         if not summary: 
             raise Exception("Summary unable to be processed.")
@@ -68,4 +58,3 @@ def summarize_conversation( session_id: str, llm=llms[2], ctx_wdw_size=4086, tas
     except Exception as err:
         Logger.error(repr(err))
         return {"response": f"{type(err).__name__}: {repr(err)}"}
-

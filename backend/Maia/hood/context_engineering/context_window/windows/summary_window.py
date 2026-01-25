@@ -1,78 +1,84 @@
-from math import ceil, floor
-from backend.logging.LoggingWrapper import Logger
+from backend.Maia.hood.context_engineering.context_window.windows.generate_window import build_context_window
 
-from backend.Maia.hood.context_engineering.context_window.windows.generate_custom_window import generate_custom_context_window
-from backend.Maia.hood.context_engineering.context_window.sections._task._task import generate_task
-from backend.Maia.hood.context_engineering.context_window.sections._task.variables import SUMMARIZE_CONVERSATION
+section_ratios = {
+    "TASK": 0.3,
+    "CONVERSATIONAL_TRANSCRIPT": 0.70,
+}
 
 
-def generate_summarize_context_window( 
-    llm: str, 
-    size: int, 
-    session_id: str,
-    # context
-    RULES="",
-    TOOL_CONTRACT="",
-    TASK_FRAMING=SUMMARIZE_CONVERSATION,
-    PINNED_FACTS="",
-    GOALS="",
-    LONGTERM_RECALL="",
-    CONVERSATIONAL_TRANSCRIPT="",
-    # percent of context window
-    RULES_ratio=0,
-    TOOL_CONTRACT_ratio=0.0,
-    TASK_FRAMING_ratio=0.0,
-    PINNED_FACTS_ratio=0.0,
-    GOALS_ratio=0.0,
-    LONGTERM_RECALL_ratio=0.0,
-    CONVERSATIONAL_TRANSCRIPT_ratio=0.0
-) -> list[dict] | bool:
-    """
-    Returns
-    - context window as a list[dict]
+TASK = """
+Summarize the conversation into a compact memory note optimized for later retrieval.
 
-    Arguments (bare minimum args to enter)
-    - llm: the llm model to use
-    - size: token size of window
-    - session_id: id of conversation to summarize
-    
-    Default contracts available for if none specified
-    - RULES
-    - TOOL_CONTRACT
-    - TASK_FRAMING
-    - CONVERSATIONAL_TRANSCRIPT (based on given session id)\n
+You MUST return a JSON object with ALL fields listed below.
+If a field has no content, return an empty list [].
+Do NOT omit any fields.
 
-    Sections covered by RAG (only specify if necessary)
-    - PINNED_FACTS
-    - GOALS
-    - LONGTERM_RECALL
+Assume the reader has not seen the conversation.
+Focus on concrete outcomes, intent, and technical details.
+Avoid generic advice or textbook explanations.
 
-    Default sizes if none specified
-    - set to 0 for all context groups.
-    - specify sizes of sections to include.
+Return your answer in a single <JSON>...</JSON> block with EXACTLY this structure:
 
-    This supports the following llms (must enter exactly as spelled in ""). \n
-    - "maia-llama3"
-    """
+{
+  "title": string,
+  "goal": string,
+  "events": string[],
+  "anchors": string[]
+}
 
-    Logger.info(f"[generate_summarize_context_window] Creating summarization window for session {session_id} (size: {size} tokens, llm: {llm})")
-    args = locals()
-    RATIOS = [ RULES_ratio, TOOL_CONTRACT_ratio, TASK_FRAMING_ratio, PINNED_FACTS_ratio, GOALS_ratio, LONGTERM_RECALL_ratio, CONVERSATIONAL_TRANSCRIPT_ratio ]
+Field requirements:
 
-    try:
-        # ----- Check ratio sum > 1. Get dict of args. Create window. -----
-        ratio_sum = sum(RATIOS)
-        if ratio_sum > 1:
-            raise Exception(f"Sum of given ratios ({ratio_sum:.2f}) exceeds 1.0")
+- title:
+  - Short, specific noun phrase (not a sentence).
 
-        active_sections = sum(1 for r in RATIOS if r > 0)
-        Logger.info(f"[generate_summarize_context_window] {active_sections} active sections, ratio sum: {ratio_sum:.2f}")
+- goal:
+  - One concise sentence describing the problem, intent, or question addressed in this slice.
 
-        CONTEXT_WINDOW = generate_custom_context_window(**args)
-        Logger.info(f"[generate_summarize_context_window] Successfully generated context window")
+- events:
+  - 1–5 objective events that occurred in this slice.
+  - An event is something that happened or was discussed (e.g., an explanation given, a topic covered, a question asked).
+  - Do NOT interpret events as decisions, commitments, or recommendations.
+  - Do NOT convert suggestions or best practices into confirmed actions.
 
-    except Exception as err:
-        Logger.error(f"[generate_summarize_context_window] Failed to generate context window: {repr(err)}")
-        return False
+- anchors:
+  - 5–12 retrieval anchors.
+  - Use identifiers, numbers, protocols, ports, acronyms, function names, or concrete technical terms.
+  - Prefer tokens someone would type into search.
+  - Do NOT include abstract categories or generic words (e.g., "security", "discussion").
 
-    return CONTEXT_WINDOW
+Rules:
+- Do NOT invent details.
+- Do NOT broaden beyond what is explicitly present in this slice.
+- Keep language dense and technical.
+- Do NOT include explanatory text outside the <JSON> block.
+- Do NOT wrap the output in quotations.
+"""
+
+
+CONVERSATIONAL_TRANSCRIPT_INTRO = """
+The section below is the text to summarize.
+Use it as the sole source of truth for your summary.
+"""
+
+
+def generate_summarize_context_window(
+    window_size_tkns: int,
+    given_text: str,
+) -> str:
+    # generate sections for context window
+    TASK_SECTION = TASK
+    TRANSCRIPT_SECTION = CONVERSATIONAL_TRANSCRIPT_INTRO + given_text
+
+    # create sections dict
+    section_names = list(section_ratios.keys())
+    section_content = [TASK_SECTION, TRANSCRIPT_SECTION]
+    sections = [(str(k), str(v)) for k, v in zip(section_names, section_content)]
+
+    # build context window
+    context_window = build_context_window(
+        sections=sections,
+        ratios=section_ratios,
+        max_tokens=window_size_tkns,
+    )
+
+    return context_window
