@@ -562,7 +562,7 @@ function MarkdownBlock({ text }: { text: string }) {
         flexDirection: "column",
         gap: tokens.spacing.sm,
         padding: `${tokens.spacing.md}px ${tokens.spacing.lg}px`,
-        margin: `${tokens.spacing.lg}px 0`,
+        margin: `${tokens.spacing.lg}px ${tokens.spacing.md}px`,
         backgroundColor: tokens.colors.surfaceSecondary,
         borderRadius: tokens.radius.md,
         fontFamily: markdownFontFamily,

@@ -1,22 +1,27 @@
 [
   {
     "role": "user",
-    "content": "Hey Maia, how’s it going?",
-    "timestamp": "2026-01-25T03:15:04+00:00"
+    "content": "hey Maia!",
+    "timestamp": "2026-01-25T03:53:58+00:00"
   },
   {
     "role": "assistant",
-    "content": "Hey! It's been going well. How about you? What have you been up to lately?",
-    "timestamp": "2026-01-25T03:15:08+00:00"
+    "content": "Hey! It's nice to meet you again. How about we start with a bit more about your hobbies? I'm curious to know what else you enjoy doing in addition to the ones you mentioned.",
+    "timestamp": "2026-01-25T03:54:02+00:00"
   },
   {
     "role": "user",
-    "content": "not much, can you give me a recap of our conversation from earlier?",
-    "timestamp": "2026-01-25T03:15:23+00:00"
+    "content": "which ones did I mention again?",
+    "timestamp": "2026-01-25T03:54:12+00:00"
   },
   {
     "role": "assistant",
-    "content": "Sure thing! Here's a quick recap of our previous chat:\n\n- We were getting to know each other and discussing some hobbies.\n- You mentioned enjoying lifting weights, gaming, watching TV, playing guitar, and coding.\n\nWould you like to continue exploring any of these topics further or discuss something new?",
-    "timestamp": "2026-01-25T03:15:27+00:00"
+    "content": "Which hobby or activities did you previously discuss that you remembered mentioning? That way, I can help you recall them.",
+    "timestamp": "2026-01-25T03:54:14+00:00"
+  },
+  {
+    "role": "user",
+    "content": "I think weightlifting? i forgot the others",
+    "timestamp": "2026-01-25T03:54:31+00:00"
   }
 ]
