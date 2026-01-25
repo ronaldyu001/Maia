@@ -6,7 +6,8 @@ llms = {
     1: "ministral-3:latest",
     2: "stablelm-zephyr:latest",
     3: "qwen2.5:3b",
-    4: "phi3.5:latest"
+    4: "phi3.5:latest",
+    5: ""
 }
 
 # ----- Ollama Wrapper Variables -----

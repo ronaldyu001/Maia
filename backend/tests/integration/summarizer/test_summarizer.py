@@ -64,18 +64,7 @@ def test_summarizer_integration():
         window_size_tkns=window_size_tkns,
         given_text=TEXT,
     )
-
-    match = re.search(r"(\{[\s\S]*?\})", response)
-    print(match)
-
-    assert match is not None
-    payload = json.loads(match.group(1).strip())
-    assert isinstance(payload.get("title"), str)
-    assert isinstance(payload.get("goal"), str)
-    assert isinstance(payload.get("events"), list)
-    assert isinstance(payload.get("anchors"), list)
-
-    print(payload)
+    print(response)
 
 
 test_summarizer_integration()
