@@ -22,6 +22,7 @@ from backend.Maia.hood.context_engineering.context_window.sections.current_conve
 from backend.routes.chat.helpers.get_prev_session_id import get_prev_session_id
 from backend.routes.chat.helpers.set_prev_session_id import set_prev_session_id
 from backend.routes.chat.helpers.embed_remainder_prev_conversation import embed_remainder_prev_conversation
+from backend.routes.chat.helpers.summarize_response import summarize_response
 
 
 # ===== router and model =====
@@ -81,8 +82,16 @@ async def chat(req: ChatRequest):
     #if Maia sends a message
     if not success:
         Logger.info("Sending Maia's reply...")
+        #if response token count > threshold, summarize
+        token_threshold = 300
+        response_token_count = generic_token_counter(text=response["response"])
+        summary_response = response["response"]
+        if response_token_count > token_threshold:
+            Logger.info(f"Summarizing response (~{response_token_count} tokens > {token_threshold})")
+            summary_response = summarize_response(response["response"])
+        
         #update full conversation with response
-        turns = add_turn( session_id=current_session_id, role="assistant", content=response["response"] )
+        turns = add_turn( session_id=current_session_id, role="assistant", content=summary_response )
         #save full conversation to conversational memory
         save_conversation( session_id=current_session_id, data=turns )
         #embed buffer if Maia's reply causes window to exceed token limit
