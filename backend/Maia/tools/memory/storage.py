@@ -27,9 +27,13 @@ def load_json( path: Path, default: Any ) -> list[dict] | dict:
     """
 
     try:
-        # --- if path DNE, create one, else use existing ---
+        # --- if file path DNE, create parent dirs, return default ---
         if not path.exists():
-            path.mkdir( parents=True, exist_ok=True )
+            path.parent.mkdir(parents=True, exist_ok=True)
+            return default
+
+        if path.is_dir():
+            return default
         
         # --- get text from json ---
         text = path.read_text(encoding="utf-8").strip()
@@ -76,8 +80,11 @@ def save_json( path: Path, default: Any, data: Any ) -> Tuple[ bool, str|None ]:
                 f"got {type(data).__name__}"
             )
 
-        # --- create file path if DNE ---
-        path.touch( exist_ok=True )
+        # --- create parent dirs if DNE ---
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if path.exists() and path.is_dir():
+            raise Exception(f"Path '{path}' is a directory, expected a file")
+        path.touch(exist_ok=True)
         temp = path.with_suffix(path.suffix + ".tmp") # create temp file to write data
 
         # --- write to json ---
