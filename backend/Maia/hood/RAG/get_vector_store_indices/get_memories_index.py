@@ -15,9 +15,8 @@ def get_memories_index() -> VectorStoreIndex:
 
 
     #manually check for vector stores. load if exists.
-    Logger.info("Checking for existing 'memories' stores.")
     if any(persist_dir.iterdir()):
-        Logger.info("Existing 'memories' stores found. Loading.")
+        Logger.info("Loading existing 'memories' index")
 
         #load storage context
         storage_context = StorageContext.from_defaults(
@@ -32,7 +31,7 @@ def get_memories_index() -> VectorStoreIndex:
 
     #create vector store if DNE and persist
     else:
-        Logger.info("No 'memories' stores found. Creating.")
+        Logger.info("No existing 'memories' index found, creating new one")
 
         #create storage context
         storage_context = StorageContext.from_defaults(
@@ -49,6 +48,4 @@ def get_memories_index() -> VectorStoreIndex:
         memories_index.storage_context.persist(persist_dir=persist_dir)
 
 
-    #return the vector store
-    Logger.info("Returning 'memories' index.")
     return memories_index

@@ -11,14 +11,14 @@ def get_prev_session_id() -> str | None:
     :rtype: str | None
     """
     if not os.path.exists(prev_session_id_path):
-        Logger.warning(f"Previous session id file does not exist: {prev_session_id_path}")
+        Logger.info("No previous session id file found")
         return None
 
     try:
         with open(prev_session_id_path, "r") as f:
             session_id = f.read().strip()
-        Logger.info(f"Successfully retrieved previous session id: {session_id}")
+        Logger.info(f"Retrieved previous session id: {session_id}")
         return session_id
     except Exception as e:
-        Logger.error(f"Failed to read previous session id: {e}")
+        Logger.error(f"Failed to read previous session id: {repr(e)}")
         return None

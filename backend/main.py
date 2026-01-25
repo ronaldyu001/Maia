@@ -5,9 +5,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from backend.logging.LoggingWrapper import Logger
 
 # ----- create FastAPI app -----
-Logger.log(level=20, msg='Starting backend.')
+Logger.info("Starting backend")
 app = FastAPI()
-# model = OllamaModel( model_name=OLLAMA_MODEL_NAME )
 
 
 # ----- Allow frontend origin(s) -----
@@ -28,5 +27,5 @@ app.include_router( chat.router )
 @app.on_event( event_type="startup" )
 async def startup_events():
     """ startup events. """
-    print( f"Performing startup events..." )
+    Logger.info("Running startup events")
     OllamaModel()

@@ -21,7 +21,7 @@ def add_turn( session_id: str, role: str, content: str,  ) -> list[dict]:
         # ----- initialize with empty array if file DNE or is empty -----
         if not conversation_file.exists() or conversation_file.stat().st_size == 0:
             conversation_file.write_text("[]", encoding="utf-8")
-            Logger.info(f"[add_turn] Created new conversation file for session {session_id}")
+            Logger.info(f"Created new conversation file for session: {session_id}")
             conversational_memory = []
         else:
             # ----- load existing conversation -----
@@ -36,10 +36,9 @@ def add_turn( session_id: str, role: str, content: str,  ) -> list[dict]:
             "content": content
         }]
 
-        content_preview = content[:50].replace('\n', ' ')
-        Logger.info(f"[add_turn] Added {role} turn to session {session_id} ({len(turns)} total turns): \"{content_preview}{'...' if len(content) > 50 else ''}\"")
+        Logger.info(f"Added {role} turn to session {session_id} ({len(turns)} total turns)")
         return turns
 
     except Exception as err:
-        Logger.error(f"[add_turn] Failed to add turn to session {session_id}: {repr(err)}")
+        Logger.error(f"Failed to add turn to session {session_id}: {repr(err)}")
         return [{}]

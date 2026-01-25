@@ -28,14 +28,14 @@ def load_conversation( session_id: str ) -> list[dict]:
 
         if conversation_json.exists():
             conversation = load_json( path=conversation_json, default=[] )
-            Logger.info(f"[load_conversation] Loaded {len(conversation)} turns from session {session_id}")
+            Logger.info(f"Loaded {len(conversation)} turns from session: {session_id}")
             return conversation
 
         else:
             raise Exception( f"Conversation file not found for session {session_id}" )
 
     except Exception as err:
-        Logger.error(f"[load_conversation] Failed to load session {session_id}: {repr(err)}")
+        Logger.error(f"Failed to load session {session_id}: {repr(err)}")
         return False
     
 
@@ -74,7 +74,7 @@ def save_conversation(session_id: str, data: List[dict]) -> None:
     except Exception as err:
         # If file is corrupt/unreadable, reset to empty rather than crash
         conversation = []
-        Logger.warning(f"[save_conversation] Failed to load existing conversation for session {session_id}, starting fresh: {err}")
+        Logger.warning(f"Failed to load existing conversation for session {session_id}, starting fresh: {repr(err)}")
 
     # Append last message
     last_exchange = data[-1] if data else None
@@ -92,12 +92,12 @@ def save_conversation(session_id: str, data: List[dict]) -> None:
             }
             conversation.append(new_message)
             content_preview = content[:50].replace('\n', ' ')
-            Logger.info(f"[save_conversation] Appending {role} message to session {session_id}: \"{content_preview}{'...' if len(content) > 50 else ''}\"")
+            Logger.info(f"Appending {role} turn to session: {session_id}")
         else:
             # Invalid / incomplete turn — skip silently
-            Logger.warning(f"[save_conversation] Skipping invalid turn in session {session_id}: role={type(role).__name__}, content={type(content).__name__}")
+            Logger.warning(f"Skipping invalid turn in session {session_id}: role={type(role).__name__}, content={type(content).__name__}")
     else:
-        Logger.warning(f"[save_conversation] No valid message to append for session {session_id}")
+        Logger.warning(f"No valid message to append for session: {session_id}")
 
     # Save updated conversation
     save_successful, error = save_json(
@@ -107,9 +107,9 @@ def save_conversation(session_id: str, data: List[dict]) -> None:
     )
 
     if save_successful:
-        Logger.info(f"[save_conversation] Saved conversation for session {session_id} ({len(conversation)} total turns)")
+        Logger.info(f"Saved session {session_id} ({len(conversation)} total turns)")
     else:
-        Logger.error(f"[save_conversation] Failed to save session {session_id}: {error}")
+        Logger.error(f"Failed to save session {session_id}: {error}")
 
 
 def format_conversation( conversation: list[dict] ) -> list[dict]:
@@ -129,7 +129,7 @@ def conversational_to_longterm( session_id: str ) -> bool:
     CONVERSATION = Path( SHORT_TERM_conversations )
     LONG_TERM = Path( LONG_TERM_conversations )
 
-    Logger.info(f"[conversational_to_longterm] Archiving session {session_id} to long-term storage")
+    Logger.info(f"Archiving session {session_id} to long-term storage")
 
     try:
         # ----- if conversational memory DNE, do nothing -----
@@ -141,11 +141,11 @@ def conversational_to_longterm( session_id: str ) -> bool:
             if not copy_file( from_path=CONVERSATION, to_path=LONG_TERM ):
                 raise Exception( f"Failed to copy conversation to long-term storage" )
 
-        Logger.info(f"[conversational_to_longterm] Successfully archived session {session_id}")
+        Logger.info(f"Archived session: {session_id}")
         return True
 
     except Exception as err:
-        Logger.error(f"[conversational_to_longterm] Failed to archive session {session_id}: {repr(err)}")
+        Logger.error(f"Failed to archive session {session_id}: {repr(err)}")
         return False
 
 
@@ -158,12 +158,12 @@ def ensure_conversation_initialized(session_id: str) -> bool:
 
     try:
         data = load_conversation(session_id=session_id)
-        Logger.info(f"[ensure_conversation_initialized] Session {session_id} exists with {len(data) if data else 0} turns")
+        Logger.info(f"Session {session_id} exists with {len(data) if data else 0} turns")
 
     except:
         conversation_exists = False
         data = []
         save_conversation(session_id=session_id, data=data)
-        Logger.info(f"[ensure_conversation_initialized] Created new conversation for session {session_id}")
+        Logger.info(f"Created new conversation for session: {session_id}")
 
     return conversation_exists

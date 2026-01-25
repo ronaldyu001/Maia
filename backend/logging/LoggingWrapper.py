@@ -11,10 +11,11 @@ log_path = log_dir / log_filename
 
 class MaiaLogFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:
-        base = f"{self.formatTime(record)} [{record.levelname}]: {record.getMessage()}"
         if record.levelno >= logging.ERROR:
-            return f"{base} [{record.filename}:{record.lineno}]"
-        return base
+            caller = f"[{record.module}.{record.funcName}:{record.lineno}]"
+        else:
+            caller = f"[{record.module}.{record.funcName}]"
+        return f"{self.formatTime(record)} [{record.levelname}] {caller}: {record.getMessage()}"
 
 
 # Basic configuration

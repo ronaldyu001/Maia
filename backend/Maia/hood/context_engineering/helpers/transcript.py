@@ -11,11 +11,9 @@ def create_transcript(turns: list[dict]) -> list[str]:
     Only includes 'role' and 'content' in transcript.
     """
     try:
-        result = [ f"{t['role'].capitalize()}: {t['content']}" for t in turns ]
-        Logger.info(f"[create_transcript] Converted {len(turns)} turns to string format")
-        return result
+        return [ f"{t['role'].capitalize()}: {t['content']}" for t in turns ]
     except Exception as err:
-        Logger.error(f"[create_transcript] Failed to convert transcript: {err}")
+        Logger.error(f"Failed to convert transcript: {repr(err)}")
         return False
 
 
@@ -25,11 +23,9 @@ def create_transcript_with_timestamps(turns: list[dict]) -> list[str]:
     Includes 'role', 'timestamp', 'content' in transcript.
     """
     try:
-        result = [ f"[{t['timestamp']}] {t['role'].capitalize()}: {t['content']}" for t in turns ]
-        Logger.info(f"[create_transcript_with_timestamps] Converted {len(turns)} turns with timestamps")
-        return result
+        return [ f"[{t['timestamp']}] {t['role'].capitalize()}: {t['content']}" for t in turns ]
     except Exception as err:
-        Logger.error(f"[create_transcript_with_timestamps] Failed to convert transcript: {err}")
+        Logger.error(f"Failed to convert transcript with timestamps: {repr(err)}")
         return False
 
 
@@ -44,10 +40,6 @@ def trim_transcript( transcript: list[str], num_turns: Optional[int] = None, str
     original_count = len(transcript)
     if stringify_entire_transcript: num_turns = len(transcript)
     start_index = len(transcript) - num_turns
-    trimmed_count = num_turns
-
-    if trimmed_count < original_count:
-        Logger.info(f"[trim_transcript] Trimmed {original_count} -> {trimmed_count} turns (keeping most recent)")
 
     return "\n".join( transcript[ start_index: ] )
 
@@ -57,7 +49,6 @@ def autosize_transcript( transcript: list[dict], size: int, llm: str ) -> list[d
     Automatically resizes a transcript to the desired token count for a desired llm.
     """
     original_turns = len(transcript)
-    Logger.info(f"[autosize_transcript] Resizing {original_turns} turns to fit {size} tokens (llm: {llm})")
 
     # ----- token size bounds, num_turns -----
     num_turns = len(transcript)
@@ -74,7 +65,6 @@ def autosize_transcript( transcript: list[dict], size: int, llm: str ) -> list[d
 
     # ----- if transcript is smaller than window, return -----
     if token_count <= size:
-        Logger.info(f"[autosize_transcript] Transcript fits within budget (~{token_count} tokens)")
         return ready_transcript
 
     # ----- if transcript is larger than window, decrease -----
@@ -87,7 +77,7 @@ def autosize_transcript( transcript: list[dict], size: int, llm: str ) -> list[d
         token_count = generic_token_counter( llm=llm, text=ready_transcript_str )
 
     final_turns = len(ready_transcript)
-    Logger.info(f"[autosize_transcript] Resized {original_turns} -> {final_turns} turns (~{token_count} tokens, keeping recent)")
+    Logger.info(f"Resized transcript {original_turns} -> {final_turns} turns (~{token_count} tokens, keeping recent)")
     return ready_transcript
 
 
@@ -97,7 +87,6 @@ def autosize_transcript_generic(transcript: list[dict], size: int):
     Keeps most recent messages.
     """
     original_turns = len(transcript)
-    Logger.info(f"[autosize_transcript_generic] Resizing {original_turns} turns to fit {size} tokens")
 
     #stringify transcript
     ready_transcript = transcript
@@ -109,7 +98,6 @@ def autosize_transcript_generic(transcript: list[dict], size: int):
 
     #if transcript is smaller than window, return
     if token_count <= size:
-        Logger.info(f"[autosize_transcript_generic] Transcript fits within budget (~{token_count} tokens)")
         return ready_transcript
 
     #if transcript is larger than window, decrease until smaller
@@ -127,7 +115,7 @@ def autosize_transcript_generic(transcript: list[dict], size: int):
         )
 
     final_turns = len(ready_transcript)
-    Logger.info(f"[autosize_transcript_generic] Resized {original_turns} -> {final_turns} turns (~{token_count} tokens, keeping recent)")
+    Logger.info(f"Resized transcript {original_turns} -> {final_turns} turns (~{token_count} tokens, keeping recent)")
     return ready_transcript
 
 
@@ -137,7 +125,6 @@ def autosize_transcript_generic_keep_oldest(transcript: list[dict], size: int):
     Keeps the oldest messages (drops newest ones).
     """
     original_turns = len(transcript)
-    Logger.info(f"[autosize_transcript_generic_keep_oldest] Resizing {original_turns} turns to fit {size} tokens (keeping oldest)")
 
     # stringify transcript
     ready_transcript = transcript
@@ -152,7 +139,6 @@ def autosize_transcript_generic_keep_oldest(transcript: list[dict], size: int):
 
     # if transcript is smaller than window, return
     if token_count <= size:
-        Logger.info(f"[autosize_transcript_generic_keep_oldest] Transcript fits within budget (~{token_count} tokens)")
         return ready_transcript
 
     # if transcript is larger than window, decrease from the end
@@ -168,5 +154,5 @@ def autosize_transcript_generic_keep_oldest(transcript: list[dict], size: int):
         token_count = generic_token_counter(text=ready_transcript_str)
 
     final_turns = len(ready_transcript)
-    Logger.info(f"[autosize_transcript_generic_keep_oldest] Resized {original_turns} -> {final_turns} turns (~{token_count} tokens)")
+    Logger.info(f"Resized transcript {original_turns} -> {final_turns} turns (~{token_count} tokens, keeping oldest)")
     return ready_transcript

@@ -48,17 +48,14 @@ class LlamaIndex:
         self.settings = Settings
 
         #set embedder in settings
-        Logger.info("Setting embed model for LlamaIndex in settings.")
         self.settings.embed_model = OllamaEmbedding(
             model_name="nomic-embed-text",
             base_url="http://localhost:11434"
         )
 
         #intialize/load vector stores
-        Logger.info("initializing/Loading 'raw_converations' index.")
+        Logger.info("Loading vector store indices")
         self.raw_conversations_index = get_raw_conversations_index()
-
-        Logger.info("Initializing/Loading 'memories' index.")
         self.memories_index = get_memories_index()
         
 
@@ -80,14 +77,12 @@ class LlamaIndex:
         document = Document(text=text, extra_info=metadata)
 
         #insert document into vector store
-        try: 
-            Logger.info("Inserting document to index.")
+        try:
             index.insert(document)
         except Exception as err:
-            Logger.error(repr(err))
+            Logger.error(f"Failed to insert document: {repr(err)}")
 
         #persist
-        Logger.info("Persisting index.")
         index.storage_context.persist(
             persist_dir=persist_dir
         )
@@ -106,18 +101,16 @@ class LlamaIndex:
 
         # load conversation based on session id
         try:
-            Logger.info(f"Loading conversation for remaining embed: {session_id}")
             conversation = load_conversation(session_id=session_id)
             if not conversation:
-                Logger.warning(f"No conversation found for session id: {session_id}")
+                Logger.warning(f"No conversation found for session: {session_id}")
                 return
         except Exception as err:
-            Logger.error(f"Failed to load conversation: {repr(err)}")
+            Logger.error(f"Failed to load conversation for embedding: {repr(err)}")
             return
 
         # load embedding history
         try:
-            Logger.info("Loading embedding history.")
             embedding_history: list[dict] = load_json(path=embedding_history_path, default=[])
             if not isinstance(embedding_history, list):
                 embedding_history = []
@@ -127,7 +120,6 @@ class LlamaIndex:
 
         # find portion of conversation not yet embedded
         try:
-            Logger.info("Calculating remaining conversation to embed.")
             embedding_history_keys = {
                 json.dumps(d, sort_keys=True, ensure_ascii=False) for d in embedding_history
             }
@@ -141,16 +133,15 @@ class LlamaIndex:
 
         # if nothing remaining to embed, exit
         if not remaining_conversation:
-            Logger.info("No remaining conversation to embed.")
+            Logger.info(f"No unembedded turns remaining for session: {session_id}")
             return
 
         # create transcript from remaining conversation
         try:
-            Logger.info(f"Embedding {len(remaining_conversation)} remaining turns.")
             transcript = create_transcript_with_timestamps(turns=remaining_conversation)
             stringified_transcript = trim_transcript(transcript=transcript, stringify_entire_transcript=True)
         except Exception as err:
-            Logger.error(f"Failed to create transcript: {repr(err)}")
+            Logger.error(f"Failed to create transcript for embedding: {repr(err)}")
             return
 
         # create metadata
@@ -161,14 +152,14 @@ class LlamaIndex:
 
         # embed remaining conversation to raw_conversations vector store
         try:
-            Logger.info("Embedding remaining conversation.")
+            Logger.info(f"Embedding {len(remaining_conversation)} remaining turns for session: {session_id}")
             self.embed(
                 text=stringified_transcript,
                 metadata=metadata,
                 index=self.raw_conversations_index,
                 persist_dir=self.raw_conversations_index_path
             )
-            Logger.info("Remaining conversation embedded successfully.")
+            Logger.info(f"Remaining conversation embedded for session: {session_id}")
         except Exception as err:
             Logger.error(f"Failed to embed remaining conversation: {repr(err)}")
 
@@ -183,38 +174,28 @@ class LlamaIndex:
 
         #load conversation based on session id
         try:
-            Logger.info(f"Loading conversation: {session_id}")
             turns = load_conversation(session_id=session_id)
             transcript = create_transcript_with_timestamps(turns=turns)
             stringified_transcript = trim_transcript(transcript=transcript, stringify_entire_transcript=True)
-
         except Exception as err:
-            Logger.error(repr(err))
+            Logger.error(f"Failed to load conversation for embedding: {repr(err)}")
             raise repr(err)
-        
 
         #create metadata
-        try:
-            Logger.info("Creating conversation metadata.")
-            metadata = {
-                "session_id": session_id,
-                "project": "conversation"
-            }
-
-        except Exception as err:
-            Logger.error(repr(err))
-
+        metadata = {
+            "session_id": session_id,
+            "project": "conversation"
+        }
 
         #embed conversation to raw_conversations vector store
         try:
-            Logger.info("Embedding conversation.")
+            Logger.info(f"Embedding entire conversation for session: {session_id}")
             self.embed(
                 text=stringified_transcript,
                 metadata=metadata,
                 index=self.raw_conversations_index,
                 persist_dir=self.raw_conversations_index_path
             )
-            Logger.info("Conversation embedded.")
-
+            Logger.info(f"Conversation embedded for session: {session_id}")
         except Exception as err:
-            Logger.error(repr(err))
+            Logger.error(f"Failed to embed conversation: {repr(err)}")

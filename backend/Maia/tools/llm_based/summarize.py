@@ -52,9 +52,9 @@ def summarize_conversation(session_id: str, llm=llms[2], ctx_wdw_size=4086) -> s
         if not summary: 
             raise Exception("Summary unable to be processed.")
         
-        Logger.info(f"Conversation {session_id} summarized, returning summary.")
+        Logger.info(f"Conversation summarized for session: {session_id}")
         return summary
 
     except Exception as err:
-        Logger.error(repr(err))
+        Logger.error(f"Failed to summarize conversation for session {session_id}: {repr(err)}")
         return {"response": f"{type(err).__name__}: {repr(err)}"}

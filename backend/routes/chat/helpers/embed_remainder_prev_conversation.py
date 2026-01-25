@@ -15,14 +15,13 @@ def clear_embedding_history():
     """
     try:
         if not LAST_EMBEDDED_PATH.exists():
-            Logger.info("[clear_embedding_history] File does not exist, nothing to clear")
             return
 
         LAST_EMBEDDED_PATH.write_text("[]", encoding="utf-8")
-        Logger.info("[clear_embedding_history] Successfully cleared embedding history")
+        Logger.info("Cleared embedding history")
 
     except Exception as err:
-        Logger.error(f"[clear_embedding_history] Failed to clear embedding history: {repr(err)}")
+        Logger.error(f"Failed to clear embedding history: {repr(err)}")
 
 
 def embed_remainder_prev_conversation():
@@ -32,22 +31,19 @@ def embed_remainder_prev_conversation():
     that haven't been embedded yet. Clears the embedding history after completion.
     """
     try:
-        Logger.info("[embed_remainder_prev_conversation] Starting embedding of previous conversation remainder")
-
         # get previous session id
         prev_session_id = get_prev_session_id()
         if not prev_session_id:
-            Logger.info("[embed_remainder_prev_conversation] No previous session id found, skipping")
             return
 
         # embed remaining conversation
+        Logger.info(f"Embedding remainder of previous session: {prev_session_id}")
         vector_store = LlamaIndex()
         vector_store.embed_remaining_conversation(session_id=prev_session_id)
 
         # clear embedding history for fresh start with new conversation
         clear_embedding_history()
-
-        Logger.info("[embed_remainder_prev_conversation] Completed successfully")
+        Logger.info("Previous conversation embedding complete")
 
     except Exception as err:
-        Logger.error(f"[embed_remainder_prev_conversation] Failed: {repr(err)}")
+        Logger.error(f"Failed to embed previous conversation remainder: {repr(err)}")

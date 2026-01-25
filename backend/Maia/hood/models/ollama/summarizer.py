@@ -114,7 +114,6 @@ class Summarizer:
         session_id: Optional[str] = None
     ) -> str:
         if custom_prompt:
-            Logger.info(f'[Summarize] Using custom prompt: {custom_prompt}')
             prompt = generate_summarize_context_window(
                 window_size_tkns=window_size_tkns,
                 given_text=given_text,
@@ -131,19 +130,16 @@ class Summarizer:
         last_response = ""
 
         #retry until valid response or max retries hit
-        for _ in range(MAX_SUMMARY_RETRIES):
+        for attempt in range(MAX_SUMMARY_RETRIES):
             last_response = self._request_summary(prompt)
-            Logger.info(f'Summarize response is valid json: {self._is_json_wrapped(last_response)}')
 
             if self._is_json_wrapped(last_response):
                 break
 
-            if custom_prompt:
-                Logger.info(f'Summarize response is valid string: {isinstance(last_response, str)}')
-                if isinstance(last_response, str):
-                    return last_response
+            if custom_prompt and isinstance(last_response, str):
+                return last_response
 
-        Logger.info(f'Summary response: {last_response}')
+        Logger.info(f"Summarization complete (attempts: {attempt + 1}/{MAX_SUMMARY_RETRIES})")
 
         #parse the response into a dict
         summary_dict = self._parse_summary_dict(last_response)
@@ -185,7 +181,7 @@ Return only the recap text.
         }
 
         try:
-            Logger.info("Summarizing response.")
+            Logger.info("Compressing assistant response for storage")
             summary = self.summarize(
                 window_size_tkns=1500,
                 given_text=response,
@@ -194,6 +190,6 @@ Return only the recap text.
             )
 
         except Exception as err:
-            Logger.error(repr(err))
+            Logger.error(f"Failed to summarize response: {repr(err)}")
 
         return summary

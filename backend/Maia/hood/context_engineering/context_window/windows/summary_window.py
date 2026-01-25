@@ -1,7 +1,6 @@
 from typing import Optional
 
 from backend.Maia.hood.context_engineering.context_window.windows.generate_window import build_context_window
-from backend.logging.LoggingWrapper import Logger
 
 
 
@@ -85,7 +84,5 @@ def generate_summarize_context_window(
         ratios=section_ratios,
         max_tokens=window_size_tkns,
     )
-
-    Logger.info(context_window)
 
     return context_window

@@ -19,7 +19,7 @@ def truncate_to_tokens(text: str, max_tokens: int) -> str:
     if original_tokens <= max_tokens:
         return text
 
-    Logger.warning(f"[truncate_to_tokens] Content exceeds budget ({original_tokens} > {max_tokens} tokens), truncating")
+    Logger.warning(f"Content exceeds budget ({original_tokens} > {max_tokens} tokens), truncating")
     # Approximate character cutoff
     max_chars = max_tokens * 4
     truncated = text[:max_chars]
@@ -51,8 +51,7 @@ def build_context_window(
         A single formatted context string.
     """
     section_names = [name for name, _ in sections]
-    Logger.info(f"[build_context_window] Building context window with {len(sections)} sections: {section_names}")
-    Logger.info(f"[build_context_window] Token budget: {max_tokens}")
+    Logger.info(f"Building context window ({len(sections)} sections, {max_tokens} token budget): {section_names}")
 
     # --- validate ratios ---
     total_ratio = sum(ratios.get(name, 0.0) for name, _ in sections)
@@ -65,14 +64,13 @@ def build_context_window(
     for name, text in sections:
         ratio = ratios.get(name, 0.0)
         if ratio <= 0.0 or not text.strip():
-            Logger.info(f"[build_context_window] Skipping section '{name}' (ratio={ratio:.2f}, empty={not text.strip()})")
             continue
 
         section_budget = int(max_tokens * ratio)
         section_budget = min(section_budget, remaining_tokens)
 
         if section_budget <= 0:
-            Logger.warning(f"[build_context_window] No budget remaining for section '{name}'")
+            Logger.warning(f"No budget remaining for section '{name}'")
             continue
 
         # truncated_text = truncate_to_tokens(text.strip(), section_budget)
@@ -80,12 +78,11 @@ def build_context_window(
         used_tokens = estimate_tokens(truncated_text)
         remaining_tokens -= used_tokens
 
-        Logger.info(f"[build_context_window] Section '{name}': allocated {section_budget} tokens, used ~{used_tokens} tokens")
         rendered_sections.append(
             f"### {name}\n{truncated_text}"
         )
 
     total_used = max_tokens - remaining_tokens
-    Logger.info(f"[build_context_window] Context window complete: {len(rendered_sections)} sections, ~{total_used}/{max_tokens} tokens used")
+    Logger.info(f"Context window built: {len(rendered_sections)} sections, ~{total_used}/{max_tokens} tokens used")
 
     return "\n\n".join(rendered_sections)

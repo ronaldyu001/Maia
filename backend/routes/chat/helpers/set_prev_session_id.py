@@ -14,6 +14,6 @@ def set_prev_session_id(current_session_id: str):
         os.makedirs(os.path.dirname(prev_session_id_path), exist_ok=True)
         with open(prev_session_id_path, "w") as f:
             f.write(current_session_id)
-        Logger.info(f"Successfully saved session id: {current_session_id}")
+        Logger.info(f"Saved session id: {current_session_id}")
     except Exception as e:
-        Logger.error(f"Failed to save session id: {e}")
+        Logger.error(f"Failed to save session id: {repr(e)}")
