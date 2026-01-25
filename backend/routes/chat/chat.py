@@ -69,9 +69,10 @@ async def chat(req: ChatRequest):
  
     #generate context window
     Logger.info("Generating context window.")
+    Logger.info(f"[chat] Turns before : {turns}")
     prompt = generate_conversation_window(session_id=current_session_id, window_size_tkns=context_window_size, current_conversation=turns)
     print( f"Context Window size: {generic_token_counter( text=prompt )} tokens" )
-    Logger.info(prompt)
+    Logger.info(f"[chat] Maia's context window: {prompt}")
 
     #get response
     Logger.info("Getting response...")
@@ -101,7 +102,6 @@ async def chat(req: ChatRequest):
 
         #update full conversation with response
         turns = add_turn( session_id=current_session_id, role="assistant", content=summary_response )
-        Logger.info(f"Length of conversation: {turns}")
         #save full conversation to conversational memory
         save_conversation( session_id=current_session_id, data=turns )
         #embed buffer if Maia's reply causes window to exceed token limit

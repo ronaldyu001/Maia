@@ -14,8 +14,8 @@ section_ratios = {
     "SYSTEM_PROMPT": 0.15,
     "TASK": 0.10,
     "TOOL_CONTRACT": 0.15,
-    "RAG": 0.35,
     "CURRENT_CONVERSATION": 0.25,
+    "RAG": 0.35,
 }
 
 
@@ -42,7 +42,7 @@ def generate_conversation_window(session_id: str, window_size_tkns: int, current
 
     #create sections dict
     section_names = list(section_ratios.keys())
-    section_content = [SYSTEM_PROMPT, TASK, TOOL_CONTRACT, RAG, CURRENT_CONVERSATION_FULL]
+    section_content = [SYSTEM_PROMPT, TASK, TOOL_CONTRACT, CURRENT_CONVERSATION_FULL, RAG]
     sections = [(str(k), str(v)) for k, v in zip(section_names, section_content)]
 
     #build context window

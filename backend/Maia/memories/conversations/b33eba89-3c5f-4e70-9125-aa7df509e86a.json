@@ -68,5 +68,65 @@
     "role": "assistant",
     "content": "[Compressed] Maia discussed Quenton Nelson as one of the best interior defenders and highlighted Jerry Jeudy as their top receiver.",
     "timestamp": "2026-01-25T14:28:08-07:00"
+  },
+  {
+    "role": "user",
+    "content": "sure, can you give me some stats for Bo Nix?",
+    "timestamp": "2026-01-25T15:02:03-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "[Compressed] Maia discussed Bo Nix's key statistics as of mid-January 2026, including his passing and rushing performances.",
+    "timestamp": "2026-01-25T15:02:34-07:00"
+  },
+  {
+    "role": "user",
+    "content": "nice thanks! sure what deeper stats do you have?",
+    "timestamp": "2026-01-25T15:08:49-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "[Compressed] Maia explained the key stats of Bo Nix, including his passing yards with a TD:INT ratio of ~3:1, leading rushing yards with an average of 5 yards per carry, and a completion percentage around 65-68%. He's also known for hitting big plays on about 15% of attempts.",
+    "timestamp": "2026-01-25T15:09:20-07:00"
+  },
+  {
+    "role": "user",
+    "content": "no that’s good thanks! Who are some other players I should watch out for again?",
+    "timestamp": "2026-01-25T15:10:00-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "[Compressed] Maia explained deeper stats and insights on Bo Nix as of mid-January 2026, including his passing performance metrics and rushing statistics.",
+    "timestamp": "2026-01-25T15:10:28-07:00"
+  },
+  {
+    "role": "user",
+    "content": "Let’s pivot to another Bronco",
+    "timestamp": "2026-01-25T15:13:57-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "[Compressed] Maia explained that Bo Nix is the Broncos' starting quarterback and has shown potential with inconsistency.",
+    "timestamp": "2026-01-25T15:14:17-07:00"
+  },
+  {
+    "role": "user",
+    "content": "What time is it?",
+    "timestamp": "2026-01-25T15:17:36-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "[Compressed] Maia discussed key statistics of Bo's performance, including his passing yards, touchdowns, interceptions, and completion rate.",
+    "timestamp": "2026-01-25T15:17:59-07:00"
+  },
+  {
+    "role": "user",
+    "content": "Let’s talk about something other than football now",
+    "timestamp": "2026-01-25T15:20:26-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "[Compressed] Maia discussed Nelson's role as an elite interior defender, key part of the Broncos' run defense with 10 sacks and 18 tackles for loss in 2025.",
+    "timestamp": "2026-01-25T15:21:16-07:00"
   }
 ]
