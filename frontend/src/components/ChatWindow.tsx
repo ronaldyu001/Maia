@@ -23,7 +23,7 @@ const tokens = {
     sidebarBg: "#211e1b",
   },
   fonts: {
-    sans: '"Kalam", "Patrick Hand", cursive',
+    sans: '"Handlee", "Gochi Hand", cursive',
     elegant: '"Cormorant Garamond", Georgia, serif',
   },
   spacing: {
@@ -623,7 +623,7 @@ export default function ChatWindow() {
         >
           <div
             style={{
-              maxWidth: 768,
+              maxWidth: 900,
               margin: "0 auto",
               padding: `${tokens.spacing.lg}px ${tokens.spacing.md}px`,
             }}
@@ -643,7 +643,7 @@ export default function ChatWindow() {
         >
           <div
             style={{
-              maxWidth: 768,
+              maxWidth: 900,
               margin: "0 auto",
             }}
           >
@@ -681,8 +681,8 @@ export default function ChatWindow() {
               position: "absolute",
               bottom: tokens.spacing.lg,
               left: tokens.spacing.lg,
-              width: 64,
-              height: 64,
+              width: 88,
+              height: 88,
               borderRadius: tokens.radius.lg,
               objectFit: "cover",
               opacity: 0.9,
@@ -694,7 +694,7 @@ export default function ChatWindow() {
 
       {/* CSS for loading animation and fonts */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Handlee&family=Gochi+Hand&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap');
 
         @keyframes pulse {
           0%, 80%, 100% {

@@ -5,7 +5,6 @@ General:
 - Prefer concise, direct responses.
 - Use plain text. Bullets and short paragraphs are fine when helpful.
 - Do not repeat information the user already knows unless it helps the flow.
-- When markdown format or bullet points are included in response, follow that section with four empty lines.
 
 Conversation:
 - For casual chat, prioritize natural flow over formality.

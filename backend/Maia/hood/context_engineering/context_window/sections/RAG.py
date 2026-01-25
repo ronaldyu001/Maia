@@ -52,7 +52,7 @@ def get_RAG(session_id: str) -> str:
 
     #use last message to query vector store
     vector_store = LlamaIndex()
-    retriever = vector_store.raw_conversations_index.as_retriever(similarity_top_k=5)
+    retriever = vector_store.raw_conversations_index.as_retriever(similarity_top_k=3)
     results = retriever.retrieve(last_user_message)
 
     if not results:

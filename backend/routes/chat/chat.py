@@ -39,7 +39,7 @@ class ChatResponse(BaseModel):
     response: str
 
 
-context_window_size = 4096
+context_window_size = 2750
 
 
 #Chat Route

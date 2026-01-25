@@ -21,7 +21,7 @@ const tokens = {
     inlineCodeText: "#f5ebe0",
   },
   fonts: {
-    sans: '"Kalam", "Patrick Hand", cursive',
+    sans: '"Handlee", "Gochi Hand", cursive',
     mono: '"JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace',
   },
   spacing: {
@@ -42,19 +42,9 @@ const markdownFontFamily = '"Cormorant Garamond", "Garamond", "Georgia", serif';
 // User avatar icon
 function UserIcon() {
   return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke={tokens.colors.textSecondary}
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-      <circle cx="12" cy="7" r="4" />
-    </svg>
+    <span role="img" aria-label="user" style={{ fontSize: 25 }}>
+      🧑🏻
+    </span>
   );
 }
 
@@ -62,8 +52,8 @@ function UserIcon() {
 function RobotIcon() {
   return (
     <svg
-      width="16"
-      height="16"
+      width="25"
+      height="25"
       viewBox="0 0 24 24"
       fill="none"
       stroke={tokens.colors.accent}
@@ -105,9 +95,43 @@ function parseText(text: string): React.ReactNode[] {
     return match.index + (match[1] ? match[1].length : 0);
   };
   const firstMarkdownStopMatch = (segment: string) => {
-    const match = segment.match(/(^|\n)\s*\n\s*\n/);
-    if (!match || match.index == null) return null;
-    return { index: match.index, length: match[0].length };
+    const lines = segment.split("\n");
+    let offset = 0;
+
+    const isMarkdownStartLine = (line: string) =>
+      /^#{1,6}\s+/.test(line) ||
+      /^\s*[-*+]\s+/.test(line) ||
+      /^\s*\d+\.\s+/.test(line) ||
+      /^\s*>\s?/.test(line) ||
+      /^\s*(?:-{3,}|\*{3,}|_{3,})\s*$/.test(line);
+
+    for (let i = 0; i < lines.length; i += 1) {
+      const line = lines[i];
+      const lineLength = line.length;
+      const lineStart = offset;
+      const lineEnd = offset + lineLength;
+
+      if (!line.trim()) {
+        let j = i + 1;
+        let nextOffset = lineEnd + 1;
+        while (j < lines.length && !lines[j].trim()) {
+          nextOffset += lines[j].length + 1;
+          j += 1;
+        }
+
+        if (j >= lines.length) {
+          return { index: lineStart, length: segment.length - lineStart };
+        }
+
+        if (!isMarkdownStartLine(lines[j])) {
+          return { index: lineStart, length: nextOffset - lineStart };
+        }
+      }
+
+      offset = lineEnd + 1;
+    }
+
+    return null;
   };
 
   const pushTextSegment = (segment: string) => {
@@ -537,7 +561,8 @@ function MarkdownBlock({ text }: { text: string }) {
         display: "flex",
         flexDirection: "column",
         gap: tokens.spacing.sm,
-        padding: `${tokens.spacing.sm}px ${tokens.spacing.md}px`,
+        padding: `${tokens.spacing.md}px ${tokens.spacing.lg}px`,
+        margin: `${tokens.spacing.lg}px 0`,
         backgroundColor: tokens.colors.surfaceSecondary,
         borderRadius: tokens.radius.md,
         fontFamily: markdownFontFamily,
@@ -608,17 +633,17 @@ export default function Message({ role, text }: Props) {
       {/* Avatar */}
       <div
         style={{
-          width: 28,
-          height: 28,
-          borderRadius: tokens.radius.sm,
-          backgroundColor: tokens.colors.surfaceSecondary,
+          width: 40,
+          height: 40,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           flexShrink: 0,
         }}
       >
-        {isUser ? <UserIcon /> : <RobotIcon />}
+        <div style={{ transform: "scale(1.15)" }}>
+          {isUser ? <UserIcon /> : <RobotIcon />}
+        </div>
       </div>
 
       {/* Message content */}
@@ -654,7 +679,8 @@ export default function Message({ role, text }: Props) {
         >
           <div
             style={{
-              fontSize: 18,
+              fontSize: 20,
+              fontWeight: 10,
               lineHeight: 1.5,
               color: tokens.colors.text,
               fontFamily: tokens.fonts.sans,
