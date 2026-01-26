@@ -54,14 +54,6 @@ def get_current_conversation(current_conversation: list[dict], session_id: str, 
         transcript=current_transcript_obj,
         stringify_entire_transcript=True,
     )
-    conversation_token_count = generic_token_counter(text=current_transcript_str)
-
-    # return conversation if <= token limit
-    if conversation_token_count <= size:
-        Logger.info(f"Conversation fits within budget ({len(current_conversation)} turns, ~{conversation_token_count} tokens)")
-        return current_transcript_str
-
-    Logger.info(f"Conversation exceeds budget (~{conversation_token_count} > {size} tokens), embedding older turns")
 
     # ensure and load embedding history
     try:
@@ -83,22 +75,34 @@ def get_current_conversation(current_conversation: list[dict], session_id: str, 
     # get portion of conversation not embedded yet
     try:
         conversation_not_embedded = subtract_list_of_dicts(current_conversation, embedding_history)
+        conversation_not_embedded_obj = create_transcript_with_timestamps(conversation_not_embedded)
+        conversation_not_embedded_str = trim_transcript(transcript=conversation_not_embedded_obj, stringify_entire_transcript=True)
+
     except Exception as err:
         conversation_not_embedded = current_conversation
         Logger.error(f"Failed to calculate unembedded turns: {repr(err)}")
+
+    # return unembedded conversation if <= token limit
+    conversation_not_embedded_token_count = generic_token_counter(text=conversation_not_embedded)
+    if conversation_not_embedded_token_count <= size:
+        Logger.info(f"Conversation fits within budget ({len(current_conversation)} turns, ~{conversation_not_embedded_token_count} tokens)")
+        return conversation_not_embedded_str
+
+    Logger.info(f"Conversation exceeds budget (~{conversation_not_embedded_token_count} > {size} tokens), embedding older turns")
+
 
     # keep the most recent turn(s) out of embedding to avoid dropping latest context
     recent_keep = 1
     if len(conversation_not_embedded) <= recent_keep:
         Logger.info("Not enough unembedded turns to embed without dropping latest; returning full transcript")
-        return current_transcript_str
+        return conversation_not_embedded_str
 
     embed_candidates = conversation_not_embedded[:-recent_keep]
     if not embed_candidates:
         Logger.info("No eligible turns to embed after reserving recent; returning full transcript")
-        return current_transcript_str
+        return conversation_not_embedded_str
 
-    # get chunk size of conversation to not embed yet
+    # get chunk size of conversation to embed
     chunk_ratio = 0.5
     chunk_size = int(size * chunk_ratio)
 
@@ -110,7 +114,7 @@ def get_current_conversation(current_conversation: list[dict], session_id: str, 
     # If there's nothing new to embed, just return the full current transcript
     if not chunk_list_dict:
         Logger.info("No new turns to embed, returning full transcript")
-        return current_transcript_str
+        return conversation_not_embedded_str
 
     chunk_obj = create_transcript_with_timestamps(turns=chunk_list_dict)
     chunk_str = trim_transcript(transcript=chunk_obj, stringify_entire_transcript=True)
@@ -136,7 +140,7 @@ def get_current_conversation(current_conversation: list[dict], session_id: str, 
         Logger.error(f"Failed to save embedding history: {repr(err)}")
 
     # return remaining conversation (not embedded yet) for context window
-    remaining = subtract_list_of_dicts(current_conversation, chunk_list_dict)
+    remaining = subtract_list_of_dicts(conversation_not_embedded, chunk_list_dict)
     remaining_obj = create_transcript_with_timestamps(turns=remaining)
     remaining_str = trim_transcript(transcript=remaining_obj, stringify_entire_transcript=True)
 
