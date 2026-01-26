@@ -48,13 +48,6 @@ def get_current_conversation(current_conversation: list[dict], session_id: str, 
     vector_store = LlamaIndex()
     embedding_history_path = Path("backend/Maia/memories/conversations/last_embedded.json")
 
-    # token count of FULL current conversation (string form)
-    current_transcript_obj = create_transcript_with_timestamps(turns=current_conversation)
-    current_transcript_str = trim_transcript(
-        transcript=current_transcript_obj,
-        stringify_entire_transcript=True,
-    )
-
     # ensure and load embedding history
     try:
         embedding_history_path.parent.mkdir(parents=True, exist_ok=True)
@@ -83,7 +76,7 @@ def get_current_conversation(current_conversation: list[dict], session_id: str, 
         Logger.error(f"Failed to calculate unembedded turns: {repr(err)}")
 
     # return unembedded conversation if <= token limit
-    conversation_not_embedded_token_count = generic_token_counter(text=conversation_not_embedded)
+    conversation_not_embedded_token_count = generic_token_counter(text=conversation_not_embedded_str)
     if conversation_not_embedded_token_count <= size:
         Logger.info(f"Conversation fits within budget ({len(current_conversation)} turns, ~{conversation_not_embedded_token_count} tokens)")
         return conversation_not_embedded_str

@@ -193,5 +193,125 @@
     "role": "user",
     "content": "Oh thanks, I’ll check some of those out and see if any sound interesting!",
     "timestamp": "2026-01-25T22:18:34-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "[Compressed] Maia explained the recommended shows for different viewing moods: drama/epic storytelling, sharp witty shows, tech satire, and comedy.",
+    "timestamp": "2026-01-25T22:18:48-07:00"
+  },
+  {
+    "role": "user",
+    "content": "No thank you, I’m actually watching a show called Steal right now. It’s pretty good so far, but I’ve been coding at the same time so I’ve missed a little bit here and there",
+    "timestamp": "2026-01-25T22:26:48-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "[Compressed] Maia discussed ways to catch up on *Steal* and explained she could provide a plot recap, highlight critical storylines or character arcs, or delve into specific characters' roles.",
+    "timestamp": "2026-01-25T22:27:17-07:00"
+  },
+  {
+    "role": "user",
+    "content": "Oh, do you know about the show Steal?",
+    "timestamp": "2026-01-25T22:29:29-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "[Compressed] Maia explained the main characters and their roles in the show \"Steal\" (2026 release) to you.",
+    "timestamp": "2026-01-25T22:29:40-07:00"
+  },
+  {
+    "role": "user",
+    "content": "wait, how did you know it was released in 2026?",
+    "timestamp": "2026-01-25T22:30:25-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "[Compressed] Maia explained the release date error and suggested alternative topics for discussion such as plot summaries, character breakdowns, and genre comparisons.",
+    "timestamp": "2026-01-25T22:30:37-07:00"
+  },
+  {
+    "role": "user",
+    "content": "Yes please",
+    "timestamp": "2026-01-25T22:42:46-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "[Compressed] Maia explained the options for catching up on *Steal*—a plot recap, key storyline breakdowns, or an explanation of specific characters.",
+    "timestamp": "2026-01-25T22:43:07-07:00"
+  },
+  {
+    "role": "user",
+    "content": "No thank you",
+    "timestamp": "2026-01-25T22:46:29-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "[Compressed] Maia discussed tips for viewers who have missed key moments in *Steal* without spoilers, such as skipping ahead to the next episode or checking official recaps.",
+    "timestamp": "2026-01-25T22:46:40-07:00"
+  },
+  {
+    "role": "user",
+    "content": "haha skipping ahead is an unintuitive way to catch up but I know what you mean. I’ve actually experienced that, I was suprised it help create anchor points in the show to feel like I’m caught up",
+    "timestamp": "2026-01-25T22:47:39-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "[Compressed] Maia explained the key moments and discussed potential themes or twists building in the show.",
+    "timestamp": "2026-01-25T22:47:50-07:00"
+  },
+  {
+    "role": "user",
+    "content": "I don’t think you would have seen Steal, it came out in 2026",
+    "timestamp": "2026-01-25T22:56:33-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "[Compressed] Maia explained how to enjoy a show like *Steal* without spoiling it and suggested using key moments as anchor points, such as pivotal scenes or character twists.",
+    "timestamp": "2026-01-25T22:57:00-07:00"
+  },
+  {
+    "role": "user",
+    "content": "I just double checked, Steal was released in 2026",
+    "timestamp": "2026-01-25T22:59:13-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "[Compressed] Maia explained that *Steal* is scheduled for a 2026 release, and she clarified an earlier mistake. She noted that the show blends heist thriller elements with strong character dynamics, mentioning unexpected alliances and betrayals as a highlight. Maia suggested watching episodes where character arcs shift or listening to the soundtrack for mood cues, and she also offered insights into spotting great heist movies/shows.",
+    "timestamp": "2026-01-25T22:59:35-07:00"
+  },
+  {
+    "role": "user",
+    "content": "Let’s move on to another topic",
+    "timestamp": "2026-01-25T23:00:23-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "[Compressed] Maia discussed ideas for fresh topics to explore and explained that she was open to suggestions on entertainment, productivity, local spots, or casual conversation.",
+    "timestamp": "2026-01-25T23:00:33-07:00"
+  },
+  {
+    "role": "user",
+    "content": "Oh, how about some tips on going to bed earlier? I’ve been staying up too late recently",
+    "timestamp": "2026-01-25T23:44:02-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "[Compressed] Maia discussed simple but effective tips for winding down earlier with a consistent bedtime alarm, a routine, limiting caffeine and blue light, starting small, and making the sleeping space cozy.",
+    "timestamp": "2026-01-25T23:44:28-07:00"
+  },
+  {
+    "role": "user",
+    "content": "Ok, I’ll try those out thanks!",
+    "timestamp": "2026-01-25T23:45:29-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "[Compressed] Maia explained several ideas for productivity boost, local spots, random fun activities, and tech/creative tools.",
+    "timestamp": "2026-01-25T23:45:41-07:00"
+  },
+  {
+    "role": "user",
+    "content": "Have you heard of protein soda? I found it at Costco the past weekend and its really good. And its 30g of protein for like 160 calories",
+    "timestamp": "2026-01-26T00:01:05-07:00"
   }
 ]
