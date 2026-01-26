@@ -54,7 +54,8 @@ async def chat(req: ChatRequest):
     message = req.message
 
     #if current session id != prev session id, embed the remainder of the previous conversation
-    embed_remainder_prev_conversation()
+    if current_session_id != get_prev_session_id():
+        embed_remainder_prev_conversation()
 
     #add and save new turn to conversational memory (used in context window)
     #create conversation json in memory if DNE

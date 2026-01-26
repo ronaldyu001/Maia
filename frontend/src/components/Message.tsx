@@ -677,7 +677,7 @@ export default function Message({ role, text }: Props) {
           style={{
             backgroundColor: isUser ? tokens.colors.userBubble : tokens.colors.surface,
             borderRadius: tokens.radius.lg,
-            padding: `${tokens.spacing.sm + 4}px ${tokens.spacing.md}px`,
+            padding: `${tokens.spacing.sm}px ${tokens.spacing.md}px`,
             maxWidth: "85%",
           }}
         >

@@ -51,32 +51,32 @@
   },
   {
     "role": "user",
-    "timestamp": "2026-01-25T20:16:12-07:00",
-    "content": "No that’s ok for now, thank you!"
+    "content": "No that’s ok for now, thank you!",
+    "timestamp": "2026-01-25T20:16:12-07:00"
   },
   {
     "role": "assistant",
-    "timestamp": "2026-01-25T20:16:38-07:00",
-    "content": "[Compressed] Maia discussed key differences between Jaxon Smith Njigba and Puka Nakua's recent performance, emphasizing JSN's speed and red-zone dominance versus Nakua's contested catches."
+    "content": "[Compressed] Maia discussed key differences between Jaxon Smith Njigba and Puka Nakua's recent performance, emphasizing JSN's speed and red-zone dominance versus Nakua's contested catches.",
+    "timestamp": "2026-01-25T20:16:38-07:00"
   },
   {
     "role": "user",
-    "timestamp": "2026-01-25T20:17:20-07:00",
-    "content": "Ok that’s enough information thank you"
+    "content": "Ok that’s enough information thank you",
+    "timestamp": "2026-01-25T20:17:20-07:00"
   },
   {
     "role": "assistant",
-    "timestamp": "2026-01-25T20:17:37-07:00",
-    "content": "[Compressed] Maia explained the performance of Jaxon Smith Njigba and Puka Nakua in red-zone targets and physical matchups from the 2023–2024 season, highlighting their strengths in contested catches and speed-based routes."
+    "content": "[Compressed] Maia explained the performance of Jaxon Smith Njigba and Puka Nakua in red-zone targets and physical matchups from the 2023–2024 season, highlighting their strengths in contested catches and speed-based routes.",
+    "timestamp": "2026-01-25T20:17:37-07:00"
   },
   {
     "role": "user",
-    "timestamp": "2026-01-25T20:27:32-07:00",
-    "content": "What’s a good protein goal for a 25 year old male 155 lbs and wants to build some muscle"
+    "content": "What’s a good protein goal for a 25 year old male 155 lbs and wants to build some muscle",
+    "timestamp": "2026-01-25T20:27:32-07:00"
   },
   {
     "role": "assistant",
-    "timestamp": "2026-01-25T20:27:57-07:00",
-    "content": "[Compressed] Maia explained the technical aspects of recent match-ups involving JSN and Puka Nakua."
+    "content": "[Compressed] Maia explained the technical aspects of recent match-ups involving JSN and Puka Nakua.",
+    "timestamp": "2026-01-25T20:27:57-07:00"
   }
 ]

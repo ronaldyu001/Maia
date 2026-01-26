@@ -14,7 +14,10 @@ def clear_embedding_history():
     Handles the case where the file does not exist gracefully.
     """
     try:
+        LAST_EMBEDDED_PATH.parent.mkdir(parents=True, exist_ok=True)
         if not LAST_EMBEDDED_PATH.exists():
+            LAST_EMBEDDED_PATH.write_text("[]", encoding="utf-8")
+            Logger.info("Created embedding history file")
             return
 
         LAST_EMBEDDED_PATH.write_text("[]", encoding="utf-8")
@@ -31,6 +34,9 @@ def embed_remainder_prev_conversation():
     that haven't been embedded yet. Clears the embedding history after completion.
     """
     try:
+        if not LAST_EMBEDDED_PATH.exists():
+            clear_embedding_history()
+
         # get previous session id
         prev_session_id = get_prev_session_id()
         if not prev_session_id:
