@@ -28,7 +28,6 @@ def load_conversation( session_id: str ) -> list[dict]:
 
         if conversation_json.exists():
             conversation = load_json( path=conversation_json, default=[] )
-            Logger.info(f"Loaded {len(conversation)} turns from session: {session_id}")
             return conversation
 
         else:
@@ -91,8 +90,6 @@ def save_conversation(session_id: str, data: List[dict]) -> None:
                 "timestamp": time_now(),
             }
             conversation.append(new_message)
-            content_preview = content[:50].replace('\n', ' ')
-            Logger.info(f"Appending {role} turn to session: {session_id}")
         else:
             # Invalid / incomplete turn — skip silently
             Logger.warning(f"Skipping invalid turn in session {session_id}: role={type(role).__name__}, content={type(content).__name__}")

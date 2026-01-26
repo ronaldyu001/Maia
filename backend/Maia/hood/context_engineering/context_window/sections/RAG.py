@@ -1,6 +1,6 @@
 import json
 from backend.Maia.hood.RAG.LlamaIndex_Wrapper import LlamaIndex
-from backend.logging.LoggingWrapper import Logger
+from backend.logging.LoggingWrapper import Logger, Logger_RagHistory
 
 
 RAG_INTRO = """
@@ -62,5 +62,8 @@ def get_RAG(session_id: str) -> str:
 
     BODY = "\n\n---\n\n".join(chunks)
     RAG_TEXT = RAG_INTRO + BODY
+
+
+    Logger_RagHistory.info(f"RAG:\n{RAG_TEXT}")
 
     return RAG_TEXT

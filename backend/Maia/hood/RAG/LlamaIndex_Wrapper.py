@@ -3,7 +3,7 @@ import json
 
 from llama_index.core import VectorStoreIndex, Document, Settings
 from llama_index.embeddings.ollama import OllamaEmbedding
-from backend.logging.LoggingWrapper import Logger
+from backend.logging.LoggingWrapper import Logger, Logger_EmbeddingHistory
 from backend.Maia.hood.RAG.get_vector_store_indices.get_memories_index import get_memories_index
 from backend.Maia.hood.RAG.get_vector_store_indices.get_raw_conversations_index import get_raw_conversations_index
 from backend.Maia.hood.context_engineering.helpers.conversations import load_conversation
@@ -86,6 +86,9 @@ class LlamaIndex:
         index.storage_context.persist(
             persist_dir=persist_dir
         )
+
+        #add to embedding history logs
+        Logger_EmbeddingHistory.info('\n' + text)
 
 
     def embed_remaining_conversation(self, session_id: str):

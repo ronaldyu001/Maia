@@ -315,6 +315,7 @@ function MarkdownBlock({ text }: { text: string }) {
               paddingLeft: tokens.spacing.lg,
               color: tokens.colors.text,
               listStyleType: "disc",
+              lineHeight: 1.8,
             }}
           >
             {items}
@@ -338,6 +339,7 @@ function MarkdownBlock({ text }: { text: string }) {
               paddingLeft: tokens.spacing.lg,
               color: tokens.colors.text,
               listStyleType: "decimal",
+              lineHeight: 1.8,
             }}
           >
             {items}
@@ -356,7 +358,7 @@ function MarkdownBlock({ text }: { text: string }) {
     const content = paragraphLines.join("\n").trim();
     if (!content) return;
     blocks.push(
-      <p key={getKey()} style={{ margin: 0 }}>
+      <p key={getKey()} style={{ margin: `${tokens.spacing.sm}px 0` }}>
         {parseInlineMarkdown(content, getKey)}
       </p>
     );
@@ -478,6 +480,7 @@ function MarkdownBlock({ text }: { text: string }) {
             paddingLeft: tokens.spacing.lg,
             color: tokens.colors.text,
             listStyleType: "disc",
+            lineHeight: 1.8,
           }}
         >
           {items}
@@ -536,6 +539,7 @@ function MarkdownBlock({ text }: { text: string }) {
             paddingLeft: tokens.spacing.lg,
             color: tokens.colors.text,
             listStyleType: "decimal",
+            lineHeight: 1.8,
           }}
         >
           {items}
@@ -561,7 +565,7 @@ function MarkdownBlock({ text }: { text: string }) {
         display: "flex",
         flexDirection: "column",
         gap: tokens.spacing.sm,
-        padding: `${tokens.spacing.md}px ${tokens.spacing.lg}px`,
+        padding: `${tokens.spacing.lg + tokens.spacing.sm}px ${tokens.spacing.lg}px`,
         margin: `${tokens.spacing.lg}px ${tokens.spacing.md}px`,
         backgroundColor: tokens.colors.surfaceSecondary,
         borderRadius: tokens.radius.md,
@@ -674,14 +678,16 @@ export default function Message({ role, text }: Props) {
             backgroundColor: isUser ? tokens.colors.userBubble : tokens.colors.surface,
             borderRadius: tokens.radius.lg,
             padding: `${tokens.spacing.sm + 4}px ${tokens.spacing.md}px`,
-            maxWidth: "100%",
+            maxWidth: "85%",
           }}
         >
           <div
             style={{
-              fontSize: 20,
+              fontSize: 18,
               fontWeight: 10,
-              lineHeight: 1.5,
+              lineHeight: 1.8,
+              letterSpacing: "2px",
+              padding: `${tokens.spacing.sm}px ${tokens.spacing.sm}px`,
               color: tokens.colors.text,
               fontFamily: tokens.fonts.sans,
               wordBreak: "break-word",

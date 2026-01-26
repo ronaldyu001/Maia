@@ -147,8 +147,11 @@ backend/
 ### Logger
 **File:** `logging/LoggingWrapper.py`
 
-- Custom `MaiaLogFormatter`: `TIMESTAMP [LEVEL]: MESSAGE` (ERROR+ adds `[filename:lineno]`).
+- Custom `MaiaLogFormatter` auto-injects caller info: `TIMESTAMP [LEVEL] [module.function]: message`
+- ERROR+ includes line number: `TIMESTAMP [LEVEL] [module.function:lineno]: message`
 - Dual output: console + dated file (`logging/logs/YYYY_MM_DD.log`).
+- Named logger `"maia"` with `propagate=False` (no root-logger duplication).
+- Handler guard prevents duplicate handlers on re-import.
 - Usage: `Logger.info(...)`, `Logger.warning(...)`, `Logger.error(...)`.
 
 ---
@@ -300,7 +303,11 @@ success, error = save_json(path=file_path, default=[], data=my_data)  # Safe sav
 ```
 
 ### Logging Convention
-All functions use bracketed prefixes: `Logger.info(f"[function_name] descriptive message")`.
+The formatter auto-injects `[module.function]` — log messages should contain only the message text, no manual prefixes.
+```python
+Logger.info("Saved session abc-123 (5 total turns)")       # correct
+Logger.info("[save_conversation] Saved session abc-123")    # wrong — prefix is automatic
+```
 
 ### Token Estimation
 `generic_token_counter(text)` — rough estimate: `ceil(len(text) / 4)`.

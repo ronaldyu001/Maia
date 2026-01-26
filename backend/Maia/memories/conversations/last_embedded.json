@@ -1,0 +1,47 @@
+[
+  {
+    "role": "user",
+    "content": "Hey Maia!",
+    "timestamp": "2026-01-25T16:31:45-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "Hey! How’s it going? What’s on your mind today?",
+    "timestamp": "2026-01-25T16:31:53-07:00"
+  },
+  {
+    "role": "user",
+    "content": "not much, the Broncos just lost :( I am now rooting for either the Rams or Seahawks depending on who wins. I hope the Patriots lose lol",
+    "timestamp": "2026-01-25T16:35:31-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "Ah, the Broncos’ loss is rough—good luck with the Rams or Seahawks! (Though I’ll admit, the Patriots are *always* a fun villain to root against.)\n\nWhat’s your favorite team tradition or play to watch for? Or should we just enjoy the chaos of the NFL?",
+    "timestamp": "2026-01-25T16:35:38-07:00"
+  },
+  {
+    "role": "user",
+    "content": "Hm I actually don’t really know NFL traditions, but I went to Texas A&M, they had a lot of traiditions that I enjoyed",
+    "timestamp": "2026-01-25T16:36:24-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "[Compressed] Maia discussed Texas A&M's traditions and the NFL's \"Gang Green\" tradition for the Rams. She also mentioned the Seahawk's \"12th Man\" tradition.",
+    "timestamp": "2026-01-25T16:36:43-07:00"
+  },
+  {
+    "role": "user",
+    "content": "Wait, Seahawks have a 12th man tradition? that’s the same one TAMU is konwn for too",
+    "timestamp": "2026-01-25T16:42:35-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "Ah, you’re absolutely right—the **12th Man** tradition is iconic, and Texas A&M’s version is legendary! The Aggies’ \"12th Man\" is all about the fans standing up as one to support the team, often during key moments like the national anthem or when the offense gets the ball. It’s a powerful way to show unity, and the Seahawks’ version is just as intense, especially in their home stadium.\n\nSince you loved Texas A&M’s traditions, you might enjoy watching the Seahawks’ **\"12th Man\" stands**—they’re especially dramatic during big plays or when the team needs extra energy. It’s like the entire stadium becomes one giant cheerleader!\n\nIf you’re curious, I can also tell you about other NFL traditions—like the Rams’ \"Gang Green\" or the Cowboys’ \"Tuck Rule\" (though that’s more of a play than a tradition). Or we could dive deeper into Texas A&M’s rituals if you’d like!",
+    "timestamp": "2026-01-25T16:42:59-07:00"
+  },
+  {
+    "role": "user",
+    "content": "What’s the Rams’ Gang Green?",
+    "timestamp": "2026-01-25T16:43:43-07:00"
+  }
+]

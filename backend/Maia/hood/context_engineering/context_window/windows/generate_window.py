@@ -60,6 +60,7 @@ def build_context_window(
 
     remaining_tokens = max_tokens
     rendered_sections = []
+    section_allotments = []
 
     for name, text in sections:
         ratio = ratios.get(name, 0.0)
@@ -78,11 +79,12 @@ def build_context_window(
         used_tokens = estimate_tokens(truncated_text)
         remaining_tokens -= used_tokens
 
+        section_allotments.append(f"{name}: ~{used_tokens}/{section_budget}")
         rendered_sections.append(
             f"### {name}\n{truncated_text}"
         )
 
     total_used = max_tokens - remaining_tokens
-    Logger.info(f"Context window built: {len(rendered_sections)} sections, ~{total_used}/{max_tokens} tokens used")
+    Logger.info(f"Context window built: ~{total_used}/{max_tokens} tokens | {' | '.join(section_allotments)}")
 
     return "\n\n".join(rendered_sections)

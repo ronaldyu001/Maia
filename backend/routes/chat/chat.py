@@ -2,7 +2,7 @@ import re
 
 from fastapi import APIRouter
 from pydantic import BaseModel
-from backend.logging.LoggingWrapper import Logger
+from backend.logging.LoggingWrapper import Logger, Logger_ContextWindowHistory
 
 from backend.Maia.hood.models.ollama.wrapper_ollama import OllamaModel
 from backend.Maia.hood.models.huggingface.wrapper_huggingface import HuggingFaceModel
@@ -66,6 +66,7 @@ async def chat(req: ChatRequest):
 
     #generate context window
     prompt = generate_conversation_window(session_id=current_session_id, window_size_tkns=context_window_size, current_conversation=turns)
+    Logger_ContextWindowHistory.info('\n' + prompt)
 
     #get response
     Logger.info("Requesting model response")

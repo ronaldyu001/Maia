@@ -72,19 +72,22 @@ def get_current_conversation(current_conversation: list[dict], session_id: str, 
         # IMPORTANT: default must be an *instance*, not the type `list`
         embedding_history: list[dict] = load_json(path=embedding_history_path, default=[])
         if not isinstance(embedding_history, list):
+            Logger.warning("Unable to load embedding history. Treating as empty.")
             embedding_history = []
     except Exception as err:
         embedding_history = []
         Logger.error(f"Failed to load embedding history: {repr(err)}")
 
-    # conversation portion not embedded yet
+    Logger.info(f"Loaded embedding history with size: ~{generic_token_counter(embedding_history)} tokens")
+
+    # get portion of conversation not embedded yet
     try:
         conversation_not_embedded = subtract_list_of_dicts(current_conversation, embedding_history)
     except Exception as err:
         conversation_not_embedded = current_conversation
         Logger.error(f"Failed to calculate unembedded turns: {repr(err)}")
 
-    # pick chunk to embed (oldest part of not-embedded)
+    # get chunk size of conversation to not embed yet
     chunk_ratio = 0.5
     chunk_size = int(size * chunk_ratio)
 
@@ -96,7 +99,7 @@ def get_current_conversation(current_conversation: list[dict], session_id: str, 
     # If there's nothing new to embed, just return the full current transcript
     if not chunk_list_dict:
         Logger.info("No new turns to embed, returning full transcript")
-        return current_transcript_str
+        return conversation_not_embedded
 
     chunk_obj = create_transcript_with_timestamps(turns=chunk_list_dict)
     chunk_str = trim_transcript(transcript=chunk_obj, stringify_entire_transcript=True)
