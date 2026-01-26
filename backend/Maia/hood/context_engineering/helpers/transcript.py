@@ -1,5 +1,6 @@
 from backend.logging.LoggingWrapper import Logger
 from typing import Optional
+from datetime import datetime
 
 from backend.Maia.hood.context_engineering.helpers.token_counters import generic_token_counter
 from math import ceil, floor
@@ -17,13 +18,25 @@ def create_transcript(turns: list[dict]) -> list[str]:
         return False
 
 
+def _format_timestamp(ts: str) -> str:
+    try:
+        dt = datetime.fromisoformat(ts)
+    except (TypeError, ValueError):
+        return ts
+    tz = dt.strftime("%Z") or dt.strftime("%z")
+    return f"{dt.strftime('%H:%M')} {tz}".strip()
+
+
 def create_transcript_with_timestamps(turns: list[dict]) -> list[str]:
     """
     Converts transcript from a list of dicts into a list of strings.
     Includes 'role', 'timestamp', 'content' in transcript.
     """
     try:
-        return [ f"[{t['timestamp']}] {t['role'].capitalize()}: {t['content']}" for t in turns ]
+        return [
+            f"[{_format_timestamp(t['timestamp'])}] {t['role'].capitalize()}: {t['content']}"
+            for t in turns
+        ]
     except Exception as err:
         Logger.error(f"Failed to convert transcript with timestamps: {repr(err)}")
         return False

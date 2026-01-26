@@ -87,19 +87,30 @@ def get_current_conversation(current_conversation: list[dict], session_id: str, 
         conversation_not_embedded = current_conversation
         Logger.error(f"Failed to calculate unembedded turns: {repr(err)}")
 
+    # keep the most recent turn(s) out of embedding to avoid dropping latest context
+    recent_keep = 1
+    if len(conversation_not_embedded) <= recent_keep:
+        Logger.info("Not enough unembedded turns to embed without dropping latest; returning full transcript")
+        return current_transcript_str
+
+    embed_candidates = conversation_not_embedded[:-recent_keep]
+    if not embed_candidates:
+        Logger.info("No eligible turns to embed after reserving recent; returning full transcript")
+        return current_transcript_str
+
     # get chunk size of conversation to not embed yet
     chunk_ratio = 0.5
     chunk_size = int(size * chunk_ratio)
 
     chunk_list_dict = autosize_transcript_generic_keep_oldest(
-        transcript=conversation_not_embedded,
+        transcript=embed_candidates,
         size=chunk_size,
     )
 
     # If there's nothing new to embed, just return the full current transcript
     if not chunk_list_dict:
         Logger.info("No new turns to embed, returning full transcript")
-        return conversation_not_embedded
+        return current_transcript_str
 
     chunk_obj = create_transcript_with_timestamps(turns=chunk_list_dict)
     chunk_str = trim_transcript(transcript=chunk_obj, stringify_entire_transcript=True)

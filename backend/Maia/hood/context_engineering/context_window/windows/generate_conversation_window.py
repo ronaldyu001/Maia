@@ -37,7 +37,11 @@ def generate_conversation_window(session_id: str, window_size_tkns: int, current
     RAG = get_RAG(
         session_id=session_id
     )
-    CURRENT_CONVERSATION = get_current_conversation(current_conversation=current_conversation, session_id=session_id, size=floor(window_size_tkns * section_ratios["CURRENT_CONVERSATION"])-200)
+    CURRENT_CONVERSATION = get_current_conversation(
+        current_conversation=current_conversation,
+        session_id=session_id,
+        size=floor(window_size_tkns * section_ratios["CURRENT_CONVERSATION"]),
+    )
     CURRENT_CONVERSATION_FULL = CURRENT_CONVERSATION_INTRO + CURRENT_CONVERSATION
 
     #create sections dict

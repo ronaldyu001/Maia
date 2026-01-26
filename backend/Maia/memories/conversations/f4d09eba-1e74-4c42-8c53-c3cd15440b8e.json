@@ -78,5 +78,55 @@
     "role": "assistant",
     "content": "[Compressed] Maia explained the technical aspects of recent match-ups involving JSN and Puka Nakua.",
     "timestamp": "2026-01-25T20:27:57-07:00"
+  },
+  {
+    "role": "user",
+    "content": "hm, maybe our messages are off by one turn?",
+    "timestamp": "2026-01-25T20:30:04-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "[Compressed] Maia discussed a protein goal of 105–155 grams per day for a male weighing 155 lbs looking to build muscle, prioritizing quality sources like lean meats and plant-based proteins.",
+    "timestamp": "2026-01-25T20:30:20-07:00"
+  },
+  {
+    "role": "user",
+    "content": "hey, what’s the date today?",
+    "timestamp": "2026-01-25T21:22:04-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "Today is **January 25, 2026**. Hope you’re doing well! Let me know if you’d like help with anything else.",
+    "timestamp": "2026-01-25T21:22:21-07:00"
+  },
+  {
+    "role": "user",
+    "content": "Ok, it seems like our conversation is back on sync, I messed something up earlier so we were misaligned",
+    "timestamp": "2026-01-25T21:22:55-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "[Compressed] Maia discussed the protein requirements for muscle building, explaining that a good starting point is 109–155 grams of protein per day for a 155-pound male.",
+    "timestamp": "2026-01-25T21:23:11-07:00"
+  },
+  {
+    "role": "user",
+    "content": "I didn’t ask for that",
+    "timestamp": "2026-01-25T21:23:25-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "[Compressed] Maia discussed the protein goal and key sources for muscle building in a male aged 25 weighing 155 lbs.",
+    "timestamp": "2026-01-25T21:23:39-07:00"
+  },
+  {
+    "role": "user",
+    "content": "No, let’s talk about something else!",
+    "timestamp": "2026-01-25T21:29:42-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "Got it! Let’s switch gears—what’s on your mind now? Whether it’s planning a workout, cooking ideas, or just chatting about something else, I’m here.",
+    "timestamp": "2026-01-25T21:30:02-07:00"
   }
 ]
