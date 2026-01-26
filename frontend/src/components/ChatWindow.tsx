@@ -42,18 +42,6 @@ const tokens = {
   },
 };
 
-const dateGroups = ["Today", "Yesterday", "3 days ago", "1 week ago"];
-
-// Dummy conversation history for sidebar
-const dummyConversations = [
-  { id: "1", title: "Planning the garden", date: "Today" },
-  { id: "2", title: "Recipe ideas for dinner", date: "Today" },
-  { id: "3", title: "Book recommendations", date: "Yesterday" },
-  { id: "4", title: "Travel plans for summer", date: "Yesterday" },
-  { id: "5", title: "Learning to paint", date: "3 days ago" },
-  { id: "6", title: "Meditation techniques", date: "1 week ago" },
-];
-
 // Icons
 function SendIcon({ active }: { active: boolean }) {
   return (
@@ -91,19 +79,25 @@ function PlusIcon() {
   );
 }
 
-function ChatIcon() {
+function CalendarIcon({ size = 18 }: { size?: number }) {
   return (
     <svg
-      width="16"
-      height="16"
+      width={size}
+      height={size}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+      <rect x="3" y="4" width="18" height="18" rx="2" />
+      <line x1="16" y1="2" x2="16" y2="6" />
+      <line x1="8" y1="2" x2="8" y2="6" />
+      <line x1="3" y1="10" x2="21" y2="10" />
+      <circle cx="8" cy="15" r="1" fill="currentColor" />
+      <circle cx="12" cy="15" r="1" fill="currentColor" />
+      <circle cx="16" cy="15" r="1" fill="currentColor" />
     </svg>
   );
 }
@@ -139,7 +133,7 @@ function RobotIcon() {
 
 // Sidebar component
 function Sidebar({ onNewConversation }: { onNewConversation: () => void }) {
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [calendarHovered, setCalendarHovered] = useState(false);
 
   return (
     <aside
@@ -153,8 +147,9 @@ function Sidebar({ onNewConversation }: { onNewConversation: () => void }) {
         height: "100%",
       }}
     >
-      {/* New Conversation Button */}
-      <div style={{ padding: tokens.spacing.md }}>
+      {/* Top Buttons */}
+      <div style={{ padding: tokens.spacing.md, display: "flex", flexDirection: "column", gap: 24 }}>
+        {/* New Conversation Button */}
         <button
           onClick={onNewConversation}
           style={{
@@ -184,80 +179,45 @@ function Sidebar({ onNewConversation }: { onNewConversation: () => void }) {
           <PlusIcon />
           New Conversation
         </button>
+
+        {/* Calendar Button */}
+        <button
+          onMouseEnter={() => setCalendarHovered(true)}
+          onMouseLeave={() => setCalendarHovered(false)}
+          style={{
+            width: "80%",
+            aspectRatio: "1 / 0.8",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 12,
+            padding: tokens.spacing.lg,
+            alignSelf: "center",
+            marginTop: tokens.spacing.sm,
+            backgroundColor: "#2a2320",
+            color: calendarHovered ? tokens.colors.accent : tokens.colors.textMuted,
+            border: "none",
+            borderTop: "1px solid rgba(255, 255, 255, 0.06)",
+            borderBottom: calendarHovered ? "4px solid #1a1410" : "5px solid #1a1410",
+            borderRadius: tokens.radius.lg,
+            boxShadow: calendarHovered
+              ? "0 2px 4px rgba(0, 0, 0, 0.3)"
+              : "0 4px 8px rgba(0, 0, 0, 0.3)",
+            transform: calendarHovered ? "translateY(1px)" : "translateY(0)",
+            cursor: "pointer",
+            transition: "all 0.1s ease",
+          }}
+        >
+          <CalendarIcon size={34} />
+          <span style={{ fontFamily: tokens.fonts.elegant, fontSize: 14, letterSpacing: "0.3px" }}>
+            Calendar
+          </span>
+        </button>
       </div>
 
-      {/* Conversation List */}
-      <div
-        style={{
-          flex: 1,
-          overflowY: "auto",
-          padding: `0 ${tokens.spacing.sm}px`,
-        }}
-      >
-        {dateGroups.map((dateGroup) => {
-          const conversations = dummyConversations.filter(
-            (c) => c.date === dateGroup
-          );
-          if (conversations.length === 0) return null;
-
-          return (
-            <div key={dateGroup} style={{ marginBottom: tokens.spacing.md }}>
-              <div
-                style={{
-                  padding: `${tokens.spacing.sm}px ${tokens.spacing.sm}px`,
-                  fontSize: 11,
-                  fontFamily: tokens.fonts.elegant,
-                  fontWeight: 400,
-                  color: tokens.colors.textMuted,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.05em",
-                }}
-              >
-                {dateGroup}
-              </div>
-              {conversations.map((conversation) => (
-                <button
-                  key={conversation.id}
-                  onMouseEnter={() => setHoveredId(conversation.id)}
-                  onMouseLeave={() => setHoveredId(null)}
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: tokens.spacing.sm,
-                    padding: `${tokens.spacing.sm}px ${tokens.spacing.sm}px`,
-                    backgroundColor:
-                      hoveredId === conversation.id
-                        ? tokens.colors.surfaceSecondary
-                        : "transparent",
-                    color: tokens.colors.textSecondary,
-                    border: "none",
-                    borderRadius: tokens.radius.sm,
-                    fontFamily: tokens.fonts.sans,
-                    fontSize: 14,
-                    textAlign: "left",
-                    cursor: "pointer",
-                    transition: "background-color 0.15s ease",
-                  }}
-                >
-                  <span style={{ flexShrink: 0, opacity: 0.6 }}>
-                    <ChatIcon />
-                  </span>
-                  <span
-                    style={{
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {conversation.title}
-                  </span>
-                </button>
-              ))}
-            </div>
-          );
-        })}
-      </div>
+      {/* Spacer */}
+      <div style={{ flex: 1 }} />
 
       {/* Sidebar Footer */}
       <div

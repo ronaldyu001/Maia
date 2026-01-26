@@ -7,7 +7,7 @@ const tokens = {
   colors: {
     background: "#1c1816",
     surface: "#2a2320",
-    surfaceSecondary: "#3a322d",
+    surfaceSecondary: "#221a14",
     border: "#4a3f38",
     borderLight: "#5a4d44",
     text: "#f5ebe0",
@@ -231,11 +231,12 @@ function parseInlineMarkdown(text: string, getKey: () => string): React.ReactNod
           key={getKey()}
           style={{
             backgroundColor: tokens.colors.inlineCodeBg,
-            color: tokens.colors.inlineCodeText,
-            padding: "2px 6px",
+            color: tokens.colors.accent,
+            padding: "2px 7px",
             borderRadius: 4,
-            fontSize: "0.9em",
+            fontSize: "0.88em",
             fontFamily: tokens.fonts.mono,
+            border: `1px solid ${tokens.colors.border}`,
           }}
         >
           {code}
@@ -250,17 +251,30 @@ function parseInlineMarkdown(text: string, getKey: () => string): React.ReactNod
           href={url}
           target="_blank"
           rel="noreferrer"
-          style={{ color: tokens.colors.accent, textDecoration: "underline" }}
+          style={{
+            color: tokens.colors.accent,
+            textDecoration: "none",
+            borderBottom: `1px solid rgba(212, 165, 116, 0.4)`,
+            transition: "border-color 0.2s",
+          }}
         >
           {label}
         </a>
       );
     } else if (type === "bold") {
       const content = match[1] ?? match[2] ?? "";
-      nodes.push(<strong key={getKey()}>{content}</strong>);
+      nodes.push(
+        <strong key={getKey()} style={{ fontWeight: 600, color: tokens.colors.text }}>
+          {content}
+        </strong>
+      );
     } else if (type === "italic") {
       const content = match[1] ?? match[2] ?? "";
-      nodes.push(<em key={getKey()}>{content}</em>);
+      nodes.push(
+        <em key={getKey()} style={{ color: tokens.colors.textSecondary }}>
+          {content}
+        </em>
+      );
     }
 
     remaining = remaining.slice(bestMatch.index + match[0].length);
@@ -289,6 +303,12 @@ function MarkdownBlock({ text }: { text: string }) {
   const isBlockStart = (line: string) =>
     isHeading(line) || isBlockquote(line) || isListItem(line) || isOrderedItem(line) || isHr(line);
 
+  // Shared list item styles
+  const listItemStyle: React.CSSProperties = {
+    paddingLeft: 4,
+    marginBottom: 4,
+  };
+
   const buildNestedLists = (nested: string[]) => {
     const nodes: React.ReactNode[] = [];
     let j = 0;
@@ -304,7 +324,11 @@ function MarkdownBlock({ text }: { text: string }) {
         const items: React.ReactNode[] = [];
         while (j < nested.length && isListItem(nested[j])) {
           const itemText = nested[j].replace(/^\s*[-*+]\s+/, "");
-          items.push(<li key={getKey()}>{parseInlineMarkdown(itemText, getKey)}</li>);
+          items.push(
+            <li key={getKey()} style={listItemStyle}>
+              {parseInlineMarkdown(itemText, getKey)}
+            </li>
+          );
           j += 1;
         }
         nodes.push(
@@ -312,10 +336,10 @@ function MarkdownBlock({ text }: { text: string }) {
             key={getKey()}
             style={{
               margin: 0,
-              paddingLeft: tokens.spacing.lg,
+              paddingLeft: 20,
               color: tokens.colors.text,
-              listStyleType: "disc",
-              lineHeight: 1.8,
+              listStyleType: "circle",
+              lineHeight: 1.75,
             }}
           >
             {items}
@@ -328,7 +352,11 @@ function MarkdownBlock({ text }: { text: string }) {
         const items: React.ReactNode[] = [];
         while (j < nested.length && isOrderedItem(nested[j])) {
           const itemText = nested[j].replace(/^\s*\d+\.\s+/, "");
-          items.push(<li key={getKey()}>{parseInlineMarkdown(itemText, getKey)}</li>);
+          items.push(
+            <li key={getKey()} style={listItemStyle}>
+              {parseInlineMarkdown(itemText, getKey)}
+            </li>
+          );
           j += 1;
         }
         nodes.push(
@@ -336,10 +364,10 @@ function MarkdownBlock({ text }: { text: string }) {
             key={getKey()}
             style={{
               margin: 0,
-              paddingLeft: tokens.spacing.lg,
+              paddingLeft: 20,
               color: tokens.colors.text,
               listStyleType: "decimal",
-              lineHeight: 1.8,
+              lineHeight: 1.75,
             }}
           >
             {items}
@@ -358,7 +386,15 @@ function MarkdownBlock({ text }: { text: string }) {
     const content = paragraphLines.join("\n").trim();
     if (!content) return;
     blocks.push(
-      <p key={getKey()} style={{ margin: `${tokens.spacing.sm}px 0` }}>
+      <p
+        key={getKey()}
+        style={{
+          margin: `6px 0`,
+          lineHeight: 1.7,
+          color: tokens.colors.text,
+          letterSpacing: "0.2px",
+        }}
+      >
         {parseInlineMarkdown(content, getKey)}
       </p>
     );
@@ -374,14 +410,19 @@ function MarkdownBlock({ text }: { text: string }) {
 
     if (isHr(line)) {
       blocks.push(
-        <hr
+        <div
           key={getKey()}
           style={{
-            border: "none",
-            borderTop: `1px solid ${tokens.colors.borderLight}`,
-            margin: `${tokens.spacing.sm}px 0`,
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            margin: `16px 0`,
           }}
-        />
+        >
+          <div style={{ flex: 1, height: 1, background: `linear-gradient(to right, transparent, ${tokens.colors.borderLight})` }} />
+          <div style={{ width: 4, height: 4, borderRadius: "50%", backgroundColor: tokens.colors.accent, opacity: 0.5 }} />
+          <div style={{ flex: 1, height: 1, background: `linear-gradient(to left, transparent, ${tokens.colors.borderLight})` }} />
+        </div>
       );
       i += 1;
       continue;
@@ -390,17 +431,33 @@ function MarkdownBlock({ text }: { text: string }) {
     if (isHeading(line)) {
       const level = line.match(/^#{1,6}/)?.[0].length ?? 1;
       const content = line.replace(/^#{1,6}\s+/, "");
-      const sizes = [26, 24, 22, 20, 18, 16];
+      const sizes = [24, 21, 19, 17, 15, 14];
+      const weights = [700, 650, 600, 600, 500, 500];
+      const isLarge = level <= 2;
       blocks.push(
-        <div
-          key={getKey()}
-          style={{
-            fontSize: sizes[level - 1],
-            fontWeight: 600,
-            color: tokens.colors.text,
-          }}
-        >
-          {parseInlineMarkdown(content, getKey)}
+        <div key={getKey()} style={{ marginTop: level === 1 ? 4 : 2, marginBottom: isLarge ? 8 : 4 }}>
+          <div
+            style={{
+              fontSize: sizes[level - 1],
+              fontWeight: weights[level - 1],
+              color: level <= 2 ? tokens.colors.accent : tokens.colors.text,
+              letterSpacing: level <= 2 ? "0.5px" : "0.2px",
+              lineHeight: 1.4,
+            }}
+          >
+            {parseInlineMarkdown(content, getKey)}
+          </div>
+          {level === 1 && (
+            <div
+              style={{
+                marginTop: 6,
+                height: 2,
+                width: 40,
+                borderRadius: 1,
+                background: `linear-gradient(to right, ${tokens.colors.accent}, transparent)`,
+              }}
+            />
+          )}
         </div>
       );
       i += 1;
@@ -418,10 +475,14 @@ function MarkdownBlock({ text }: { text: string }) {
         <blockquote
           key={getKey()}
           style={{
-            margin: 0,
-            paddingLeft: tokens.spacing.md,
-            borderLeft: `3px solid ${tokens.colors.borderLight}`,
+            margin: `8px 0`,
+            padding: `10px 16px`,
+            borderLeft: `3px solid ${tokens.colors.accent}`,
+            backgroundColor: "rgba(212, 165, 116, 0.06)",
+            borderRadius: `0 ${tokens.radius.sm}px ${tokens.radius.sm}px 0`,
             color: tokens.colors.textSecondary,
+            fontStyle: "italic",
+            lineHeight: 1.7,
           }}
         >
           {parseInlineMarkdown(content, getKey)}
@@ -439,7 +500,7 @@ function MarkdownBlock({ text }: { text: string }) {
         if (currentText == null) return;
         const nestedNodes = buildNestedLists(nestedLines);
         items.push(
-          <li key={getKey()}>
+          <li key={getKey()} style={listItemStyle}>
             <div>{parseInlineMarkdown(currentText, getKey)}</div>
             {nestedNodes.length ? (
               <div style={{ marginTop: tokens.spacing.xs }}>{nestedNodes}</div>
@@ -476,11 +537,10 @@ function MarkdownBlock({ text }: { text: string }) {
         <ul
           key={getKey()}
           style={{
-            margin: 0,
-            paddingLeft: tokens.spacing.lg,
+            margin: `4px 0`,
+            paddingLeft: 22,
             color: tokens.colors.text,
-            listStyleType: "disc",
-            lineHeight: 1.8,
+            lineHeight: 1.75,
           }}
         >
           {items}
@@ -498,7 +558,7 @@ function MarkdownBlock({ text }: { text: string }) {
         if (currentText == null) return;
         const nestedNodes = buildNestedLists(nestedLines);
         items.push(
-          <li key={getKey()}>
+          <li key={getKey()} style={listItemStyle}>
             <div>{parseInlineMarkdown(currentText, getKey)}</div>
             {nestedNodes.length ? (
               <div style={{ marginTop: tokens.spacing.xs }}>{nestedNodes}</div>
@@ -535,11 +595,11 @@ function MarkdownBlock({ text }: { text: string }) {
         <ol
           key={getKey()}
           style={{
-            margin: 0,
-            paddingLeft: tokens.spacing.lg,
+            margin: `4px 0`,
+            paddingLeft: 22,
             color: tokens.colors.text,
             listStyleType: "decimal",
-            lineHeight: 1.8,
+            lineHeight: 1.75,
           }}
         >
           {items}
@@ -564,12 +624,15 @@ function MarkdownBlock({ text }: { text: string }) {
       style={{
         display: "flex",
         flexDirection: "column",
-        gap: tokens.spacing.sm,
-        padding: `${tokens.spacing.lg + tokens.spacing.sm}px ${tokens.spacing.lg}px`,
-        margin: `${tokens.spacing.lg}px ${tokens.spacing.md}px`,
+        gap: 6,
+        padding: `20px 24px`,
+        margin: `12px 0`,
         backgroundColor: tokens.colors.surfaceSecondary,
         borderRadius: tokens.radius.md,
+        borderLeft: `3px solid rgba(212, 165, 116, 0.25)`,
         fontFamily: markdownFontFamily,
+        fontSize: 15,
+        lineHeight: 1.7,
       }}
     >
       {blocks}
@@ -582,34 +645,55 @@ function CodeBlock({ code, language }: { code: string; language: string }) {
   return (
     <div
       style={{
-        margin: `${tokens.spacing.md}px 0`,
+        margin: `12px 0`,
         borderRadius: tokens.radius.sm,
         overflow: "hidden",
         backgroundColor: tokens.colors.codeBackground,
         border: `1px solid ${tokens.colors.border}`,
+        boxShadow: `0 2px 8px rgba(0, 0, 0, 0.15)`,
       }}
     >
       {language && (
         <div
           style={{
-            padding: `${tokens.spacing.sm}px ${tokens.spacing.md}px`,
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            padding: `6px 14px`,
             backgroundColor: tokens.colors.surface,
-            fontSize: 12,
-            color: tokens.colors.textSecondary,
-            fontFamily: tokens.fonts.mono,
             borderBottom: `1px solid ${tokens.colors.border}`,
           }}
         >
-          {language}
+          <span
+            style={{
+              width: 6,
+              height: 6,
+              borderRadius: "50%",
+              backgroundColor: tokens.colors.accent,
+              opacity: 0.6,
+            }}
+          />
+          <span
+            style={{
+              fontSize: 11,
+              fontWeight: 500,
+              color: tokens.colors.textMuted,
+              fontFamily: tokens.fonts.mono,
+              textTransform: "uppercase",
+              letterSpacing: "0.5px",
+            }}
+          >
+            {language}
+          </span>
         </div>
       )}
       <pre
         style={{
           margin: 0,
-          padding: tokens.spacing.md,
+          padding: `14px 16px`,
           overflow: "auto",
           fontSize: 13,
-          lineHeight: 1.5,
+          lineHeight: 1.6,
           fontFamily: tokens.fonts.mono,
           color: tokens.colors.codeText,
         }}
@@ -669,7 +753,7 @@ export default function Message({ role, text }: Props) {
             marginBottom: tokens.spacing.xs,
           }}
         >
-          {isUser ? "You" : "Maia"}
+          {isUser ? "Ronald" : "Maia"}
         </span>
 
         {/* Message bubble */}
