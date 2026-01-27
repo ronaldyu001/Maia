@@ -148,36 +148,48 @@ function Sidebar({ onNewConversation }: { onNewConversation: () => void }) {
       }}
     >
       {/* Top Buttons */}
-      <div style={{ padding: tokens.spacing.md, display: "flex", flexDirection: "column", gap: 24 }}>
+      <div style={{ padding: tokens.spacing.md + 20, display: "flex", flexDirection: "column", gap: 24}}>
         {/* New Conversation Button */}
         <button
           onClick={onNewConversation}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderBottomWidth = "4px";
+            e.currentTarget.style.transform = "translateY(1px)";
+            e.currentTarget.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.3)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderBottomWidth = "5px";
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.3)";
+          }}
           style={{
-            width: "100%",
+            width: "80%",
+            aspectRatio: "1 / 0.8",
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            gap: tokens.spacing.sm,
-            padding: `${tokens.spacing.sm + 4}px ${tokens.spacing.md}px`,
+            alignSelf: "center",
+            gap: 12,
+            padding: tokens.spacing.lg,
             backgroundColor: tokens.colors.accent,
             color: "#1c1816",
             border: "none",
-            borderRadius: tokens.radius.md,
+            borderTop: "1px solid rgba(255, 255, 255, 0.15)",
+            borderBottom: "5px solid #a07a50",
+            borderRadius: tokens.radius.lg,
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
+            transform: "translateY(0)",
             fontFamily: tokens.fonts.elegant,
-            fontSize: 15,
+            fontSize: 14,
             fontWeight: 500,
+            letterSpacing: "0.3px",
             cursor: "pointer",
-            transition: "background-color 0.15s ease",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = tokens.colors.accentHover;
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = tokens.colors.accent;
+            transition: "all 0.1s ease",
           }}
         >
           <PlusIcon />
-          New Conversation
+          <span>New Conversation</span>
         </button>
 
         {/* Calendar Button */}
