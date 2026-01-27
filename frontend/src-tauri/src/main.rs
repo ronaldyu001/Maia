@@ -1,6 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use std::process::Command as StdCommand;
 use std::sync::Mutex;
 use tauri::{AppHandle, Manager};
 use tauri_plugin_shell::{process::CommandChild, ShellExt};
@@ -70,6 +71,22 @@ fn start_backend(app: &AppHandle) {
 
 fn stop_backend(app: &AppHandle) {
   if let Some(child) = app.state::<BackendProcess>().0.lock().unwrap().take() {
+    let pid = child.pid();
+
+    #[cfg(windows)]
+    {
+      let _ = StdCommand::new("taskkill")
+        .args(["/T", "/F", "/PID", &pid.to_string()])
+        .status();
+    }
+
+    #[cfg(unix)]
+    {
+      let _ = StdCommand::new("pkill")
+        .args(["-TERM", "-P", &pid.to_string()])
+        .status();
+    }
+
     let _ = child.kill();
   }
 }
