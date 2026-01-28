@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import MaiaAnimaBot from "../assets/Maia_Avatars/1.0-1.x/1.0/Anima Bot.gif";
 
 const tokens = {
@@ -16,17 +16,71 @@ const tokens = {
   },
 };
 
+interface StartupEvent {
+  label: string;
+  done: boolean;
+}
+
+interface StartupStatus {
+  total: number;
+  completed: number;
+  events: Record<string, StartupEvent>;
+  finished: boolean;
+}
+
 export default function LoadingScreen({ onFinished }: { onFinished: () => void }) {
   const [fadeOut, setFadeOut] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [statusLabel, setStatusLabel] = useState("Connecting to backend...");
+  const onFinishedRef = useRef(onFinished);
+  onFinishedRef.current = onFinished;
 
   useEffect(() => {
-    const fadeTimer = setTimeout(() => setFadeOut(true), 2400);
-    const doneTimer = setTimeout(() => onFinished(), 3200);
-    return () => {
-      clearTimeout(fadeTimer);
-      clearTimeout(doneTimer);
+    let cancelled = false;
+
+    const poll = async () => {
+      while (!cancelled) {
+        try {
+          const res = await fetch("http://127.0.0.1:8000/startup/status");
+          const data: StartupStatus = await res.json();
+
+          if (cancelled) break;
+
+          const pct = data.total > 0 ? data.completed / data.total : 0;
+          setProgress(pct);
+
+          // Show the label of the first event that hasn't finished yet
+          const pending = Object.values(data.events).find((e) => !e.done);
+          setStatusLabel(pending ? pending.label + "..." : "Ready!");
+
+          if (data.finished) {
+            setProgress(1);
+            setStatusLabel("Ready!");
+            // Brief pause so the user sees "Ready!" before fade-out
+            await new Promise((r) => setTimeout(r, 400));
+            if (!cancelled) {
+              setFadeOut(true);
+              setTimeout(() => {
+                if (!cancelled) onFinishedRef.current();
+              }, 800);
+            }
+            return;
+          }
+        } catch {
+          // Backend not reachable yet
+          setStatusLabel("Connecting to backend...");
+        }
+
+        await new Promise((r) => setTimeout(r, 500));
+      }
     };
-  }, [onFinished]);
+
+    poll();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <div
@@ -99,7 +153,7 @@ export default function LoadingScreen({ onFinished }: { onFinished: () => void }
         Maia
       </h1>
 
-      {/* Tagline */}
+      {/* Status label */}
       <p
         style={{
           fontFamily: tokens.fonts.sans,
@@ -110,7 +164,7 @@ export default function LoadingScreen({ onFinished }: { onFinished: () => void }
           letterSpacing: 1,
         }}
       >
-        warming up...
+        {statusLabel}
       </p>
 
       {/* Progress bar */}
@@ -126,22 +180,16 @@ export default function LoadingScreen({ onFinished }: { onFinished: () => void }
         <div
           style={{
             height: "100%",
+            width: `${progress * 100}%`,
             borderRadius: 1,
             background: `linear-gradient(90deg, ${tokens.colors.accent}, ${tokens.colors.accentHover})`,
-            animation: "loadingProgress 2.4s ease-in-out forwards",
+            transition: "width 0.4s ease-in-out",
           }}
         />
       </div>
 
       {/* Keyframe animations */}
       <style>{`
-        @keyframes loadingProgress {
-          0% { width: 0%; }
-          20% { width: 15%; }
-          50% { width: 55%; }
-          80% { width: 85%; }
-          100% { width: 100%; }
-        }
         @keyframes loadingAvatarPulse {
           0%, 100% { box-shadow: 0 0 60px ${tokens.colors.accent}22, 0 8px 32px rgba(0,0,0,0.4); }
           50% { box-shadow: 0 0 80px ${tokens.colors.accent}35, 0 8px 32px rgba(0,0,0,0.4); }

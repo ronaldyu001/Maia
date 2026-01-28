@@ -1,8 +1,12 @@
+import asyncio
+
 from fastapi import FastAPI
-from backend.Maia.hood.models.ollama.wrapper_ollama import OllamaModel
-from backend.routes.chat import chat
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+
+from backend.routes.chat import chat
 from backend.logging.LoggingWrapper import Logger
+from backend.startup import run_startup, get_startup_status
 
 # ----- create FastAPI app -----
 Logger.info("Starting backend")
@@ -20,12 +24,16 @@ app.add_middleware(
 
 
 # ----- register routes -----
-app.include_router( chat.router )
+app.include_router(chat.router)
+
+
+# ----- startup status endpoint -----
+@app.get("/startup/status")
+async def startup_status():
+    return JSONResponse(content=get_startup_status())
 
 
 # ----- startup events -----
-@app.on_event( event_type="startup" )
-async def startup_events():
-    """ startup events. """
-    Logger.info("Running startup events")
-    OllamaModel()
+@app.on_event("startup")
+async def on_startup():
+    asyncio.create_task(run_startup())

@@ -91,6 +91,27 @@ fn stop_backend(app: &AppHandle) {
   }
 }
 
+fn stop_calendar() {
+  #[cfg(windows)]
+  {
+    let _ = StdCommand::new("taskkill")
+      .args(["/F", "/IM", "radicale.exe"])
+      .status();
+  }
+
+  #[cfg(unix)]
+  {
+    let _ = StdCommand::new("pkill")
+      .args(["-f", "radicale.*Radicale.conf"])
+      .status();
+  }
+}
+
+fn stop_services(app: &AppHandle) {
+  stop_calendar();
+  stop_backend(app);
+}
+
 fn main() {
   let app = tauri::Builder::default()
     .plugin(tauri_plugin_shell::init())
@@ -107,20 +128,20 @@ fn main() {
       // Fired when a window is closed (including clicking the close button).
       tauri::RunEvent::WindowEvent { event, .. } => match event {
         tauri::WindowEvent::CloseRequested { .. } => {
-          stop_backend(app_handle);
+          stop_services(app_handle);
         }
         tauri::WindowEvent::Destroyed => {
-          stop_backend(app_handle);
+          stop_services(app_handle);
         }
         _ => {}
       },
       // Fired when the app is about to exit (Cmd+Q, closing last window, etc.)
       tauri::RunEvent::ExitRequested { .. } => {
-        stop_backend(app_handle);
+        stop_services(app_handle);
       }
       // Extra safety: ensure backend is stopped on final exit
       tauri::RunEvent::Exit => {
-        stop_backend(app_handle);
+        stop_services(app_handle);
       }
       _ => {}
     }
