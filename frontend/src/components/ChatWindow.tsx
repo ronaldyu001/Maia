@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Message from "./Message";
-import { sendMessage } from "../api/chat";
+import { sendMessage } from "../api";
 import tokens from "../tokens";
 import MaiaAnimaBot from "../assets/Maia_Avatars/1.0-1.x/1.0/Anima Bot.gif";
 

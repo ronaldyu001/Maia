@@ -9,9 +9,15 @@ function App() {
   const [currentPage, setCurrentPage] = useState<Page>("chat");
   const [chatKey, setChatKey] = useState(0);
   const [hasConversation, setHasConversation] = useState(false);
+  const [calendarRefreshToken, setCalendarRefreshToken] = useState(0);
 
   const handleNavigate = useCallback((page: Page) => {
     setCurrentPage(page);
+  }, []);
+
+  const handleCalendarOpen = useCallback(() => {
+    setCalendarRefreshToken((token) => token + 1);
+    setCurrentPage("calendar");
   }, []);
 
   const handleNewConversation = useCallback(() => {
@@ -40,6 +46,7 @@ function App() {
       <Sidebar
         currentPage={currentPage}
         onNavigate={handleNavigate}
+        onCalendarOpen={handleCalendarOpen}
         hasConversation={hasConversation}
         onNewConversation={handleNewConversation}
       />
@@ -76,7 +83,7 @@ function App() {
             transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
           }}
         >
-          <Calendar />
+          <Calendar refreshToken={calendarRefreshToken} />
         </div>
       </div>
 

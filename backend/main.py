@@ -4,9 +4,15 @@ from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.routes.chat import chat
 from backend.logging.LoggingWrapper import Logger
 from backend.startup import run_startup, get_startup_status
+
+#routes
+from backend.routes.chat import chat
+from backend.routes.calendar import \
+    route_calendar
+
+
 
 # ----- create FastAPI app -----
 Logger.info("Starting backend")
@@ -25,6 +31,7 @@ app.add_middleware(
 
 # ----- register routes -----
 app.include_router(chat.router)
+app.include_router(route_calendar.router)
 
 
 # ----- startup status endpoint -----

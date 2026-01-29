@@ -9,7 +9,9 @@ from backend.logging.LoggingWrapper import Logger
 from backend.Maia.hood.models.ollama.wrapper_ollama import OllamaModel
 
 
-RADICALE_CONFIG_PATH = Path(__file__).resolve().parent / "Radicale" / "Radicale.conf"
+RADICALE_CONFIG_PATH = (
+    Path(__file__).resolve().parent / "Calendar" / "Radicale" / "Radicale.conf"
+)
 RADICALE_PYTHON = Path(__file__).resolve().parents[1] / ".venv" / "bin" / "python"
 RADICALE_WORKDIR = RADICALE_CONFIG_PATH.parent
 _calendar_process: Optional[subprocess.Popen] = None

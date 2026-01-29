@@ -1,9 +1,0 @@
-[principal]
-user = .*
-collection = {user}
-permission = rw
-
-[public]
-user = .*
-collection = public/.*
-permission = r

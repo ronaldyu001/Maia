@@ -103,11 +103,13 @@ const inactiveStyle: React.CSSProperties = {
 export default function Sidebar({
   currentPage,
   onNavigate,
+  onCalendarOpen,
   hasConversation,
   onNewConversation,
 }: {
   currentPage: Page;
   onNavigate: (page: Page) => void;
+  onCalendarOpen: () => void;
   hasConversation: boolean;
   onNewConversation: () => void;
 }) {
@@ -184,7 +186,7 @@ export default function Sidebar({
 
         {/* Calendar Button */}
         <button
-          onClick={() => onNavigate("calendar")}
+          onClick={onCalendarOpen}
           onMouseEnter={(e) => {
             setCalendarHovered(true);
             e.currentTarget.style.borderBottomWidth = "4px";

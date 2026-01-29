@@ -1,0 +1,19 @@
+[principal]
+user = .+
+collection = ^/?{user}/?$
+permissions = rw
+
+[collections]
+user = .+
+collection = ^/?{user}/.*$
+permissions = rw
+
+[public]
+user = .*
+collection = ^/?public(/.*)?$
+permissions = r
+
+[root]
+user = .+
+collection = ^/?$
+permissions = r
