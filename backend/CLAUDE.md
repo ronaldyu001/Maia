@@ -115,14 +115,15 @@ SetDefaultCalendarResponse(success)
 
 **Event Models:**
 ```python
-EventItem(uid, summary, description?, dtstart, dtend, location?, url)
-CreateEventRequest(calendar_url, summary, description?, dtstart, dtend, location?)
+EventItem(uid, summary, description?, dtstart, dtend, location?, priority?, url)
+CreateEventRequest(calendar_url, summary, description?, dtstart, dtend, location?, priority?)
 CreateEventResponse(event: EventItem)
 DeleteEventRequest(event_url, calendar_url)
 DeleteEventResponse(success, message)
-EditEventRequest(event_url, calendar_url, summary?, description?, dtstart?, dtend?, location?)
+EditEventRequest(event_url, calendar_url, summary?, description?, dtstart?, dtend?, location?, priority?)
 EditEventResponse(event: EventItem)
 ```
+*Note: priority is 1-9 where 1 is highest priority*
 
 ### Routes (`routes/calendar/route_calendar.py`)
 

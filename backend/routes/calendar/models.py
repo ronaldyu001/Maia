@@ -68,6 +68,7 @@ class EventItem(BaseModel):
     dtstart: datetime
     dtend: datetime
     location: Optional[str] = None
+    priority: Optional[int] = None  # 1-9, where 1 is highest priority
     url: str
 
 
@@ -79,6 +80,7 @@ class CreateEventRequest(BaseModel):
     dtstart: datetime
     dtend: datetime
     location: Optional[str] = None
+    priority: Optional[int] = None  # 1-9, where 1 is highest priority
 
 
 class CreateEventResponse(BaseModel):
@@ -107,6 +109,7 @@ class EditEventRequest(BaseModel):
     dtstart: Optional[datetime] = None
     dtend: Optional[datetime] = None
     location: Optional[str] = None
+    priority: Optional[int] = None  # 1-9, where 1 is highest priority
 
 
 class EditEventResponse(BaseModel):

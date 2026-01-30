@@ -394,18 +394,6 @@ export default function Calendar({ refreshToken }: CalendarProps) {
             <PlusIcon size={22} />
             Start New Calendar
           </button>
-
-          <p
-            style={{
-              fontSize: 13,
-              color: tokens.colors.textMuted,
-              margin: 0,
-              marginTop: tokens.spacing.md,
-              fontFamily: tokens.fonts.sans,
-            }}
-          >
-            Creates a new .ics calendar file
-          </p>
         </div>
       )}
 

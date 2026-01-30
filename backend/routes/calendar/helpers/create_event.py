@@ -44,6 +44,8 @@ def create_event(req: CreateEventRequest) -> CreateEventResponse:
             event.add("description", req.description)
         if req.location:
             event.add("location", req.location)
+        if req.priority is not None:
+            event.add("priority", req.priority)
 
         ical.add_component(event)
 
@@ -61,6 +63,7 @@ def create_event(req: CreateEventRequest) -> CreateEventResponse:
                 dtstart=req.dtstart,
                 dtend=req.dtend,
                 location=req.location,
+                priority=req.priority,
                 url=event_url,
             )
         )

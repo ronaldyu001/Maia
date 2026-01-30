@@ -60,6 +60,8 @@ def edit_event(req: EditEventRequest) -> EditEventResponse:
         current_dtstart = _get_ical_value(vevent, "dtstart")
         current_dtend = _get_ical_value(vevent, "dtend")
         current_location = _get_ical_value(vevent, "location")
+        current_priority_raw = vevent.get("priority")
+        current_priority = int(current_priority_raw) if current_priority_raw is not None else None
 
         # Apply updates (use new value if provided, else keep current)
         new_summary = req.summary if req.summary is not None else current_summary
@@ -67,6 +69,7 @@ def edit_event(req: EditEventRequest) -> EditEventResponse:
         new_dtstart = req.dtstart if req.dtstart is not None else current_dtstart
         new_dtend = req.dtend if req.dtend is not None else current_dtend
         new_location = req.location if req.location is not None else current_location
+        new_priority = req.priority if req.priority is not None else current_priority
 
         # Update the VEVENT component
         if "summary" in vevent:
@@ -91,6 +94,11 @@ def edit_event(req: EditEventRequest) -> EditEventResponse:
         if new_location:
             vevent.add("location", new_location)
 
+        if "priority" in vevent:
+            del vevent["priority"]
+        if new_priority is not None:
+            vevent.add("priority", new_priority)
+
         # Update last-modified timestamp
         if "last-modified" in vevent:
             del vevent["last-modified"]
@@ -114,6 +122,7 @@ def edit_event(req: EditEventRequest) -> EditEventResponse:
                 dtstart=dtstart_dt,
                 dtend=dtend_dt,
                 location=new_location,
+                priority=new_priority,
                 url=req.event_url,
             )
         )
