@@ -35,14 +35,17 @@ backend/
 │   │   └── helpers/
 │   │
 │   └── calendar/
-│       ├── route_calendar.py           # Router with 5 endpoints
+│       ├── route_calendar.py           # Router with 8 endpoints (5 calendar, 3 event)
 │       ├── models.py                   # Centralized Pydantic models
 │       └── helpers/
 │           ├── create_calendar.py
 │           ├── delete_calendar.py
 │           ├── list_calendars.py
 │           ├── get_default_calendar.py
-│           └── set_default_calendar.py
+│           ├── set_default_calendar.py
+│           ├── create_event.py         # Create event via iCalendar
+│           ├── delete_event.py         # Delete event by URL
+│           └── edit_event.py           # Edit existing event
 │
 ├── Calendar/
 │   └── Radicale/
@@ -96,6 +99,8 @@ LOGS_DIR
 ## Calendar System
 
 ### Pydantic Models (`routes/calendar/models.py`)
+
+**Calendar Models:**
 ```python
 CalendarItem(name, url)
 ListCalendarsResponse(calendars)
@@ -108,8 +113,20 @@ SetDefaultCalendarRequest(calendar_url)
 SetDefaultCalendarResponse(success)
 ```
 
+**Event Models:**
+```python
+EventItem(uid, summary, description?, dtstart, dtend, location?, url)
+CreateEventRequest(calendar_url, summary, description?, dtstart, dtend, location?)
+CreateEventResponse(event: EventItem)
+DeleteEventRequest(event_url, calendar_url)
+DeleteEventResponse(success, message)
+EditEventRequest(event_url, calendar_url, summary?, description?, dtstart?, dtend?, location?)
+EditEventResponse(event: EventItem)
+```
+
 ### Routes (`routes/calendar/route_calendar.py`)
 
+**Calendar Routes:**
 | Endpoint | Method | Purpose |
 |----------|--------|---------|
 | `/calendar/create_calendar` | POST | Create new calendar |
@@ -118,13 +135,27 @@ SetDefaultCalendarResponse(success)
 | `/calendar/get_default_calendar` | GET | Get default calendar URL |
 | `/calendar/set_default_calendar` | POST | Set default calendar |
 
+**Event Routes:**
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/calendar/create_event` | POST | Create event in calendar |
+| `/calendar/delete_event` | POST | Delete event by URL |
+| `/calendar/edit_event` | POST | Edit existing event |
+
 ### Helpers
 All helpers use centralized config from `config/calendar.py`:
+
+**Calendar Helpers:**
 - `create_calendar(name)` — Creates calendar via CalDAV
 - `delete_calendar(name)` — Deletes calendar by name
 - `list_calendars()` — Returns all calendars
 - `get_default_calendar()` — Reads default from JSON
 - `set_default_calendar(url)` — Writes default to JSON
+
+**Event Helpers:**
+- `create_event(req)` — Creates event via iCalendar/CalDAV
+- `delete_event(req)` — Deletes event by URL
+- `edit_event(req)` — Updates event fields in-place
 
 ---
 
@@ -245,7 +276,9 @@ Logger.error(f"Failed: {e}")
 |--------------|-------|
 | Add/modify chat endpoint | `routes/chat/chat.py` |
 | Add calendar endpoint | `routes/calendar/route_calendar.py` |
-| Add calendar model | `routes/calendar/models.py` |
+| Add event endpoint | `routes/calendar/route_calendar.py` |
+| Add calendar/event model | `routes/calendar/models.py` |
+| Add event helper | `routes/calendar/helpers/` |
 | Change calendar config | `config/calendar.py` |
 | Change path constants | `config/paths.py` |
 | Change LLM model | `Maia/config.py` |

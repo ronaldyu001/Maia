@@ -10,8 +10,8 @@ type Turn = { role: "user" | "maia"; text: string };
 function SendIcon({ active }: { active: boolean }) {
   return (
     <svg
-      width="20"
-      height="20"
+      width="18"
+      height="18"
       viewBox="0 0 24 24"
       fill="none"
       stroke={active ? "#ffffff" : tokens.colors.textMuted}
@@ -25,11 +25,32 @@ function SendIcon({ active }: { active: boolean }) {
   );
 }
 
-function RobotIcon() {
+function CoffeeIcon({ size = 16 }: { size?: number }) {
   return (
     <svg
-      width="20"
-      height="20"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={tokens.colors.accent}
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M17 8h1a4 4 0 1 1 0 8h-1" />
+      <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z" />
+      <path d="M6 2v2" />
+      <path d="M10 2v2" />
+      <path d="M14 2v2" />
+    </svg>
+  );
+}
+
+function RobotIcon({ size = 20 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
       viewBox="0 0 24 24"
       fill="none"
       stroke={tokens.colors.accent}
@@ -57,47 +78,139 @@ function EmptyState() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        minHeight: "60vh",
+        minHeight: "70vh",
         color: tokens.colors.textMuted,
         textAlign: "center",
-        padding: tokens.spacing.lg,
+        padding: tokens.spacing.xl,
+        position: "relative",
       }}
     >
-      <img
-        src={MaiaAnimaBot}
-        alt="Maia"
+      {/* Decorative coffee steam accents */}
+      <div
         style={{
-          width: 120,
-          height: 120,
-          borderRadius: tokens.radius.xl,
-          objectFit: "cover",
-          marginBottom: tokens.spacing.lg,
+          position: "absolute",
+          top: "15%",
+          left: "20%",
+          opacity: 0.06,
+          transform: "rotate(-15deg)",
         }}
-      />
+      >
+        <CoffeeIcon size={48} />
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          bottom: "20%",
+          right: "18%",
+          opacity: 0.06,
+          transform: "rotate(15deg)",
+        }}
+      >
+        <CoffeeIcon size={36} />
+      </div>
+
+      {/* Avatar container with glow effect */}
+      <div
+        style={{
+          position: "relative",
+          marginBottom: tokens.spacing.xl,
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            inset: -8,
+            borderRadius: "50%",
+            background: `radial-gradient(circle, ${tokens.colors.accentMuted} 0%, transparent 70%)`,
+            filter: "blur(12px)",
+          }}
+        />
+        <img
+          src={MaiaAnimaBot}
+          alt="Maia"
+          style={{
+            position: "relative",
+            width: 140,
+            height: 140,
+            borderRadius: "50%",
+            objectFit: "cover",
+            border: `3px solid ${tokens.colors.accent}`,
+            boxShadow: tokens.shadows.lg,
+          }}
+        />
+      </div>
+
+      {/* Greeting text */}
       <h2
         style={{
-          fontSize: 34,
+          fontSize: 38,
           fontWeight: 400,
           color: tokens.colors.text,
           margin: 0,
-          marginBottom: tokens.spacing.md,
-          lineHeight: 1.3,
+          marginBottom: tokens.spacing.sm,
+          lineHeight: 1.2,
+          letterSpacing: "-0.01em",
         }}
       >
         Hey, Ronald!
       </h2>
+
+      {/* Decorative divider */}
+      <div
+        style={{
+          width: 60,
+          height: 2,
+          background: `linear-gradient(90deg, transparent, ${tokens.colors.accent}, transparent)`,
+          borderRadius: tokens.radius.full,
+          margin: `${tokens.spacing.md}px 0`,
+        }}
+      />
+
+      {/* Subtitle */}
       <p
         style={{
-          fontSize: 22,
+          fontSize: 20,
           color: tokens.colors.textSecondary,
           margin: 0,
           fontFamily: tokens.fonts.elegant,
           fontStyle: "italic",
           fontWeight: 300,
+          maxWidth: 320,
+          lineHeight: 1.5,
         }}
       >
         What shall we explore together today?
       </p>
+
+      {/* Suggestion chips */}
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          gap: tokens.spacing.sm,
+          marginTop: tokens.spacing.xl,
+          maxWidth: 500,
+        }}
+      >
+        {["Ask me anything", "Let's brainstorm", "Help me plan"].map((text) => (
+          <span
+            key={text}
+            style={{
+              padding: `${tokens.spacing.xs + 2}px ${tokens.spacing.md}px`,
+              backgroundColor: tokens.colors.surface,
+              color: tokens.colors.textSecondary,
+              fontSize: 14,
+              borderRadius: tokens.radius.full,
+              border: `1px solid ${tokens.colors.borderLight}`,
+              fontFamily: tokens.fonts.elegant,
+              letterSpacing: "0.02em",
+            }}
+          >
+            {text}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }

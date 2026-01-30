@@ -1,8 +1,13 @@
 # Centralized Pydantic models for calendar routes
+from datetime import datetime
 from typing import List, Optional
 
 from pydantic import BaseModel
 
+
+# =============================================================================
+# Calendar Models
+# =============================================================================
 
 class CalendarItem(BaseModel):
     """Represents a single calendar."""
@@ -49,3 +54,61 @@ class SetDefaultCalendarRequest(BaseModel):
 class SetDefaultCalendarResponse(BaseModel):
     """Response after setting the default calendar."""
     success: bool
+
+
+# =============================================================================
+# Event Models
+# =============================================================================
+
+class EventItem(BaseModel):
+    """Represents a calendar event."""
+    uid: str
+    summary: str
+    description: Optional[str] = None
+    dtstart: datetime
+    dtend: datetime
+    location: Optional[str] = None
+    url: str
+
+
+class CreateEventRequest(BaseModel):
+    """Request to create a new event."""
+    calendar_url: str
+    summary: str
+    description: Optional[str] = None
+    dtstart: datetime
+    dtend: datetime
+    location: Optional[str] = None
+
+
+class CreateEventResponse(BaseModel):
+    """Response after creating an event."""
+    event: EventItem
+
+
+class DeleteEventRequest(BaseModel):
+    """Request to delete an event."""
+    event_url: str
+    calendar_url: str
+
+
+class DeleteEventResponse(BaseModel):
+    """Response after deleting an event."""
+    success: bool
+    message: str
+
+
+class EditEventRequest(BaseModel):
+    """Request to edit an event."""
+    event_url: str
+    calendar_url: str
+    summary: Optional[str] = None
+    description: Optional[str] = None
+    dtstart: Optional[datetime] = None
+    dtend: Optional[datetime] = None
+    location: Optional[str] = None
+
+
+class EditEventResponse(BaseModel):
+    """Response after editing an event."""
+    event: EventItem
