@@ -1,8 +1,8 @@
 import "./App.css";
 import { useState, useCallback } from "react";
-import Sidebar, { type Page } from "./components/Sidebar";
-import ChatWindow from "./components/ChatWindow";
-import Calendar from "./components/Calendar";
+import { Sidebar, type Page } from "./components/sidebar";
+import { ChatWindow } from "./components/chat";
+import { CalendarManager } from "./components/calendar";
 import tokens from "./tokens";
 
 function App() {
@@ -83,7 +83,7 @@ function App() {
             transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
           }}
         >
-          <Calendar refreshToken={calendarRefreshToken} />
+          <CalendarManager refreshToken={calendarRefreshToken} />
         </div>
       </div>
 

@@ -21,6 +21,11 @@ from backend.routes.calendar.models import (
     DeleteEventResponse,
     EditEventRequest,
     EditEventResponse,
+    GetEventCountsRequest,
+    GetEventCountsResponse,
+    GetEventsForDayRequest,
+    GetEventsForDayResponse,
+    PriorityCounts,
 )
 # Calendar helpers
 from backend.routes.calendar.helpers.create_calendar import create_calendar
@@ -32,6 +37,8 @@ from backend.routes.calendar.helpers.set_default_calendar import set_default_cal
 from backend.routes.calendar.helpers.create_event import create_event
 from backend.routes.calendar.helpers.delete_event import delete_event
 from backend.routes.calendar.helpers.edit_event import edit_event
+from backend.routes.calendar.helpers.get_event_counts import get_event_counts
+from backend.routes.calendar.helpers.get_events_for_day import get_events_for_day
 
 
 router = APIRouter(prefix="/calendar", tags=["calendar"])
@@ -98,3 +105,15 @@ def delete_event_route(req: DeleteEventRequest) -> DeleteEventResponse:
 def edit_event_route(req: EditEventRequest) -> EditEventResponse:
     """Edit an existing event."""
     return edit_event(req)
+
+
+@router.post("/get_event_counts", response_model=GetEventCountsResponse)
+def get_event_counts_route(req: GetEventCountsRequest) -> GetEventCountsResponse:
+    """Get per-day priority counts for events within a visible range."""
+    return get_event_counts(req)
+
+
+@router.post("/get_events_for_day", response_model=GetEventsForDayResponse)
+def get_events_for_day_route(req: GetEventsForDayRequest) -> GetEventsForDayResponse:
+    """Get events for a single day filtered by priority bucket."""
+    return get_events_for_day(req)

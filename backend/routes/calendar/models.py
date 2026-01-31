@@ -1,6 +1,6 @@
 # Centralized Pydantic models for calendar routes
-from datetime import datetime
-from typing import List, Optional
+from datetime import date, datetime, time
+from typing import Dict, List, Optional
 
 from pydantic import BaseModel
 
@@ -67,9 +67,13 @@ class EventItem(BaseModel):
     description: Optional[str] = None
     dtstart: datetime
     dtend: datetime
+    timestart: Optional[time] = None
+    timeend: Optional[time] = None
     location: Optional[str] = None
     priority: Optional[int] = None  # 1-9, where 1 is highest priority
     url: str
+    rrule_freq: Optional[str] = None
+    rrule_byweekday: Optional[List[str]] = None
 
 
 class CreateEventRequest(BaseModel):
@@ -81,6 +85,8 @@ class CreateEventRequest(BaseModel):
     dtend: datetime
     location: Optional[str] = None
     priority: Optional[int] = None  # 1-9, where 1 is highest priority
+    rrule_freq: Optional[str] = None
+    rrule_byweekday: Optional[List[str]] = None
 
 
 class CreateEventResponse(BaseModel):
@@ -115,3 +121,35 @@ class EditEventRequest(BaseModel):
 class EditEventResponse(BaseModel):
     """Response after editing an event."""
     event: EventItem
+
+
+class GetEventCountsRequest(BaseModel):
+    """Request to get per-day priority counts in a calendar."""
+    calendar_url: str
+    range_start: datetime
+    range_end: datetime
+
+
+class PriorityCounts(BaseModel):
+    """Counts of priorities for a single day."""
+    high: int = 0
+    medium: int = 0
+    low: int = 0
+
+
+class GetEventCountsResponse(BaseModel):
+    """Response containing per-day priority counts and expanded events."""
+    counts: Dict[str, PriorityCounts]
+    events: List[EventItem]
+
+
+class GetEventsForDayRequest(BaseModel):
+    """Request to fetch events for a single day by priority bucket."""
+    calendar_url: str
+    date: date
+    priority: Optional[str] = None
+
+
+class GetEventsForDayResponse(BaseModel):
+    """Response containing events for a specific day."""
+    events: List[EventItem]

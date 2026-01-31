@@ -1,7 +1,7 @@
 # Create a new calendar event
 
 import uuid
-from datetime import datetime
+from datetime import datetime, time
 
 import caldav
 from icalendar import Calendar, Event
@@ -9,6 +9,16 @@ from icalendar import Calendar, Event
 from backend.config.calendar import get_caldav_client
 from backend.logging.LoggingWrapper import Logger
 from backend.routes.calendar.models import CreateEventRequest, CreateEventResponse, EventItem
+
+
+def _local_time(value: datetime | None) -> time | None:
+    if value is None:
+        return None
+    if value.tzinfo is not None:
+        return value.astimezone().time().replace(tzinfo=None)
+    return value.time()
+
+
 
 
 def create_event(req: CreateEventRequest) -> CreateEventResponse:
@@ -46,6 +56,11 @@ def create_event(req: CreateEventRequest) -> CreateEventResponse:
             event.add("location", req.location)
         if req.priority is not None:
             event.add("priority", req.priority)
+        if req.rrule_freq:
+            rrule: dict[str, object] = {"FREQ": req.rrule_freq.upper()}
+            if req.rrule_byweekday:
+                rrule["BYDAY"] = [day.upper() for day in req.rrule_byweekday]
+            event.add("rrule", rrule)
 
         ical.add_component(event)
 
@@ -62,9 +77,13 @@ def create_event(req: CreateEventRequest) -> CreateEventResponse:
                 description=req.description,
                 dtstart=req.dtstart,
                 dtend=req.dtend,
+                timestart=_local_time(req.dtstart),
+                timeend=_local_time(req.dtend),
                 location=req.location,
                 priority=req.priority,
                 url=event_url,
+                rrule_freq=req.rrule_freq,
+                rrule_byweekday=req.rrule_byweekday,
             )
         )
 

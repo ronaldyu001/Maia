@@ -1,6 +1,6 @@
 # Edit an existing calendar event
 
-from datetime import datetime
+from datetime import datetime, time
 from typing import Optional
 
 import caldav
@@ -9,6 +9,16 @@ from icalendar import Calendar
 from backend.config.calendar import get_caldav_client
 from backend.logging.LoggingWrapper import Logger
 from backend.routes.calendar.models import EditEventRequest, EditEventResponse, EventItem
+
+
+def _local_time(value: datetime | None) -> time | None:
+    if value is None:
+        return None
+    if value.tzinfo is not None:
+        return value.astimezone().time().replace(tzinfo=None)
+    return value.time()
+
+
 
 
 def _get_ical_value(component, prop: str, default=None):
@@ -121,6 +131,8 @@ def edit_event(req: EditEventRequest) -> EditEventResponse:
                 description=new_description,
                 dtstart=dtstart_dt,
                 dtend=dtend_dt,
+                timestart=_local_time(dtstart_dt),
+                timeend=_local_time(dtend_dt),
                 location=new_location,
                 priority=new_priority,
                 url=req.event_url,

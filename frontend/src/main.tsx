@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import LoadingScreen from "./components/LoadingScreen";
+import { LoadingScreen } from "./components/loading";
 
 function Root() {
   const [loading, setLoading] = useState(true);

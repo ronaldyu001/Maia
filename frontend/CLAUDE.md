@@ -8,7 +8,7 @@ Intended for LLMs and developers navigating this codebase.
 ## Entry Points
 
 - `src/main.tsx` — React entry point, renders `Root` wrapper with loading screen
-- `src/components/App.tsx` — Main app container, page routing between chat and calendar
+- `src/App.tsx` — Main app container, page routing between chat and calendar
 
 ---
 
@@ -17,6 +17,7 @@ Intended for LLMs and developers navigating this codebase.
 ```
 frontend/src/
 ├── main.tsx                    # React entry point, startup loading logic
+├── App.tsx                     # Root app, page routing, layout
 ├── tokens.ts                   # Design system (colors, fonts, spacing, transitions)
 ├── App.css                     # Global styles, animations, scrollbar
 ├── index.css                   # Base CSS reset
@@ -29,14 +30,41 @@ frontend/src/
 │   └── useAnimatedVisibility.ts  # Modal/popup animation state hook
 │
 ├── components/
-│   ├── icons.tsx               # Centralized icon components
-│   ├── App.tsx                 # Root app, page routing, layout
-│   ├── Sidebar.tsx             # Left navigation (Chat/Calendar buttons)
-│   ├── ChatWindow.tsx          # Chat interface, message handling
-│   ├── Message.tsx             # Message rendering with markdown support
-│   ├── Calendar.tsx            # Calendar management, create modal
-│   ├── CalendarView.tsx        # FullCalendar display, calendar selector
-│   └── LoadingScreen.tsx       # Startup progress display
+│   ├── shared/                 # Shared utilities across all components
+│   │   ├── index.ts            # Barrel exports
+│   │   ├── icons.tsx           # Centralized icon components
+│   │   └── hooks.ts            # Shared hooks (useAnimatedVisibility, useHover, useClickOutside)
+│   │
+│   ├── calendar/               # Calendar module
+│   │   ├── index.ts            # Barrel exports
+│   │   ├── types.ts            # CalendarItem, PriorityCounts, EventCounts types
+│   │   ├── constants.ts        # MONTH_LABELS, WEEKDAY_OPTIONS, etc.
+│   │   ├── helpers.ts          # daysInMonth, formatDateKey, toOption, to24Hour
+│   │   ├── hooks.ts            # useCalendarRange, useEventCounts
+│   │   ├── calendarStyles.ts   # FullCalendar CSS-in-JS styles
+│   │   ├── Dropdown.tsx        # Reusable dropdown select component
+│   │   ├── CalendarManager.tsx # Main orchestrator, calendar state management
+│   │   ├── CalendarView.tsx    # FullCalendar display, header, popups
+│   │   ├── CreateCalendarModal.tsx  # Modal for creating calendars
+│   │   └── CreateEventModal.tsx     # Modal for creating events
+│   │
+│   ├── chat/                   # Chat module
+│   │   ├── index.ts            # Barrel exports
+│   │   ├── types.ts            # Turn type definition
+│   │   ├── markdown.tsx        # parseText, parseInlineMarkdown, MarkdownBlock, CodeBlock
+│   │   ├── ChatWindow.tsx      # Main chat interface
+│   │   ├── Message.tsx         # Message rendering with markdown
+│   │   ├── EmptyState.tsx      # Empty state when no messages
+│   │   └── InputBar.tsx        # Chat input with send button
+│   │
+│   ├── loading/                # Loading module
+│   │   ├── index.ts            # Barrel exports
+│   │   └── LoadingScreen.tsx   # Startup progress display
+│   │
+│   └── sidebar/                # Sidebar module
+│       ├── index.ts            # Barrel exports
+│       ├── types.ts            # Page type definition
+│       └── Sidebar.tsx         # Left navigation
 │
 └── assets/
     ├── Maia_Avatars/           # Avatar images/GIFs
@@ -82,13 +110,18 @@ shadows: { sm, md, lg, xl }
 
 ## Shared Modules
 
-### Icons (`components/icons.tsx`)
+### Icons (`components/shared/icons.tsx`)
 Centralized icon components used across the app:
 - `PlusIcon`, `ChatIcon`, `CalendarIcon`, `CalendarListIcon`
 - `CoffeeIcon`, `RobotIcon`, `ChevronIcon`, `CheckIcon`
-- `MoreIcon`, `StarIcon`, `UserIcon`, `SendIcon`
+- `MoreIcon`, `EditIcon`, `StarIcon`, `UserIcon`, `SendIcon`, `CloseIcon`, `EventIcon`
 
 All icons accept a `size` prop.
+
+### Shared Hooks (`components/shared/hooks.ts`)
+- `useAnimatedVisibility({ exitDuration })` — Modal/popup animation state
+- `useHover()` — Simple hover state management
+- `useClickOutside(ref, handler, enabled)` — Click outside detection
 
 ### API (`api/index.ts`)
 Centralized API module with typed functions:
@@ -108,52 +141,57 @@ setDefaultCalendar(url): Promise<void>
 getStartupStatus(): Promise<StartupStatus>
 ```
 
-### Hooks (`hooks/useAnimatedVisibility.ts`)
-Custom hook for modal/popup animation state:
-
-```typescript
-const { isOpen, isVisible, open, close, toggle } = useAnimatedVisibility({
-  exitDuration: 200
-});
-```
-
-Handles the common pattern of `isOpen` (DOM presence) + `isVisible` (CSS transition state).
-
 ---
 
-## Component Architecture
+## Module Architecture
 
-### App.tsx — Root Container
-- Manages `currentPage` state ("chat" | "calendar")
-- Slide animation between pages (400ms)
-- Fixed sidebar (260px) + flexible content
+### Calendar Module (`components/calendar/`)
 
-### Sidebar.tsx — Navigation
-- Chat and Calendar navigation buttons
-- Shows "New Conversation" when chat has messages
+**CalendarManager** — Main orchestrator
+- Manages calendar list, selection, and loading states
+- Handles view transitions between empty state and calendar view
+- Creates calendars via modal
 
-### ChatWindow.tsx — Chat Interface
+**CalendarView** — FullCalendar display
+- FullCalendar with dayGrid, timeGrid, interaction, rrule plugins
+- Calendar selector dropdown with context menu
+- Events popup with create/edit options
+- Set default / delete calendar actions
+
+**CreateCalendarModal** — Calendar creation
+**CreateEventModal** — Event creation with date/time pickers, recurrence, priority
+
+**Hooks:**
+- `useCalendarRange()` — Tracks current calendar view range
+- `useEventCounts()` — Fetches event counts for month view
+
+### Chat Module (`components/chat/`)
+
+**ChatWindow** — Main interface
 - Session management with UUID
 - Auto-scroll, auto-resize textarea
-- Markdown message rendering
+- Message list with loading indicator
 
-### Message.tsx — Rich Text Rendering
+**Message** — Rich text rendering
 - Code blocks with syntax highlighting
 - Markdown: headers, lists, blockquotes, bold, italic, links
 
-### Calendar.tsx — Calendar Management
-- Fetches and manages calendar list
-- Create calendar modal
-- Default calendar preference
+**EmptyState** — Welcome screen with suggestions
+**InputBar** — Chat input with send button
 
-### CalendarView.tsx — FullCalendar Display
-- FullCalendar with dayGrid, timeGrid, interaction
-- Calendar selector dropdown with context menu
-- Set default / delete calendar actions
+### Loading Module (`components/loading/`)
 
-### LoadingScreen.tsx — Startup Display
+**LoadingScreen** — Startup display
 - Polls `/startup/status`
 - Progress bar with current step label
+- Fade-out transition when complete
+
+### Sidebar Module (`components/sidebar/`)
+
+**Sidebar** — Navigation
+- Chat and Calendar navigation buttons
+- Shows "New Conversation" when chat has messages
+- Maia avatar footer
 
 ---
 
@@ -169,6 +207,8 @@ Handles the common pattern of `isOpen` (DOM presence) + `isVisible` (CSS transit
 | `/calendar/create_calendar` | POST | Create new calendar |
 | `/calendar/delete_calendar` | POST | Delete calendar |
 | `/calendar/set_default_calendar` | POST | Set default calendar |
+| `/calendar/create_event` | POST | Create calendar event |
+| `/calendar/get_event_counts` | POST | Get event counts by priority |
 | `/startup/status` | GET | Get startup progress |
 
 ---
@@ -180,7 +220,7 @@ Handles the common pattern of `isOpen` (DOM presence) + `isVisible` (CSS transit
 - `axios@1.11.0`
 
 **Calendar:**
-- `@fullcalendar/react`, `core`, `daygrid`, `timegrid`, `interaction`
+- `@fullcalendar/react`, `core`, `daygrid`, `timegrid`, `interaction`, `rrule`
 
 **Build:**
 - `vite@7.1.3`, `typescript~5.8.3`, `@tauri-apps/cli@2.9.6`
@@ -191,12 +231,31 @@ Handles the common pattern of `isOpen` (DOM presence) + `isVisible` (CSS transit
 
 | I want to... | Go to |
 |--------------|-------|
-| Add/modify an icon | `components/icons.tsx` |
+| Add/modify an icon | `components/shared/icons.tsx` |
+| Add shared hook | `components/shared/hooks.ts` |
 | Change theme colors | `tokens.ts` |
 | Add API endpoint | `api/index.ts` |
-| Modify chat UI | `components/ChatWindow.tsx` |
-| Edit message rendering | `components/Message.tsx` |
-| Update calendar features | `components/Calendar.tsx`, `CalendarView.tsx` |
-| Add animated dialog | `hooks/useAnimatedVisibility.ts` |
-| Change navigation | `components/Sidebar.tsx` |
-| Modify page routing | `components/App.tsx` |
+| Modify chat UI | `components/chat/ChatWindow.tsx` |
+| Edit message rendering | `components/chat/Message.tsx`, `markdown.tsx` |
+| Update calendar view | `components/calendar/CalendarView.tsx` |
+| Modify event creation | `components/calendar/CreateEventModal.tsx` |
+| Change calendar management | `components/calendar/CalendarManager.tsx` |
+| Add calendar hooks | `components/calendar/hooks.ts` |
+| Change navigation | `components/sidebar/Sidebar.tsx` |
+| Modify page routing | `src/App.tsx` |
+| Update loading screen | `components/loading/LoadingScreen.tsx` |
+
+---
+
+## Import Examples
+
+```typescript
+// Import from module barrel exports
+import { Sidebar, type Page } from "./components/sidebar";
+import { ChatWindow, Message } from "./components/chat";
+import { CalendarManager, CalendarView } from "./components/calendar";
+import { LoadingScreen } from "./components/loading";
+
+// Import shared utilities
+import { PlusIcon, CoffeeIcon, useAnimatedVisibility } from "./components/shared";
+```

@@ -1,99 +1,23 @@
-import { useMemo } from "react";
+// Markdown parsing utilities for chat messages
 
-type Props = { role: "user" | "maia"; text: string };
-
-// Design tokens matching ChatWindow (cozy coffee shop theme)
-const tokens = {
-  colors: {
-    background: "#1c1816",
-    surface: "#2a2320",
-    surfaceSecondary: "#221a14",
-    border: "#4a3f38",
-    borderLight: "#5a4d44",
-    text: "#f5ebe0",
-    textSecondary: "#c4b5a8",
-    textMuted: "#8a7b6d",
-    accent: "#d4a574",
-    userBubble: "#3a322d",
-    codeBackground: "#1c1816",
-    codeText: "#e8dfd4",
-    inlineCodeBg: "#3a322d",
-    inlineCodeText: "#f5ebe0",
-  },
-  fonts: {
-    sans: '"Handlee", "Gochi Hand", cursive',
-    mono: '"JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace',
-  },
-  spacing: {
-    xs: 4,
-    sm: 8,
-    md: 16,
-    lg: 24,
-  },
-  radius: {
-    sm: 8,
-    md: 12,
-    lg: 16,
-  },
-};
+import tokens from "../../tokens";
 
 const markdownFontFamily = '"Cormorant Garamond", "Garamond", "Georgia", serif';
-
-// User avatar icon
-function UserIcon() {
-  return (
-    <span role="img" aria-label="user" style={{ fontSize: 25 }}>
-      🧑🏻
-    </span>
-  );
-}
-
-// Robot avatar icon for Maia
-function RobotIcon() {
-  return (
-    <svg
-      width="25"
-      height="25"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke={tokens.colors.accent}
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      {/* Head */}
-      <rect x="5" y="8" width="14" height="10" rx="2" />
-      {/* Antenna */}
-      <line x1="12" y1="8" x2="12" y2="4" />
-      <circle cx="12" cy="3" r="1" fill={tokens.colors.accent} />
-      {/* Eyes */}
-      <circle cx="9" cy="12" r="1.5" fill={tokens.colors.accent} />
-      <circle cx="15" cy="12" r="1.5" fill={tokens.colors.accent} />
-      {/* Smile */}
-      <path d="M9 15.5c0 0 1.5 1 3 1s3-1 3-1" />
-      {/* Ears */}
-      <rect x="2" y="11" width="2" height="4" rx="0.5" />
-      <rect x="20" y="11" width="2" height="4" rx="0.5" />
-    </svg>
-  );
-}
-
-// Code fences must start at line start.
 const codeBlockRegex = /(^|\n)```([a-zA-Z0-9_-]*)\n([\s\S]*?)\n```(?=\n|$)/g;
 
-function parseText(text: string): React.ReactNode[] {
+export function parseText(text: string): React.ReactNode[] {
   const out: React.ReactNode[] = [];
   let lastIndex = 0;
   let keyIndex = 0;
   let sawMarkdown = false;
   const getKey = () => `part-${keyIndex++}`;
 
-  // Markdown starts at a header or any list item.
   const firstMarkdownStartIndex = (segment: string) => {
     const match = segment.match(/(^|\n)(#{1,6}\s+|\s*[-*+]\s+|\s*\d+\.\s+)/);
     if (!match || match.index == null) return null;
     return match.index + (match[1] ? match[1].length : 0);
   };
+
   const firstMarkdownStopMatch = (segment: string) => {
     const lines = segment.split("\n");
     let offset = 0;
@@ -173,19 +97,15 @@ function parseText(text: string): React.ReactNode[] {
 
   for (const match of text.matchAll(codeBlockRegex)) {
     const matchIndex = match.index ?? 0;
-
-    // Text before the code block
     if (matchIndex > lastIndex) {
       pushTextSegment(text.slice(lastIndex, matchIndex));
     }
-
     const language = (match[2] || "").trim();
     const code = match[3] ?? "";
     out.push(<CodeBlock key={getKey()} code={code} language={language} />);
     lastIndex = matchIndex + match[0].length;
   }
 
-  // Remaining text
   if (lastIndex < text.length) {
     pushTextSegment(text.slice(lastIndex));
   }
@@ -193,7 +113,7 @@ function parseText(text: string): React.ReactNode[] {
   return out;
 }
 
-function parseInlineMarkdown(text: string, getKey: () => string): React.ReactNode[] {
+export function parseInlineMarkdown(text: string, getKey: () => string): React.ReactNode[] {
   const nodes: React.ReactNode[] = [];
   let remaining = text;
 
@@ -230,7 +150,7 @@ function parseInlineMarkdown(text: string, getKey: () => string): React.ReactNod
         <code
           key={getKey()}
           style={{
-            backgroundColor: tokens.colors.inlineCodeBg,
+            backgroundColor: tokens.colors.surfaceSecondary,
             color: tokens.colors.accent,
             padding: "2px 7px",
             borderRadius: 4,
@@ -303,7 +223,6 @@ function MarkdownBlock({ text }: { text: string }) {
   const isBlockStart = (line: string) =>
     isHeading(line) || isBlockquote(line) || isListItem(line) || isOrderedItem(line) || isHr(line);
 
-  // Shared list item styles
   const listItemStyle: React.CSSProperties = {
     paddingLeft: 4,
     marginBottom: 4,
@@ -419,9 +338,29 @@ function MarkdownBlock({ text }: { text: string }) {
             margin: `16px 0`,
           }}
         >
-          <div style={{ flex: 1, height: 1, background: `linear-gradient(to right, transparent, ${tokens.colors.borderLight})` }} />
-          <div style={{ width: 4, height: 4, borderRadius: "50%", backgroundColor: tokens.colors.accent, opacity: 0.5 }} />
-          <div style={{ flex: 1, height: 1, background: `linear-gradient(to left, transparent, ${tokens.colors.borderLight})` }} />
+          <div
+            style={{
+              flex: 1,
+              height: 1,
+              background: `linear-gradient(to right, transparent, ${tokens.colors.borderLight})`,
+            }}
+          />
+          <div
+            style={{
+              width: 4,
+              height: 4,
+              borderRadius: "50%",
+              backgroundColor: tokens.colors.accent,
+              opacity: 0.5,
+            }}
+          />
+          <div
+            style={{
+              flex: 1,
+              height: 1,
+              background: `linear-gradient(to left, transparent, ${tokens.colors.borderLight})`,
+            }}
+          />
         </div>
       );
       i += 1;
@@ -640,7 +579,6 @@ function MarkdownBlock({ text }: { text: string }) {
   );
 }
 
-// Code block component
 function CodeBlock({ code, language }: { code: string; language: string }) {
   return (
     <div
@@ -648,7 +586,7 @@ function CodeBlock({ code, language }: { code: string; language: string }) {
         margin: `12px 0`,
         borderRadius: tokens.radius.sm,
         overflow: "hidden",
-        backgroundColor: tokens.colors.codeBackground,
+        backgroundColor: tokens.colors.background,
         border: `1px solid ${tokens.colors.border}`,
         boxShadow: `0 2px 8px rgba(0, 0, 0, 0.15)`,
       }}
@@ -695,94 +633,11 @@ function CodeBlock({ code, language }: { code: string; language: string }) {
           fontSize: 13,
           lineHeight: 1.6,
           fontFamily: tokens.fonts.mono,
-          color: tokens.colors.codeText,
+          color: tokens.colors.text,
         }}
       >
         <code>{code}</code>
       </pre>
-    </div>
-  );
-}
-
-export default function Message({ role, text }: Props) {
-  const isUser = role === "user";
-  const parsedContent = useMemo(() => parseText(text), [text]);
-
-  return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "flex-start",
-        gap: tokens.spacing.sm,
-        padding: `${tokens.spacing.md}px 0`,
-        flexDirection: isUser ? "row-reverse" : "row",
-      }}
-    >
-      {/* Avatar */}
-      <div
-        style={{
-          width: 40,
-          height: 40,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexShrink: 0,
-        }}
-      >
-        <div style={{ transform: "scale(1.15)" }}>
-          {isUser ? <UserIcon /> : <RobotIcon />}
-        </div>
-      </div>
-
-      {/* Message content */}
-      <div
-        style={{
-          flex: 1,
-          maxWidth: "calc(100% - 44px)",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: isUser ? "flex-end" : "flex-start",
-        }}
-      >
-        {/* Role label */}
-        <span
-          style={{
-            fontSize: 16,
-            fontWeight: 500,
-            color: tokens.colors.textSecondary,
-            marginBottom: tokens.spacing.xs,
-          }}
-        >
-          {isUser ? "Ronald" : "Maia"}
-        </span>
-
-        {/* Message bubble */}
-        <div
-          style={{
-            backgroundColor: isUser ? tokens.colors.userBubble : tokens.colors.surface,
-            borderRadius: tokens.radius.lg,
-            padding: `${tokens.spacing.sm}px ${tokens.spacing.md}px`,
-            maxWidth: "85%",
-          }}
-        >
-          <div
-            style={{
-              fontSize: 18,
-              fontWeight: 10,
-              lineHeight: 1.8,
-              letterSpacing: "2px",
-              padding: `${tokens.spacing.sm}px ${tokens.spacing.sm}px`,
-              color: tokens.colors.text,
-              fontFamily: tokens.fonts.sans,
-              wordBreak: "break-word",
-              overflowWrap: "break-word",
-              whiteSpace: "pre-wrap",
-            }}
-          >
-            {parsedContent}
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

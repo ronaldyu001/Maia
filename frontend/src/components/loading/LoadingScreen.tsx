@@ -1,20 +1,8 @@
-import { useEffect, useState, useRef } from "react";
-import MaiaAnimaBot from "../assets/Maia_Avatars/1.0-1.x/1.0/Anima Bot.gif";
+// Startup loading screen with progress indicator
 
-const tokens = {
-  colors: {
-    background: "#1c1816",
-    accent: "#d4a574",
-    accentHover: "#c4956a",
-    text: "#f5ebe0",
-    textSecondary: "#c4b5a8",
-    textMuted: "#8a7b6d",
-  },
-  fonts: {
-    sans: '"Handlee", "Gochi Hand", cursive',
-    elegant: '"Cormorant Garamond", Georgia, serif',
-  },
-};
+import { useEffect, useState, useRef } from "react";
+import tokens from "../../tokens";
+import MaiaAnimaBot from "../../assets/Maia_Avatars/1.0-1.x/1.0/Anima Bot.gif";
 
 interface StartupEvent {
   label: string;
@@ -28,7 +16,11 @@ interface StartupStatus {
   finished: boolean;
 }
 
-export default function LoadingScreen({ onFinished }: { onFinished: () => void }) {
+interface LoadingScreenProps {
+  onFinished: () => void;
+}
+
+export default function LoadingScreen({ onFinished }: LoadingScreenProps) {
   const [fadeOut, setFadeOut] = useState(false);
   const [progress, setProgress] = useState(0);
   const [statusLabel, setStatusLabel] = useState("Connecting to backend...");
