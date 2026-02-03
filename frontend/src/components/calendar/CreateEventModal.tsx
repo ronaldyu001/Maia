@@ -7,13 +7,16 @@ import { CoffeeIcon } from "../shared/icons";
 import { Dropdown } from "./Dropdown";
 import { MONTH_LABELS, WEEKDAY_OPTIONS, RECURRENCE_FREQ_OPTIONS } from "./constants";
 import { daysInMonth, toOption, to24Hour } from "./helpers";
-import type { CalendarItem, Priority } from "./types";
+import type { CalendarItem, EventListItem, Priority } from "./types";
 
 interface CreateEventModalProps {
   isOpen: boolean;
   onClose: () => void;
   selectedCalendar: CalendarItem;
   onEventCreated?: () => void;
+  mode?: "create" | "edit";
+  initialEvent?: EventListItem | null;
+  onEventUpdated?: () => void;
 }
 
 export function CreateEventModal({
@@ -21,7 +24,11 @@ export function CreateEventModal({
   onClose,
   selectedCalendar,
   onEventCreated,
+  mode = "create",
+  initialEvent = null,
+  onEventUpdated,
 }: CreateEventModalProps) {
+  const isEditMode = mode === "edit";
   const initialTime = useMemo(() => {
     const base = new Date();
     base.setMinutes(0, 0, 0);
@@ -112,6 +119,42 @@ export function CreateEventModal({
     if (endDay > max) setEndDay(max);
   }, [endDay, endMonth, endYear]);
 
+  const weekdayMap = useMemo(() => ["SU", "MO", "TU", "WE", "TH", "FR", "SA"], []);
+
+  function parseDateTime(value?: string | null) {
+    if (!value) return null;
+    let normalized = value;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(normalized)) {
+      normalized = `${normalized}T00:00:00`;
+    } else if (/^\d{4}-\d{2}-\d{2} /.test(normalized)) {
+      normalized = normalized.replace(" ", "T");
+    }
+    let parsed = new Date(normalized);
+    if (!Number.isNaN(parsed.getTime())) return parsed;
+    if (!normalized.endsWith("Z")) {
+      parsed = new Date(`${normalized}Z`);
+      if (!Number.isNaN(parsed.getTime())) return parsed;
+    }
+    return null;
+  }
+
+  function to12Hour(hour24: number) {
+    const meridiem = hour24 >= 12 ? "PM" : "AM";
+    const hour = ((hour24 + 11) % 12) + 1;
+    return { hour, meridiem };
+  }
+
+  function mapPriorityToLabel(value?: number | null): Priority {
+    if (value === 1) return "high";
+    if (value === 5) return "medium";
+    if (value === 9) return "low";
+    if (value != null) {
+      if (value <= 3) return "high";
+      if (value <= 6) return "medium";
+    }
+    return "low";
+  }
+
   function resetForm() {
     setEventSummary("");
     setEventDescription("");
@@ -120,7 +163,6 @@ export function CreateEventModal({
     setIsAllDay(false);
     setIsRecurring(false);
     setRecurrenceFreq("weekly");
-    const weekdayMap = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
     setRecurrenceDays([weekdayMap[initialTime.start.getDay()]]);
     setStartMonth(initialTime.start.getMonth());
     setStartDay(initialTime.start.getDate());
@@ -135,6 +177,70 @@ export function CreateEventModal({
     setEndMinute(initialTime.end.getMinutes());
     setEndMeridiem(initialTime.end.getHours() >= 12 ? "PM" : "AM");
   }
+
+  useEffect(() => {
+    if (!isOpen) return;
+    if (!isEditMode || !initialEvent) {
+      if (!isEditMode) resetForm();
+      return;
+    }
+
+    const start = parseDateTime(initialEvent.dtstart) ?? initialTime.start;
+    const end = parseDateTime(initialEvent.dtend) ?? initialTime.end;
+    const hasTimeFields = Boolean(initialEvent.timestart || initialEvent.timeend);
+    const allDayCandidate =
+      !hasTimeFields &&
+      start.getHours() === 0 &&
+      start.getMinutes() === 0 &&
+      ((end.getHours() === 23 && end.getMinutes() >= 59) ||
+        (end.getHours() === 0 && end.getMinutes() === 0 && end > start));
+
+    setEventSummary(initialEvent.summary ?? "");
+    setEventDescription(initialEvent.description ?? "");
+    setEventPriority(mapPriorityToLabel(initialEvent.priority));
+    setEventError(null);
+    setIsAllDay(allDayCandidate);
+    setIsRecurring(Boolean(initialEvent.rrule_freq));
+    setRecurrenceFreq(initialEvent.rrule_freq ?? "weekly");
+    setRecurrenceDays(
+      initialEvent.rrule_byweekday?.length
+        ? initialEvent.rrule_byweekday
+        : [weekdayMap[start.getDay()]]
+    );
+
+    setStartMonth(start.getMonth());
+    setStartDay(start.getDate());
+    setStartYear(start.getFullYear());
+    setEndMonth(end.getMonth());
+    setEndDay(end.getDate());
+    setEndYear(end.getFullYear());
+
+    if (initialEvent.timestart) {
+      const [hour, minute] = initialEvent.timestart.split(":").map((part) => Number(part));
+      const { hour: hour12, meridiem } = to12Hour(Number.isNaN(hour) ? 0 : hour);
+      setStartHour(hour12);
+      setStartMinute(Number.isNaN(minute) ? 0 : minute);
+      setStartMeridiem(meridiem);
+    } else {
+      const { hour, meridiem } = to12Hour(start.getHours());
+      setStartHour(hour);
+      setStartMinute(start.getMinutes());
+      setStartMeridiem(meridiem);
+    }
+
+    if (initialEvent.timeend) {
+      const [hour, minute] = initialEvent.timeend.split(":").map((part) => Number(part));
+      const { hour: hour12, meridiem } = to12Hour(Number.isNaN(hour) ? 0 : hour);
+      setEndHour(hour12);
+      setEndMinute(Number.isNaN(minute) ? 0 : minute);
+      setEndMeridiem(meridiem);
+    } else {
+      const { hour, meridiem } = to12Hour(end.getHours());
+      setEndHour(hour);
+      setEndMinute(end.getMinutes());
+      setEndMeridiem(meridiem);
+    }
+  }, [initialEvent, initialTime, isEditMode, isOpen, weekdayMap]);
 
   function handleClose() {
     if (eventLoading) return;
@@ -156,7 +262,7 @@ export function CreateEventModal({
       + [pad(date.getHours()), pad(date.getMinutes()), pad(date.getSeconds())].join(":");
   }
 
-  async function handleCreate() {
+  async function handleSubmit() {
     if (!eventSummary.trim()) {
       setEventError("Please enter an event title.");
       return;
@@ -190,22 +296,42 @@ export function CreateEventModal({
     const priorityValue = priorityMap[eventPriority];
 
     try {
-      await axios.post("http://127.0.0.1:8000/calendar/create_event", {
-        calendar_url: selectedCalendar.url,
-        summary: eventSummary.trim(),
-        description: eventDescription.trim() || null,
-        dtstart: toLocalISOString(dtstart),
-        dtend: toLocalISOString(dtend),
-        location: null,
-        priority: priorityValue,
-        rrule_freq: isRecurring ? recurrenceFreq : null,
-        rrule_byweekday: isRecurring ? recurrenceDays : null,
-      });
-      onEventCreated?.();
+      if (isEditMode) {
+        if (!initialEvent?.url) {
+          setEventError("Missing event reference for editing.");
+          return;
+        }
+        await axios.post("http://127.0.0.1:8000/calendar/edit_event", {
+          event_url: initialEvent.url,
+          calendar_url: selectedCalendar.url,
+          summary: eventSummary.trim(),
+          description: eventDescription.trim() || null,
+          dtstart: toLocalISOString(dtstart),
+          dtend: toLocalISOString(dtend),
+          location: null,
+          priority: priorityValue,
+          rrule_freq: isRecurring ? recurrenceFreq : null,
+          rrule_byweekday: isRecurring ? recurrenceDays : null,
+        });
+        onEventUpdated?.();
+      } else {
+        await axios.post("http://127.0.0.1:8000/calendar/create_event", {
+          calendar_url: selectedCalendar.url,
+          summary: eventSummary.trim(),
+          description: eventDescription.trim() || null,
+          dtstart: toLocalISOString(dtstart),
+          dtend: toLocalISOString(dtend),
+          location: null,
+          priority: priorityValue,
+          rrule_freq: isRecurring ? recurrenceFreq : null,
+          rrule_byweekday: isRecurring ? recurrenceDays : null,
+        });
+        onEventCreated?.();
+      }
       handleClose();
     } catch (err) {
-      console.error("Failed to create event:", err);
-      setEventError("Could not create event. Please try again.");
+      console.error(isEditMode ? "Failed to edit event:" : "Failed to create event:", err);
+      setEventError(isEditMode ? "Could not update event. Please try again." : "Could not create event. Please try again.");
     } finally {
       setEventLoading(false);
     }
@@ -225,7 +351,7 @@ export function CreateEventModal({
         alignItems: "center",
         justifyContent: "center",
         padding: tokens.spacing.lg,
-        zIndex: 100,
+        zIndex: 7000,
         opacity: isVisible ? 1 : 0,
         transition: `opacity ${modalTransitionMs}ms ease`,
       }}
@@ -266,7 +392,7 @@ export function CreateEventModal({
               fontFamily: tokens.fonts.sans,
             }}
           >
-            New Event
+            {isEditMode ? "Edit Event" : "New Event"}
           </span>
         </div>
 
@@ -278,7 +404,7 @@ export function CreateEventModal({
             marginBottom: tokens.spacing.lg,
           }}
         >
-          Create an Event
+          {isEditMode ? "Update Event Details" : "Create an Event"}
         </h3>
 
         {/* Event Title */}
@@ -471,7 +597,6 @@ export function CreateEventModal({
           </div>
         </div>
 
-        {/* Recurrence */}
         <div style={{ marginBottom: tokens.spacing.md }}>
           <div
             style={{
@@ -722,7 +847,7 @@ export function CreateEventModal({
             Cancel
           </button>
           <button
-            onClick={handleCreate}
+            onClick={handleSubmit}
             onMouseEnter={() => setHoverCreateBtn(true)}
             onMouseLeave={() => setHoverCreateBtn(false)}
             disabled={eventLoading || !eventSummary.trim()}
@@ -746,7 +871,7 @@ export function CreateEventModal({
               transition: "all 0.15s ease",
             }}
           >
-            {eventLoading ? "Creating..." : "Create Event"}
+            {eventLoading ? (isEditMode ? "Saving..." : "Creating...") : isEditMode ? "Save Changes" : "Create Event"}
           </button>
         </div>
       </div>

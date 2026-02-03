@@ -19,6 +19,35 @@ def _local_time(value: datetime | None) -> time | None:
     return value.time()
 
 
+def _parse_rrule(rrule_prop) -> tuple[Optional[str], Optional[list[str]]]:
+    if not rrule_prop:
+        return None, None
+    try:
+        if hasattr(rrule_prop, "get"):
+            freq_val = rrule_prop.get("FREQ")
+            byday_val = rrule_prop.get("BYDAY")
+            if isinstance(freq_val, (list, tuple)):
+                freq_val = freq_val[0] if freq_val else None
+            if isinstance(byday_val, (list, tuple)):
+                byday = [str(day).upper() for day in byday_val]
+            elif byday_val:
+                byday = [part.strip().upper() for part in str(byday_val).split(",") if part.strip()]
+            else:
+                byday = None
+            freq = str(freq_val).lower() if freq_val else None
+            return freq, byday
+        if hasattr(rrule_prop, "to_ical"):
+            rrule_str = rrule_prop.to_ical().decode("utf-8")
+        else:
+            rrule_str = str(rrule_prop)
+        parts = dict(part.split("=", 1) for part in rrule_str.split(";") if "=" in part)
+        freq = parts.get("FREQ") or parts.get("freq")
+        byday = parts.get("BYDAY") or parts.get("byday")
+        byweekday = [d.strip().upper() for d in byday.split(",")] if byday else None
+        return freq.lower() if freq else None, byweekday
+    except Exception:
+        return None, None
+
 
 
 def _get_ical_value(component, prop: str, default=None):
@@ -71,6 +100,8 @@ def edit_event(req: EditEventRequest) -> EditEventResponse:
         current_dtend = _get_ical_value(vevent, "dtend")
         current_location = _get_ical_value(vevent, "location")
         current_priority_raw = vevent.get("priority")
+        current_rrule = vevent.get("rrule")
+        current_rrule_freq, current_rrule_byweekday = _parse_rrule(current_rrule)
         current_priority = int(current_priority_raw) if current_priority_raw is not None else None
 
         # Apply updates (use new value if provided, else keep current)
@@ -80,6 +111,10 @@ def edit_event(req: EditEventRequest) -> EditEventResponse:
         new_dtend = req.dtend if req.dtend is not None else current_dtend
         new_location = req.location if req.location is not None else current_location
         new_priority = req.priority if req.priority is not None else current_priority
+        new_rrule_freq = req.rrule_freq if req.rrule_freq is not None else current_rrule_freq
+        new_rrule_byweekday = (
+            req.rrule_byweekday if req.rrule_byweekday is not None else current_rrule_byweekday
+        )
 
         # Update the VEVENT component
         if "summary" in vevent:
@@ -109,6 +144,16 @@ def edit_event(req: EditEventRequest) -> EditEventResponse:
         if new_priority is not None:
             vevent.add("priority", new_priority)
 
+        fields_set = getattr(req, "__fields_set__", getattr(req, "model_fields_set", set()))
+        if "rrule_freq" in fields_set or "rrule_byweekday" in fields_set:
+            if "rrule" in vevent:
+                del vevent["rrule"]
+            if new_rrule_freq:
+                rrule: dict[str, object] = {"FREQ": new_rrule_freq.upper()}
+                if new_rrule_byweekday:
+                    rrule["BYDAY"] = [day.upper() for day in new_rrule_byweekday]
+                vevent.add("rrule", rrule)
+
         # Update last-modified timestamp
         if "last-modified" in vevent:
             del vevent["last-modified"]
@@ -136,6 +181,8 @@ def edit_event(req: EditEventRequest) -> EditEventResponse:
                 location=new_location,
                 priority=new_priority,
                 url=req.event_url,
+                rrule_freq=new_rrule_freq,
+                rrule_byweekday=new_rrule_byweekday,
             )
         )
 

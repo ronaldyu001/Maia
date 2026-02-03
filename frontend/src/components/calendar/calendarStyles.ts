@@ -14,7 +14,8 @@ export const calendarStyles = `
     --fc-button-active-border-color: ${tokens.colors.accent};
     --fc-page-bg-color: transparent;
     --fc-neutral-bg-color: ${tokens.colors.surface};
-    --fc-today-bg-color: rgba(212, 165, 116, 0.08);
+    --fc-today-bg-color: rgba(212, 165, 116, 0.04);
+    --fc-highlight-color: rgba(212, 165, 116, 0.03);
     --fc-event-bg-color: ${tokens.colors.accent};
     --fc-event-border-color: ${tokens.colors.accent};
     --fc-event-text-color: ${tokens.colors.background};
@@ -69,6 +70,35 @@ export const calendarStyles = `
 
   .fc .fc-daygrid-day:hover {
     background-color: rgba(212, 165, 116, 0.04);
+  }
+
+  .fc .fc-highlight,
+  .fc .fc-timegrid-col-bg .fc-highlight,
+  .fc .fc-timegrid-slot.fc-highlight,
+  .fc .fc-timegrid-slot-lane.fc-highlight,
+  .fc .fc-timegrid-bg-harness .fc-highlight,
+  .fc .fc-timegrid-bg-harness-inset .fc-highlight {
+    background-color: rgba(212, 165, 116, 0.03) !important;
+  }
+
+  .fc .fc-daygrid-day.fc-day-selected,
+  .fc .fc-daygrid-day.fc-day-selected .fc-daygrid-day-frame,
+  .fc .fc-daygrid-day.fc-selected,
+  .fc .fc-daygrid-day.fc-selected .fc-daygrid-day-frame,
+  .fc .fc-timegrid-col.fc-day-selected,
+  .fc .fc-timegrid-col.fc-day-selected .fc-timegrid-col-frame,
+  .fc .fc-timegrid-col.fc-selected,
+  .fc .fc-timegrid-col.fc-selected .fc-timegrid-col-frame,
+  .fc .fc-timegrid-slot-lane.fc-selected,
+  .fc .fc-timegrid-slot.fc-selected {
+    background-color: rgba(212, 165, 116, 0.03) !important;
+  }
+
+  .fc .fc-event.fc-event-mirror,
+  .fc .fc-event.fc-event-selected {
+    background-color: rgba(212, 165, 116, 0.06) !important;
+    border-color: transparent !important;
+    box-shadow: none;
   }
 
   .fc .fc-daygrid-day-number {
@@ -127,14 +157,48 @@ export const calendarStyles = `
     border-color: ${tokens.colors.border};
   }
 
+  .fc .fc-scroller {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .fc .fc-scroller::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
   .fc .fc-timegrid-slot {
-    height: 48px;
+    height: 30px;
+    background: rgba(212, 165, 116, 0.02);
   }
 
   .fc .fc-timegrid-slot-label-cushion {
     font-family: ${tokens.fonts.elegant};
     color: ${tokens.colors.textMuted};
-    font-size: 0.8rem;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .fc .fc-timegrid-slot td {
+    border-top: none;
+  }
+
+  .fc .fc-timegrid-slot.fc-timegrid-slot-lane,
+  .fc .fc-timegrid-slot.fc-timegrid-slot-label {
+    border-top: 1px solid rgba(212, 165, 116, 0.05) !important;
+    background-image: linear-gradient(to bottom, rgba(212, 165, 116, 0.05), rgba(212, 165, 116, 0.42));
+    background-repeat: no-repeat;
+    background-size: 100% 1px;
+    background-position: top left;
+  }
+
+  .fc .fc-timegrid-slot-minor.fc-timegrid-slot-lane,
+  .fc .fc-timegrid-slot-minor.fc-timegrid-slot-label {
+    border-top: 1px solid rgba(212, 165, 116, 0.04) !important;
+    background-image: linear-gradient(to bottom, rgba(212, 165, 116, 0.04), rgba(212, 165, 116, 0.04));
+    background-repeat: no-repeat;
+    background-size: 100% 1px;
+    background-position: top left;
   }
 
   .fc .fc-timegrid-now-indicator-line {
@@ -150,9 +214,34 @@ export const calendarStyles = `
   .fc .fc-event {
     border-radius: ${tokens.radius.sm}px;
     font-family: ${tokens.fonts.elegant};
-    padding: 2px 6px;
+    padding: 4px 6px;
     border: none;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    font-size: 0.82rem;
+  }
+
+  .fc .fc-event.event-priority-high,
+  .fc .fc-event.event-priority-high .fc-event-main,
+  .fc .fc-event.event-priority-high .fc-event-title {
+    background-color: rgba(196, 96, 72, 0.95) !important;
+    border-color: rgba(196, 96, 72, 0.95) !important;
+    color: ${tokens.colors.background} !important;
+  }
+
+  .fc .fc-event.event-priority-medium,
+  .fc .fc-event.event-priority-medium .fc-event-main,
+  .fc .fc-event.event-priority-medium .fc-event-title {
+    background-color: rgba(212, 165, 116, 0.9) !important;
+    border-color: rgba(212, 165, 116, 0.9) !important;
+    color: ${tokens.colors.background} !important;
+  }
+
+  .fc .fc-event.event-priority-low,
+  .fc .fc-event.event-priority-low .fc-event-main,
+  .fc .fc-event.event-priority-low .fc-event-title {
+    background-color: rgba(180, 140, 120, 0.75) !important;
+    border-color: rgba(180, 140, 120, 0.75) !important;
+    color: ${tokens.colors.background} !important;
   }
 
   .fc .fc-daygrid-event-dot {

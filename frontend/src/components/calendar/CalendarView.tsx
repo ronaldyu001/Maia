@@ -16,8 +16,6 @@ import {
   CheckIcon,
   MoreIcon,
   PlusIcon,
-  EventIcon,
-  EditIcon,
   StarIcon,
 } from "../shared/icons";
 import { MONTH_LABELS } from "./constants";
@@ -50,16 +48,18 @@ export default function CalendarView({
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [isContextOpen, setIsContextOpen] = useState(false);
   const [isContextVisible, setIsContextVisible] = useState(false);
-  const [isEventsPopupOpen, setIsEventsPopupOpen] = useState(false);
-  const [isEventsPopupVisible, setIsEventsPopupVisible] = useState(false);
   const [isCreateEventOpen, setIsCreateEventOpen] = useState(false);
+  const [isEditEventOpen, setIsEditEventOpen] = useState(false);
+  const [editingEvent, setEditingEvent] = useState<EventListItem | null>(null);
+  const [isEventMenuOpen, setIsEventMenuOpen] = useState(false);
+  const [isEventMenuVisible, setIsEventMenuVisible] = useState(false);
+  const [eventMenuPos, setEventMenuPos] = useState({ x: 0, y: 0 });
+  const [eventMenuEvent, setEventMenuEvent] = useState<EventListItem | null>(null);
 
   // Hover states
   const [tabHover, setTabHover] = useState(false);
-  const [eventsTabHover, setEventsTabHover] = useState(false);
   const [hoveredCalendar, setHoveredCalendar] = useState<string | null>(null);
   const [hoveredMoreBtn, setHoveredMoreBtn] = useState<string | null>(null);
-  const [hoveredEventOption, setHoveredEventOption] = useState<string | null>(null);
 
   // Context menu
   const [contextCalendar, setContextCalendar] = useState<CalendarItem | null>(null);
@@ -80,10 +80,10 @@ export default function CalendarView({
   // Refs
   const popupRef = useRef<HTMLDivElement>(null);
   const contextRef = useRef<HTMLDivElement>(null);
-  const eventsPopupRef = useRef<HTMLDivElement>(null);
   const countPopupRef = useRef<HTMLDivElement>(null);
   const tabRef = useRef<HTMLButtonElement>(null);
-  const eventsTabRef = useRef<HTMLButtonElement>(null);
+  const eventMenuRef = useRef<HTMLDivElement>(null);
+  const eventMenuHandlersRef = useRef(new WeakMap<HTMLElement, (event: MouseEvent) => void>());
   const calendarTransitionRef = useRef<number | null>(null);
   const prevRangeStartRef = useRef<Date | null>(null);
   const prevViewTypeRef = useRef<string | null>(null);
@@ -116,6 +116,14 @@ export default function CalendarView({
     () => MONTH_LABELS.map((label, value) => ({ label, value })),
     []
   );
+
+  const dayOptions = useMemo(() => {
+    const max = daysInMonth(currentYear, currentMonth);
+    return Array.from({ length: max }, (_, index) => {
+      const day = index + 1;
+      return { label: String(day), value: day };
+    });
+  }, [currentMonth, currentYear]);
 
   const yearOptions = useMemo(() => {
     const startYear = currentYear - 4;
@@ -163,20 +171,20 @@ export default function CalendarView({
   }, [isContextOpen]);
 
   useEffect(() => {
-    if (isEventsPopupOpen) {
-      requestAnimationFrame(() => setIsEventsPopupVisible(true));
-    } else {
-      setIsEventsPopupVisible(false);
-    }
-  }, [isEventsPopupOpen]);
-
-  useEffect(() => {
     if (isCountPopupOpen) {
       requestAnimationFrame(() => setIsCountPopupVisible(true));
     } else {
       setIsCountPopupVisible(false);
     }
   }, [isCountPopupOpen]);
+
+  useEffect(() => {
+    if (isEventMenuOpen) {
+      requestAnimationFrame(() => setIsEventMenuVisible(true));
+    } else {
+      setIsEventMenuVisible(false);
+    }
+  }, [isEventMenuOpen]);
 
   useEffect(() => {
     return () => {
@@ -222,22 +230,19 @@ export default function CalendarView({
   }, [isContextOpen, isCountPopupOpen]);
 
   useEffect(() => {
-    function handleEventsClickOutside(event: MouseEvent) {
-      if (isCountPopupOpen) return;
-      if (
-        eventsPopupRef.current &&
-        !eventsPopupRef.current.contains(event.target as Node) &&
-        eventsTabRef.current &&
-        !eventsTabRef.current.contains(event.target as Node)
-      ) {
-        closeEventsPopup();
+    function handleEventMenuOutside(event: MouseEvent) {
+      if (event.button !== 0) return;
+      if (eventMenuRef.current && eventMenuRef.current.contains(event.target as Node)) {
+        return;
       }
+      closeEventMenu();
     }
-    if (isEventsPopupOpen) {
-      document.addEventListener("mousedown", handleEventsClickOutside);
+
+    if (isEventMenuOpen) {
+      document.addEventListener("mousedown", handleEventMenuOutside, true);
     }
-    return () => document.removeEventListener("mousedown", handleEventsClickOutside);
-  }, [isEventsPopupOpen, isCountPopupOpen]);
+    return () => document.removeEventListener("mousedown", handleEventMenuOutside, true);
+  }, [isEventMenuOpen]);
 
   // Popup controls
   function togglePopup() {
@@ -254,18 +259,42 @@ export default function CalendarView({
     setTimeout(() => setIsPopupOpen(false), transitionMs);
   }
 
-  function toggleEventsPopup() {
-    if (isEventsPopupOpen) {
-      closeEventsPopup();
-    } else {
-      setIsEventsPopupOpen(true);
-    }
+  function closeEventMenu() {
+    setIsEventMenuVisible(false);
+    setTimeout(() => {
+      setIsEventMenuOpen(false);
+      setEventMenuEvent(null);
+    }, transitionMs);
   }
 
-  function closeEventsPopup() {
-    setIsEventsPopupVisible(false);
-    setTimeout(() => setIsEventsPopupOpen(false), transitionMs);
-  }
+  const openEventMenu = useCallback(
+    (event: MouseEvent, item: EventListItem, anchor?: HTMLElement | null) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const menuWidth = 200;
+      const menuHeight = 120;
+      const padding = 12;
+      const offsetX = -250;
+      const offsetY = 8;
+      let x = event.clientX + offsetX;
+      let y = event.clientY + offsetY;
+
+      if (x + menuWidth > window.innerWidth - padding) {
+        x = event.clientX - menuWidth - offsetX;
+      }
+      if (y + menuHeight > window.innerHeight - padding) {
+        y = event.clientY - menuHeight - offsetY;
+      }
+
+      x = Math.max(padding, Math.min(x, window.innerWidth - menuWidth - padding));
+      y = Math.max(padding, Math.min(y, window.innerHeight - menuHeight - padding));
+
+      setEventMenuPos({ x, y });
+      setEventMenuEvent(item);
+      setIsEventMenuOpen(true);
+    },
+    []
+  );
 
   const triggerCalendarTransition = useCallback(
     (direction: "next" | "prev") => {
@@ -376,6 +405,27 @@ export default function CalendarView({
       setCountPopupLoading(false);
     }
   }
+
+  const handleEditEvent = useCallback((item: EventListItem) => {
+    setEditingEvent(item);
+    setIsEditEventOpen(true);
+  }, []);
+
+  const handleDeleteEvent = useCallback(
+    async (item: EventListItem) => {
+      try {
+        await axios.post("http://127.0.0.1:8000/calendar/delete_event", {
+          event_url: item.url,
+          calendar_url: selectedCalendar.url,
+        });
+        setEventRefreshToken((prev) => prev + 1);
+        setCountPopupItems((prev) => prev.filter((event) => event.url !== item.url));
+      } catch (err) {
+        console.error("Failed to delete event:", err);
+      }
+    },
+    [selectedCalendar.url]
+  );
 
   function handleCalendarClick(calendar: CalendarItem) {
     onCalendarSelect(calendar);
@@ -488,6 +538,17 @@ export default function CalendarView({
     [currentDate, currentMonth]
   );
 
+  const handleDayChange = useCallback(
+    (value: string | number) => {
+      const day = Number(value);
+      const maxDay = daysInMonth(currentYear, currentMonth);
+      const nextDate = new Date(currentYear, currentMonth, Math.min(day, maxDay));
+      setCurrentDate(nextDate);
+      calendarRef.current?.getApi().gotoDate(nextDate);
+    },
+    [currentMonth, currentYear]
+  );
+
   const handlePrevRange = useCallback(() => {
     calendarRef.current?.getApi().prev();
   }, []);
@@ -497,7 +558,13 @@ export default function CalendarView({
   }, []);
 
   const handleViewChange = useCallback((nextView: string) => {
-    calendarRef.current?.getApi().changeView(nextView);
+    const api = calendarRef.current?.getApi();
+    if (!api) return;
+    if (nextView === "timeGridDay") {
+      api.changeView(nextView, new Date());
+      return;
+    }
+    api.changeView(nextView);
   }, []);
 
   const handleMoreLinkDidMount = useCallback(
@@ -522,6 +589,19 @@ export default function CalendarView({
     ),
     []
   );
+
+  const renderSlotLabel = useCallback((arg: { text: string }) => {
+    const withSpace = arg.text
+      .replace(/(\d)(am|pm)$/i, "$1 $2")
+      .replace(/(\d)(AM|PM)$/i, "$1 $2")
+      .replace(/(:\d{2})(am|pm)$/i, "$1 $2")
+      .replace(/(:\d{2})(AM|PM)$/i, "$1 $2");
+    return (
+      <span style={{ fontFamily: tokens.fonts.elegant, fontWeight: 500 }}>
+        {withSpace}
+      </span>
+    );
+  }, []);
 
   const renderEventContent = useCallback((arg: { event: any }) => {
     const kind = arg.event.extendedProps?.kind;
@@ -611,6 +691,26 @@ export default function CalendarView({
     );
   }, [openCountPopup]);
 
+  const handleEventDidMount = useCallback(
+    (info: { event: any; el: HTMLElement }) => {
+      if (info.event.extendedProps?.kind === "counts") return;
+      const rawEvent = info.event.extendedProps?.rawEvent as EventListItem | undefined;
+      if (!rawEvent) return;
+      const handler = (event: MouseEvent) => openEventMenu(event, rawEvent, info.el);
+      eventMenuHandlersRef.current.set(info.el, handler);
+      info.el.addEventListener("contextmenu", handler);
+    },
+    [openEventMenu]
+  );
+
+  const handleEventWillUnmount = useCallback((info: { el: HTMLElement }) => {
+    const handler = eventMenuHandlersRef.current.get(info.el);
+    if (handler) {
+      info.el.removeEventListener("contextmenu", handler);
+      eventMenuHandlersRef.current.delete(info.el);
+    }
+  }, []);
+
   const countEvents = useMemo(() => {
     if (viewType !== "dayGridMonth") return [];
     return Object.entries(eventCounts)
@@ -631,6 +731,14 @@ export default function CalendarView({
     () =>
       rangeEvents
         .map((event) => {
+          const priorityClass =
+            event.priority != null
+              ? event.priority <= 3
+                ? "event-priority-high"
+                : event.priority <= 6
+                  ? "event-priority-medium"
+                  : "event-priority-low"
+              : "event-priority-low";
           const dtstartRaw = event.dtstart ?? "";
           const isDateOnlyStart = /^\d{4}-\d{2}-\d{2}$/.test(dtstartRaw);
           const hasTimeFields = Boolean(event.timestart || event.timeend);
@@ -699,10 +807,12 @@ export default function CalendarView({
             start: baseDate,
             end: clampedEnd,
             allDay: !hasTimeFields && (isDateOnlyStart || isAllDaySpan),
+            classNames: [priorityClass],
             extendedProps: {
               location: event.location,
               priority: event.priority,
               url: event.url,
+              rawEvent: event,
             },
           };
         })
@@ -785,95 +895,28 @@ export default function CalendarView({
 
         {/* Header right section */}
         <div style={{ display: "flex", alignItems: "center", gap: 12, zIndex: 130 }}>
-          {/* Events button */}
-          <div style={{ position: "relative", zIndex: 130 }}>
-            <button
-              ref={eventsTabRef}
-              onClick={toggleEventsPopup}
-              onMouseEnter={() => setEventsTabHover(true)}
-              onMouseLeave={() => setEventsTabHover(false)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                padding: "10px 14px",
-                background:
-                  eventsTabHover || isEventsPopupOpen
-                    ? `linear-gradient(135deg, ${tokens.colors.surfaceSecondary} 0%, ${tokens.colors.surface} 100%)`
-                    : tokens.colors.surface,
-                border: `1px solid ${isEventsPopupOpen ? tokens.colors.accent : tokens.colors.border}`,
-                borderRadius: tokens.radius.md,
-                color: tokens.colors.text,
-                fontFamily: tokens.fonts.elegant,
-                fontSize: 15,
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-                boxShadow:
-                  eventsTabHover || isEventsPopupOpen
-                    ? `0 4px 12px rgba(0, 0, 0, 0.2), 0 0 0 1px ${tokens.colors.accent}22`
-                    : "0 2px 8px rgba(0, 0, 0, 0.1)",
-              }}
-            >
-              <EventIcon size={16} />
-              <span>Events</span>
-              <ChevronIcon size={14} direction={isEventsPopupOpen ? "up" : "down"} />
-            </button>
-
-            {/* Events popup */}
-            {isEventsPopupOpen && (
-              <div
-                ref={eventsPopupRef}
-                style={{
-                  position: "absolute",
-                  top: "calc(100% + 8px)",
-                  right: 0,
-                  minWidth: 200,
-                  background: `linear-gradient(160deg, ${tokens.colors.surface} 0%, #1f1a17 100%)`,
-                  border: `1px solid ${tokens.colors.border}`,
-                  borderRadius: tokens.radius.lg,
-                  boxShadow:
-                    "0 16px 48px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(212, 165, 116, 0.1)",
-                  overflow: "hidden",
-                  zIndex: 140,
-                  opacity: isEventsPopupVisible ? 1 : 0,
-                  transform: isEventsPopupVisible
-                    ? "translateY(0) scale(1)"
-                    : "translateY(-8px) scale(0.98)",
-                  transition: `all ${transitionMs}ms cubic-bezier(0.16, 1, 0.3, 1)`,
-                }}
-              >
-                <PopupHeader title="Event Actions" />
-                <div style={{ padding: "8px" }}>
-                  <EventOptionButton
-                    icon={<PlusIcon size={16} />}
-                    title="Create Event"
-                    subtitle="Add a new event"
-                    isHovered={hoveredEventOption === "create"}
-                    onMouseEnter={() => setHoveredEventOption("create")}
-                    onMouseLeave={() => setHoveredEventOption(null)}
-                    onClick={() => {
-                      closeEventsPopup();
-                      setIsCreateEventOpen(true);
-                    }}
-                  />
-                  <EventOptionButton
-                    icon={<EditIcon size={16} />}
-                    title="Edit Event"
-                    subtitle="Modify existing events"
-                    isHovered={hoveredEventOption === "edit"}
-                    onMouseEnter={() => setHoveredEventOption("edit")}
-                    onMouseLeave={() => setHoveredEventOption(null)}
-                    onClick={() => {
-                      closeEventsPopup();
-                      console.log("Edit event clicked");
-                    }}
-                    style={{ marginTop: 4 }}
-                  />
-                </div>
-                <PopupFooter />
-              </div>
-            )}
-          </div>
+          <button
+            type="button"
+            onClick={() => setIsCreateEventOpen(true)}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "10px 14px",
+              background: `linear-gradient(135deg, ${tokens.colors.surfaceSecondary} 0%, ${tokens.colors.surface} 100%)`,
+              border: `1px solid ${tokens.colors.border}`,
+              borderRadius: tokens.radius.md,
+              color: tokens.colors.text,
+              fontFamily: tokens.fonts.elegant,
+              fontSize: 15,
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+            }}
+          >
+            <PlusIcon size={16} />
+            <span>Create Event</span>
+          </button>
 
           {/* Calendar selector tab */}
           <div style={{ position: "relative" }}>
@@ -1050,6 +1093,9 @@ export default function CalendarView({
           <div style={{ width: 140 }}>
             <Dropdown value={currentMonth} options={monthOptions} onChange={handleMonthChange} />
           </div>
+          <div style={{ width: 80 }}>
+            <Dropdown value={currentDate.getDate()} options={dayOptions} onChange={handleDayChange} />
+          </div>
           <div style={{ width: 100 }}>
             <Dropdown value={currentYear} options={yearOptions} onChange={handleYearChange} />
           </div>
@@ -1198,10 +1244,20 @@ export default function CalendarView({
           eventOverlap={false}
           forceEventDuration={true}
           defaultTimedEventDuration="00:30"
+          slotLabelFormat={{
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true,
+            meridiem: "short",
+            omitZeroMinute: true,
+          }}
+          slotLabelContent={renderSlotLabel}
           events={fullCalendarEvents}
           datesSet={handleDatesSetWithTransition}
           dayCellContent={renderDayCellContent}
           eventContent={renderEventContent}
+          eventDidMount={handleEventDidMount}
+          eventWillUnmount={handleEventWillUnmount}
           moreLinkContent={renderMoreLinkContent}
           moreLinkDidMount={handleMoreLinkDidMount}
           eventClick={(info) => console.log("Event clicked:", info.event)}
@@ -1354,6 +1410,11 @@ export default function CalendarView({
                 {countPopupItems.map((item) => (
                   <div
                     key={`${item.uid}-${item.dtstart}`}
+                    onContextMenu={(event) => {
+                      event.preventDefault();
+                      event.stopPropagation();
+                      openEventMenu(event.nativeEvent, item, event.currentTarget);
+                    }}
                     style={{
                       zIndex: 200,
                       padding: "12px 14px",
@@ -1392,12 +1453,103 @@ export default function CalendarView({
         </div>
       )}
 
+      {isEventMenuOpen && eventMenuEvent && (
+        <div
+          ref={eventMenuRef}
+          onMouseDown={(event) => event.stopPropagation()}
+          onContextMenu={(event) => event.preventDefault()}
+          style={{
+            position: "fixed",
+            top: eventMenuPos.y,
+            left: eventMenuPos.x,
+            minWidth: 200,
+            background: `linear-gradient(160deg, ${tokens.colors.surfaceSecondary} 0%, #1f1a17 100%)`,
+            border: `1px solid ${tokens.colors.border}`,
+            borderRadius: tokens.radius.md,
+            boxShadow: "0 16px 40px rgba(0, 0, 0, 0.35)",
+            padding: "10px",
+            zIndex: 6000,
+            opacity: isEventMenuVisible ? 1 : 0,
+            transform: isEventMenuVisible ? "translateY(0)" : "translateY(-6px)",
+            transition: `opacity ${transitionMs}ms ease, transform ${transitionMs}ms ease`,
+          }}
+        >
+          <div
+            style={{
+              padding: "6px 8px 10px",
+              borderBottom: `1px solid ${tokens.colors.borderLight}`,
+              color: tokens.colors.textSecondary,
+              fontFamily: tokens.fonts.elegant,
+              fontSize: 13,
+            }}
+          >
+            {eventMenuEvent.summary || "Event"}
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              closeEventMenu();
+              handleEditEvent(eventMenuEvent);
+            }}
+            style={{
+              width: "100%",
+              padding: "10px 8px",
+              borderRadius: tokens.radius.sm,
+              border: "none",
+              background: "transparent",
+              color: tokens.colors.text,
+              fontFamily: tokens.fonts.elegant,
+              fontSize: 14,
+              textAlign: "left",
+              cursor: "pointer",
+              transition: "all 0.15s ease",
+            }}
+          >
+            Edit event
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              closeEventMenu();
+              handleDeleteEvent(eventMenuEvent);
+            }}
+            style={{
+              width: "100%",
+              padding: "10px 8px",
+              borderRadius: tokens.radius.sm,
+              border: "none",
+              background: "transparent",
+              color: tokens.colors.error,
+              fontFamily: tokens.fonts.elegant,
+              fontSize: 14,
+              textAlign: "left",
+              cursor: "pointer",
+              transition: "all 0.15s ease",
+            }}
+          >
+            Delete event
+          </button>
+        </div>
+      )}
+
       {/* Create Event Modal */}
       <CreateEventModal
         isOpen={isCreateEventOpen}
         onClose={() => setIsCreateEventOpen(false)}
         selectedCalendar={selectedCalendar}
         onEventCreated={handleEventCreated}
+      />
+
+      <CreateEventModal
+        isOpen={isEditEventOpen}
+        onClose={() => {
+          setIsEditEventOpen(false);
+          setEditingEvent(null);
+        }}
+        selectedCalendar={selectedCalendar}
+        mode="edit"
+        initialEvent={editingEvent}
+        onEventUpdated={handleEventCreated}
       />
     </div>
   );
@@ -1450,71 +1602,6 @@ function PopupFooter() {
       <CoffeeIcon size={12} />
       <div style={{ width: 24, height: 1, background: tokens.colors.border }} />
     </div>
-  );
-}
-
-function EventOptionButton({
-  icon,
-  title,
-  subtitle,
-  isHovered,
-  onClick,
-  onMouseEnter,
-  onMouseLeave,
-  style,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  subtitle: string;
-  isHovered: boolean;
-  onClick: () => void;
-  onMouseEnter: () => void;
-  onMouseLeave: () => void;
-  style?: React.CSSProperties;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-      style={{
-        width: "100%",
-        display: "flex",
-        alignItems: "center",
-        gap: 12,
-        padding: "12px 14px",
-        background: isHovered ? `rgba(212, 165, 116, 0.1)` : "transparent",
-        border: "none",
-        borderRadius: tokens.radius.md,
-        color: isHovered ? tokens.colors.text : tokens.colors.textSecondary,
-        fontFamily: tokens.fonts.elegant,
-        fontSize: 15,
-        cursor: "pointer",
-        textAlign: "left",
-        transition: "all 0.15s ease",
-        ...style,
-      }}
-    >
-      <div
-        style={{
-          width: 32,
-          height: 32,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          borderRadius: tokens.radius.sm,
-          background: isHovered ? `rgba(212, 165, 116, 0.15)` : tokens.colors.surfaceSecondary,
-          color: tokens.colors.accent,
-          transition: "all 0.15s ease",
-        }}
-      >
-        {icon}
-      </div>
-      <div>
-        <div style={{ fontWeight: 500 }}>{title}</div>
-        <div style={{ fontSize: 12, color: tokens.colors.textMuted, marginTop: 2 }}>{subtitle}</div>
-      </div>
-    </button>
   );
 }
 

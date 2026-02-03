@@ -31,6 +31,36 @@ def _priority_matches(bucket: str, wanted: str | None) -> bool:
     return bucket == wanted
 
 
+def _parse_rrule(rrule_prop) -> tuple[str | None, list[str] | None]:
+    if not rrule_prop:
+        return None, None
+    try:
+        if hasattr(rrule_prop, "get"):
+            freq_val = rrule_prop.get("FREQ")
+            byday_val = rrule_prop.get("BYDAY")
+            if isinstance(freq_val, (list, tuple)):
+                freq_val = freq_val[0] if freq_val else None
+            if isinstance(byday_val, (list, tuple)):
+                byday = [str(day).upper() for day in byday_val]
+            elif byday_val:
+                byday = [part.strip().upper() for part in str(byday_val).split(",") if part.strip()]
+            else:
+                byday = None
+            freq = str(freq_val).lower() if freq_val else None
+            return freq, byday
+        if hasattr(rrule_prop, "to_ical"):
+            rrule_str = rrule_prop.to_ical().decode("utf-8")
+        else:
+            rrule_str = str(rrule_prop)
+        parts = dict(part.split("=", 1) for part in rrule_str.split(";") if "=" in part)
+        freq = parts.get("FREQ") or parts.get("freq")
+        byday = parts.get("BYDAY") or parts.get("byday")
+        byweekday = [d.strip().upper() for d in byday.split(",")] if byday else None
+        return freq.lower() if freq else None, byweekday
+    except Exception:
+        return None, None
+
+
 def _recurrence_duration(dtstart: datetime, dtend: datetime | None) -> timedelta:
     if dtend is None:
         return timedelta(0)
@@ -92,6 +122,7 @@ def get_events_for_day(req: GetEventsForDayRequest) -> GetEventsForDayResponse:
         url = str(event.url)
 
         rrule_prop = vevent.get("rrule")
+        rrule_freq, rrule_byweekday = _parse_rrule(rrule_prop)
         if rrule_prop:
             try:
                 rrule_str = rrule_prop.to_ical().decode("utf-8")
@@ -125,8 +156,8 @@ def get_events_for_day(req: GetEventsForDayRequest) -> GetEventsForDayResponse:
                         location=location,
                         priority=int(priority_value) if priority_value is not None else None,
                         url=url,
-                        rrule_freq=None,
-                        rrule_byweekday=None,
+                        rrule_freq=rrule_freq,
+                        rrule_byweekday=rrule_byweekday,
                     )
                 )
             continue
@@ -146,8 +177,8 @@ def get_events_for_day(req: GetEventsForDayRequest) -> GetEventsForDayResponse:
                 location=location,
                 priority=int(priority_value) if priority_value is not None else None,
                 url=url,
-                rrule_freq=None,
-                rrule_byweekday=None,
+                rrule_freq=rrule_freq,
+                rrule_byweekday=rrule_byweekday,
             )
         )
 

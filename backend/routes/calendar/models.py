@@ -116,6 +116,8 @@ class EditEventRequest(BaseModel):
     dtend: Optional[datetime] = None
     location: Optional[str] = None
     priority: Optional[int] = None  # 1-9, where 1 is highest priority
+    rrule_freq: Optional[str] = None
+    rrule_byweekday: Optional[List[str]] = None
 
 
 class EditEventResponse(BaseModel):
