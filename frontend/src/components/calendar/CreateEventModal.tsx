@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import tokens from "../../tokens";
+import { API_BASE_URL } from "../../api";
 import { CoffeeIcon } from "../shared/icons";
 import { Dropdown } from "./Dropdown";
 import { MONTH_LABELS, WEEKDAY_OPTIONS, RECURRENCE_FREQ_OPTIONS } from "./constants";
@@ -301,7 +302,7 @@ export function CreateEventModal({
           setEventError("Missing event reference for editing.");
           return;
         }
-        await axios.post("http://127.0.0.1:8000/calendar/edit_event", {
+        await axios.post(`${API_BASE_URL}/calendar/edit_event`, {
           event_url: initialEvent.url,
           calendar_url: selectedCalendar.url,
           summary: eventSummary.trim(),
@@ -315,7 +316,7 @@ export function CreateEventModal({
         });
         onEventUpdated?.();
       } else {
-        await axios.post("http://127.0.0.1:8000/calendar/create_event", {
+        await axios.post(`${API_BASE_URL}/calendar/create_event`, {
           calendar_url: selectedCalendar.url,
           summary: eventSummary.trim(),
           description: eventDescription.trim() || null,

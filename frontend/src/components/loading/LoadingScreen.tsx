@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import tokens from "../../tokens";
 import MaiaAnimaBot from "../../assets/Maia_Avatars/1.0-1.x/1.0/Anima Bot.gif";
+import { API_BASE_URL } from "../../api";
 
 interface StartupEvent {
   label: string;
@@ -33,7 +34,7 @@ export default function LoadingScreen({ onFinished }: LoadingScreenProps) {
     const poll = async () => {
       while (!cancelled) {
         try {
-          const res = await fetch("http://127.0.0.1:8000/startup/status");
+          const res = await fetch(`${API_BASE_URL}/startup/status`);
           const data: StartupStatus = await res.json();
 
           if (cancelled) break;

@@ -180,6 +180,7 @@ Return only the recap text.
             "CONVERSATIONAL_TRANSCRIPT": 0.9,
         }
 
+        summary = ""
         try:
             Logger.info("Compressing assistant response for storage")
             summary = self.summarize(
@@ -191,5 +192,11 @@ Return only the recap text.
 
         except Exception as err:
             Logger.error(f"Failed to summarize response: {repr(err)}")
+
+        if not isinstance(summary, str) or not summary.strip():
+            fallback = response.strip()
+            if len(fallback) > 400:
+                fallback = f"{fallback[:397].rstrip()}..."
+            return fallback
 
         return summary

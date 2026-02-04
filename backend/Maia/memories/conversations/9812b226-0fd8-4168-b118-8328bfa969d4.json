@@ -1,0 +1,12 @@
+[
+  {
+    "role": "user",
+    "content": "hey",
+    "timestamp": "2026-02-04T10:59:12-07:00"
+  },
+  {
+    "role": "assistant",
+    "content": "Hey Ronald! 😊 Today’s date is **February 4, 2026**—how’s your day going so far? Anything fun planned?",
+    "timestamp": "2026-02-04T10:59:25-07:00"
+  }
+]

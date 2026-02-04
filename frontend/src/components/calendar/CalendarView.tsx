@@ -8,6 +8,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import rrulePlugin from "@fullcalendar/rrule";
 import tokens from "../../tokens";
+import { API_BASE_URL } from "../../api";
 import { Dropdown } from "./Dropdown";
 import {
   CoffeeIcon,
@@ -137,7 +138,7 @@ export default function CalendarView({
   async function fetchCalendars() {
     setLoadingCalendars(true);
     try {
-      const response = await axios.get("http://127.0.0.1:8000/calendar/list_calendars");
+      const response = await axios.get(`${API_BASE_URL}/calendar/list_calendars`);
       const items = response.data.calendars ?? [];
       setCalendars(items);
       return items as CalendarItem[];
@@ -392,7 +393,7 @@ export default function CalendarView({
     setIsCountPopupOpen(true);
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/calendar/get_events_for_day", {
+      const response = await axios.post(`${API_BASE_URL}/calendar/get_events_for_day`, {
         calendar_url: selectedCalendar.url,
         date: dateValue.toISOString().split("T")[0],
         priority,
@@ -414,7 +415,7 @@ export default function CalendarView({
   const handleDeleteEvent = useCallback(
     async (item: EventListItem) => {
       try {
-        await axios.post("http://127.0.0.1:8000/calendar/delete_event", {
+        await axios.post(`${API_BASE_URL}/calendar/delete_event`, {
           event_url: item.url,
           calendar_url: selectedCalendar.url,
         });
@@ -435,7 +436,7 @@ export default function CalendarView({
   async function handleDeleteCalendar() {
     if (!contextCalendar) return;
     try {
-      await axios.post("http://127.0.0.1:8000/calendar/delete_calendar", {
+      await axios.post(`${API_BASE_URL}/calendar/delete_calendar`, {
         calendar_name: contextCalendar.name,
       });
       const updated = await fetchCalendars();
@@ -457,7 +458,7 @@ export default function CalendarView({
   async function handleSetDefaultCalendar() {
     if (!contextCalendar) return;
     try {
-      await axios.post("http://127.0.0.1:8000/calendar/set_default_calendar", {
+      await axios.post(`${API_BASE_URL}/calendar/set_default_calendar`, {
         calendar_url: contextCalendar.url,
       });
       onDefaultCalendarChange(contextCalendar.url);

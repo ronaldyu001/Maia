@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import tokens from "../../tokens";
+import { API_BASE_URL } from "../../api";
 import { CoffeeIcon } from "../shared/icons";
 import type { CalendarItem } from "./types";
 
@@ -68,10 +69,10 @@ export function CreateCalendarModal({
     setLoading(true);
     setError(null);
     try {
-      await axios.post("http://127.0.0.1:8000/calendar/create_calendar", {
+      await axios.post(`${API_BASE_URL}/calendar/create_calendar`, {
         calendar_name: trimmedName,
       });
-      const response = await axios.get("http://127.0.0.1:8000/calendar/list_calendars");
+      const response = await axios.get(`${API_BASE_URL}/calendar/list_calendars`);
       const calendarList: CalendarItem[] = response.data.calendars;
       const newCalendar = calendarList.find((c) => c.name === trimmedName);
       if (newCalendar) {

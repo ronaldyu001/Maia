@@ -4,6 +4,7 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import tokens from "../../tokens";
+import { API_BASE_URL } from "../../api";
 import { CoffeeIcon, CalendarIcon, PlusIcon } from "../shared/icons";
 import { CreateCalendarModal } from "./CreateCalendarModal";
 import CalendarView from "./CalendarView";
@@ -79,7 +80,7 @@ export default function CalendarManager({ refreshToken }: CalendarManagerProps) 
 
   async function fetchCalendars() {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/calendar/list_calendars");
+      const response = await axios.get(`${API_BASE_URL}/calendar/list_calendars`);
       const calendarList: CalendarItem[] = response.data.calendars;
       setCalendars(calendarList);
       if (calendarList.length > 0 && !selectedCalendar) {
@@ -96,7 +97,7 @@ export default function CalendarManager({ refreshToken }: CalendarManagerProps) 
 
   async function fetchDefaultCalendar() {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/calendar/get_default_calendar");
+      const response = await axios.get(`${API_BASE_URL}/calendar/get_default_calendar`);
       const calendarUrl = response.data?.calendar_url ?? null;
       setDefaultCalendarUrl(calendarUrl);
       return calendarUrl as string | null;
